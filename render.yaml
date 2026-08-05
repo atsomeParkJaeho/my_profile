@@ -54,6 +54,16 @@ services:
       - key: COOKIE_SECURE
         value: "false"        # HTTPS 도메인 연결 후 true로 변경
 
+      # ── 초기 관리자 계정 ──────────────────────────────────────
+      - key: ADMIN_EMAIL
+        sync: false           # Render 대시보드에서 직접 입력
+
+      - key: ADMIN_NAME
+        sync: false
+
+      - key: ADMIN_PASSWORD
+        sync: false
+
 databases:
   - name: horilla-db
     databaseName: appdb

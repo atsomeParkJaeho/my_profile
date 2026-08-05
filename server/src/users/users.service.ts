@@ -5,10 +5,6 @@ import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 
-const ADMIN_EMAIL    = process.env.ADMIN_EMAIL;
-const ADMIN_NAME     = process.env.ADMIN_NAME;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
-
 @Injectable()
 export class UsersService implements OnApplicationBootstrap {
   constructor(
@@ -20,17 +16,21 @@ export class UsersService implements OnApplicationBootstrap {
   ) {}
 
   async onApplicationBootstrap() {
-    if (!ADMIN_EMAIL || !ADMIN_NAME || !ADMIN_PASSWORD) {
+    const email    = process.env.ADMIN_EMAIL;
+    const name     = process.env.ADMIN_NAME;
+    const password = process.env.ADMIN_PASSWORD;
+
+    if (!email || !name || !password) {
       console.warn('[Init] 관리자 계정 환경변수(ADMIN_EMAIL, ADMIN_NAME, ADMIN_PASSWORD)가 설정되지 않아 초기 계정을 생성하지 않습니다.');
       return;
     }
-    const exists = await this.usersRepository.findOne({ where: { email: ADMIN_EMAIL } });
+    const exists = await this.usersRepository.findOne({ where: { email } });
     if (!exists) {
-      const hashed = await bcrypt.hash(ADMIN_PASSWORD, 10);
+      const hashed = await bcrypt.hash(password, 10);
       await this.usersRepository.save(
-        this.usersRepository.create({ name: ADMIN_NAME, email: ADMIN_EMAIL, password: hashed }),
+        this.usersRepository.create({ name, email, password: hashed }),
       );
-      console.log(`[Init] 관리자 계정 생성 완료: ${ADMIN_EMAIL}`);
+      console.log(`[Init] 관리자 계정 생성 완료: ${email}`);
     }
   }
 
