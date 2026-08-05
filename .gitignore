@@ -1,0 +1,14 @@
+node_modules/
+dist/
+client/dist/
+server/db.sqlite
+.env
+server/.env
+server/.env.dev
+server/.env.prod
+server/sessions.sqlite
+.logs/
+release/
+.migration-sqlite-done
+.migration-mariadb-done
+.idea/
