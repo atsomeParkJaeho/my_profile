@@ -6,8 +6,8 @@ services:
 
     # 클라이언트 빌드 → 서버 빌드
     buildCommand: |
-      cd client && npm ci && npm run build &&
-      cd ../server && npm ci && npm run build
+      cd client && npm ci --include=dev && npm run build &&
+      cd ../server && npm ci --include=dev && npm run build
 
     # 서버 디렉터리에서 Node.js 직접 실행
     startCommand: cd server && node dist/main
