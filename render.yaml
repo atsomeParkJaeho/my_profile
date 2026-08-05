@@ -2,7 +2,7 @@ services:
   - type: web
     name: horilla-app
     runtime: node
-    plan: starter
+    plan: free
 
     # 클라이언트 빌드 → 서버 빌드
     buildCommand: |
@@ -67,4 +67,4 @@ services:
 databases:
   - name: horilla-db
     databaseName: appdb
-    plan: starter             # $7/월 — 1GB, 커넥션 25개
+    plan: free
