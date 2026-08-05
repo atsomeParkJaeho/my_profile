@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { clientApi } from '@api/api';
 import { useNavigate } from 'react-router-dom';
 import { getCommunityDetail, updateCommunity } from '@api/community';
@@ -26,7 +26,7 @@ const WritePageLayout = ({id, actType, itemId}) => {
 	const [loading, setLoading] = useState(isEdit);
 
 	// 이미지 업로드 핸들러 (quality 0.7 압축)
-	const imageHandler = () => {
+	const imageHandler = useCallback(() => {
 		const input = document.createElement('input');
 		input.type   = 'file';
 		input.accept = 'image/*';
@@ -44,14 +44,15 @@ const WritePageLayout = ({id, actType, itemId}) => {
 				console.error('이미지 압축 실패', err);
 			}
 		};
-	};
+	}, []);
 
-	const modules = {
+	// modules를 useMemo로 고정 — 리렌더링 시 재생성되면 Quill이 재초기화되어 스크롤 상단 이동 발생
+	const modules = useMemo(() => ({
 		toolbar: {
 			container: TOOLBAR_OPTIONS,
 			handlers:  { image: imageHandler },
 		},
-	};
+	}), [imageHandler]);
 
 	const getReady = async () => {
 		if (isEdit && itemId) {

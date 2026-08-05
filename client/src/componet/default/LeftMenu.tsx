@@ -4,6 +4,7 @@ import { logout, withdraw } from '@store/authSlice';
 import '@styles/componet/left_menu.css';
 import { useEffect, useState } from 'react';
 import { getInfo } from '@api/profile';
+import {LeftMenuList} from "@/util/routeUtil";
 
 export const LeftMenu = () => {
   const location = useLocation();
@@ -63,13 +64,27 @@ export const LeftMenu = () => {
           <h6 className="my-2">메뉴</h6>
         </div>
         <div className="list-group list-group-flush">
-          <button
-            onClick={() => navigate('/community/list')}
-            className={`list-group-item list-group-item-action d-flex justify-content-between py-3 ${location.pathname.startsWith('/community') ? 'active' : ''}`}
-          >
-            <div><i className="bi bi-journal-text me-2"></i><span>게시판</span></div>
-            <i className="bi bi-chevron-right"></i>
-          </button>
+          {LeftMenuList?.map((item,idx)=>{
+            
+            let active = location.pathname === item?.to ? 'active' : ''
+            
+            return (
+              <button
+                onClick={() => navigate(item?.to)}
+                className={`list-group-item list-group-item-action d-flex justify-content-between py-3 ${active}`}
+              >
+                <div><i className={`bi ${item?.icon} me-2`}></i><span>{item?.name}</span></div>
+                <i className={`bi bi-chevron-right`}></i>
+              </button>
+            )
+          })}
+          {/*<button*/}
+          {/*  onClick={() => navigate('/community/list')}*/}
+          {/*  className={`list-group-item list-group-item-action d-flex justify-content-between py-3 ${location.pathname.startsWith('/community') ? 'active' : ''}`}*/}
+          {/*>*/}
+          {/*  <div><i className="bi bi-journal-text me-2"></i><span>게시판</span></div>*/}
+          {/*  <i className="bi bi-chevron-right"></i>*/}
+          {/*</button>*/}
           {/* 추후 메뉴 항목 추가 예정 */}
         </div>
       </div>
