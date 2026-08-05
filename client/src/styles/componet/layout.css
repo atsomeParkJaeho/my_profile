@@ -1,0 +1,22 @@
+.container_box  {
+    /*display: flex;*/
+    /*width: 100vw;*/
+    min-width: 0;        /* flex 자식 요소 축소 허용 */
+    /*box-sizing: border-box;*/
+    /*border: 2px solid black;*/
+}
+.header_menu  {
+    position: relative;
+    height: 64px; /* fixed 헤더 높이(h-16)만큼 공간 확보 */
+    /*border: 2px solid red;*/
+}
+.row_box  {
+    overflow: hidden;
+    /*border: 2px solid blue;*/
+    display: flex;
+}
+.content_box  {
+    overflow: auto;
+    width: 80%;
+    /*border: 2px solid yellow;*/
+}

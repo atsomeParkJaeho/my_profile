@@ -1,0 +1,55 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start:dev": "cross-env NODE_ENV=development nest start --watch",
+    "build": "nest build",
+    "start:prod": "npm run build && cross-env NODE_ENV=production node dist/main",
+    "start:prod:db": "docker compose -f ../docker-compose.db.yml up -d && npm run start:prod",
+    "build:exe": "nest build && pkg . --compress GZip"
+  },
+  "pkg": {
+    "scripts": [
+      "dist/**/*.js"
+    ],
+    "assets": [
+      "dist/**/*",
+      "../client/dist/**/*",
+      "node_modules/better-sqlite3/build/Release/better_sqlite3.node"
+    ],
+    "targets": [
+      "node22-win-x64"
+    ],
+    "outputPath": "../release"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^9.4.0",
+    "@fastify/middie": "^8.3.1",
+    "@fastify/session": "^10.9.0",
+    "@fastify/static": "^7.0.4",
+    "@nestjs/common": "^10.3.0",
+    "@nestjs/config": "^4.0.4",
+    "@nestjs/core": "^10.3.0",
+    "@nestjs/platform-fastify": "^10.3.0",
+    "@nestjs/typeorm": "^10.0.2",
+    "bcrypt": "^6.0.0",
+    "better-sqlite3": "^12.11.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "cross-env": "^7.0.3",
+    "mysql2": "^3.23.2",
+    "reflect-metadata": "^0.2.0",
+    "rxjs": "^7.8.1",
+    "typeorm": "^0.3.20",
+    "vite": "^5.4.0"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.3.0",
+    "@types/bcrypt": "^6.0.0",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^20.14.0",
+    "@yao-pkg/pkg": "^6.21.0",
+    "typescript": "^5.4.0"
+  }
+}

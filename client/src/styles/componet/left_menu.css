@@ -1,0 +1,42 @@
+/* ── 사이드바 컨테이너 ──────────────────────────────
+ * 세 가지 방식 중 하나만 활성화하세요.
+ *
+ * [방식 1] sticky (권장)
+ *   - 문서 흐름 유지, 스크롤 시 상단에 고정
+ *   - 부모(left_menu)가 overflow:hidden 이면 안 됨
+ *
+ * [방식 2] fixed
+ *   - 뷰포트 기준 완전 고정
+ *   - main 콘텐츠에 margin-left 필요
+ *
+ * [방식 3] static (기본값)
+ *   - 스크롤과 함께 이동
+ * ─────────────────────────────────────────────── */
+
+.left_menu {
+    width: 224px;           /* 14rem — 헤더와 동일 너비 기준 */
+    height: 100%;           /* 부모 flex 컨테이너 높이 채움 */
+    overflow-y: auto;       /* 메뉴 항목이 많을 때 내부 스크롤 */
+}
+
+.left_menu_sec {
+    /* ── 방식 1: sticky (현재 적용) ── */
+    position: sticky;
+    top: 0;                 /* 부모 스크롤 기준 상단 고정 */
+    width: 100%;
+
+    /* ── 방식 2: fixed (필요 시 아래 주석 해제) ──
+    position: fixed;
+    top: 64px;
+    left: 0;
+    width: 224px;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+    background: white;
+    z-index: 40;
+    */
+
+    /* ── 방식 3: static (주석 해제 시 기본값) ──
+    position: static;
+    */
+}

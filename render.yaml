@@ -1,0 +1,60 @@
+services:
+  - type: web
+    name: horilla-app
+    runtime: node
+    plan: starter
+
+    # 클라이언트 빌드 → 서버 빌드
+    buildCommand: |
+      cd client && npm ci && npm run build &&
+      cd ../server && npm ci && npm run build
+
+    # 서버 디렉터리에서 Node.js 직접 실행
+    startCommand: cd server && node dist/main
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      # Render가 PORT를 자동 주입하므로 별도 지정 불필요 (main.ts에서 process.env.PORT 사용 중)
+
+      # ── MySQL (Render DB) 연결 ──────────────────────────────────
+      - key: DB_HOST
+        fromDatabase:
+          name: horilla-db
+          property: host
+
+      - key: DB_PORT
+        fromDatabase:
+          name: horilla-db
+          property: port
+
+      - key: DB_USER
+        fromDatabase:
+          name: horilla-db
+          property: user
+
+      - key: DB_PASS
+        fromDatabase:
+          name: horilla-db
+          property: password
+
+      - key: DB_NAME
+        fromDatabase:
+          name: horilla-db
+          property: database
+
+      # ── 세션 ──────────────────────────────────────────────────
+      - key: SESSION_SECRET
+        generateValue: true   # Render가 배포 시 자동 생성
+
+      - key: SESSION_DB_PATH
+        value: sessions.sqlite
+
+      - key: COOKIE_SECURE
+        value: "false"        # HTTPS 도메인 연결 후 true로 변경
+
+databases:
+  - name: horilla-db
+    databaseName: appdb
+    plan: starter             # $7/월 — 1GB, 커넥션 25개

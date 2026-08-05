@@ -1,0 +1,13 @@
+/* 1. 프로젝트 커스텀 (@font-face는 반드시 먼저 선언) */
+@import "@styles/default.css";
+
+/* 2. Tailwind (Preflight 포함) */
+@import "tailwindcss";
+
+/* 3. 클래스 기반 다크모드 — <html class="dark"> 로 제어 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* 3. Tailwind에 Pretendard를 기본 폰트로 등록 */
+@theme {
+    --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}

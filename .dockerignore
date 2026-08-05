@@ -1,0 +1,6 @@
+**/node_modules
+**/dist
+**/*.sqlite
+.git
+.idea
+README.md

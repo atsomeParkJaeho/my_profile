@@ -2,6 +2,7 @@ node_modules/
 dist/
 client/dist/
 server/db.sqlite
+*.sqlite3
 .env
 server/.env
 server/.env.dev
