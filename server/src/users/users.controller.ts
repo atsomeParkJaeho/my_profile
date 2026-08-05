@@ -21,19 +21,4 @@ export class UsersController {
     return this.usersService.remove(Number(id));
   }
 
-  // GET /api/users/auth-users
-  @Get('auth-users')
-  findAuthUsers() {
-    return this.usersService.findAuthUsers();
-  }
-
-  // GET /api/users/auth-users/:id
-  @Get('auth-users/:id')
-  findAuthUserById(@Param('id') id: string) {
-    return this.usersService.findAuthUserById(Number(id));
-  }
-  // 
-  
-  
-  
 }

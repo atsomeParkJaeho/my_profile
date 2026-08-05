@@ -7,15 +7,16 @@ import { User } from './users/entities/user.entity';
 import { CommunityModule } from './community/community.module';
 import { ProfileModule } from './profile/profile.module';
 
-// DB_HOST 환경변수 유무로 MariaDB / SQLite 자동 선택
+// DB_HOST 환경변수 유무로 PostgreSQL / SQLite 자동 선택
 const dbConfig = process.env.DB_HOST
   ? {
-      type: 'mysql' as const,
+      type: 'postgres' as const,
       host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT) || 3306,
-      username: process.env.DB_USER ?? 'root',
+      port: Number(process.env.DB_PORT) || 5432,
+      username: process.env.DB_USER ?? 'postgres',
       password: process.env.DB_PASS ?? '',
       database: process.env.DB_NAME ?? 'appdb',
+      ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
     }
   : {
       type: 'better-sqlite3' as const,

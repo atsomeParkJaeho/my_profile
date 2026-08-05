@@ -9,19 +9,28 @@ export class CommunityService implements OnApplicationBootstrap {
     private readonly dataSource: DataSource,
   ) {}
 
-  private get isMariaDB(): boolean {
-    return this.dataSource.options.type === 'mariadb' ||
-           this.dataSource.options.type === 'mysql';
+  private get isPostgres(): boolean {
+    return this.dataSource.options.type === 'postgres';
+  }
+
+  private query(sql: string, params?: any[]): Promise<any> {
+    if (this.isPostgres && params?.length) {
+      let i = 0;
+      sql = sql.replace(/\?/g, () => `$${++i}`);
+    }
+    return this.dataSource.query(sql, params);
+  }
+
+  private get pk(): string {
+    return this.isPostgres
+      ? 'id SERIAL PRIMARY KEY'
+      : 'id INTEGER PRIMARY KEY AUTOINCREMENT';
   }
 
   async onApplicationBootstrap() {
-    const pk = this.isMariaDB
-      ? 'id INT NOT NULL AUTO_INCREMENT PRIMARY KEY'
-      : 'id INTEGER PRIMARY KEY AUTOINCREMENT';
-
     await this.dataSource.query(`
       CREATE TABLE IF NOT EXISTS community_table (
-        ${pk},
+        ${this.pk},
         title       VARCHAR(500),
         content     TEXT,
         c_date      VARCHAR(20),
@@ -33,39 +42,34 @@ export class CommunityService implements OnApplicationBootstrap {
       )
     `);
 
-    // 기존 테이블에 content 컬럼이 없는 경우 추가
-    try {
-      const colType = this.isMariaDB ? 'TEXT' : 'TEXT';
+    if (this.isPostgres) {
       await this.dataSource.query(
-        `ALTER TABLE community_table ADD COLUMN content ${colType}`,
+        `ALTER TABLE community_table ADD COLUMN IF NOT EXISTS content TEXT`,
       );
-    } catch { /* 이미 존재하면 무시 */ }
+    } else {
+      try {
+        await this.dataSource.query(`ALTER TABLE community_table ADD COLUMN content TEXT`);
+      } catch { /* 이미 존재하면 무시 */ }
+    }
   }
 
   private getNow() {
     const now = new Date();
-    const date = now.toISOString().slice(0, 10);
-    const time = now.toTimeString().slice(0, 8);
-    return { date, time };
+    return { date: now.toISOString().slice(0, 10), time: now.toTimeString().slice(0, 8) };
   }
 
   async findOne(id: number): Promise<any> {
-    const rows = await this.dataSource.query(
-      'SELECT * FROM community_table WHERE id = ?',
-      [id],
-    );
+    const rows = await this.query('SELECT * FROM community_table WHERE id = ?', [id]);
     return rows[0] ?? null;
   }
 
   async findAll(): Promise<any[]> {
-    return this.dataSource.query(
-      'SELECT * FROM community_table ORDER BY id DESC',
-    );
+    return this.dataSource.query('SELECT * FROM community_table ORDER BY id DESC');
   }
 
   async create(dto: any): Promise<any> {
     const { date, time } = this.getNow();
-    return this.dataSource.query(
+    return this.query(
       `INSERT INTO community_table (title, content, c_date, c_time, c_user_name)
        VALUES (?, ?, ?, ?, ?)`,
       [dto.title, dto.content ?? '', date, time, dto.c_user_name],
@@ -73,15 +77,12 @@ export class CommunityService implements OnApplicationBootstrap {
   }
 
   async remove(id: number): Promise<any> {
-    return this.dataSource.query(
-      'DELETE FROM community_table WHERE id = ?',
-      [id],
-    );
+    return this.query('DELETE FROM community_table WHERE id = ?', [id]);
   }
 
   async update(id: number, dto: any): Promise<any> {
     const { date, time } = this.getNow();
-    return this.dataSource.query(
+    return this.query(
       `UPDATE community_table
        SET title = ?, content = ?, e_date = ?, e_time = ?, e_user_name = ?
        WHERE id = ?`,

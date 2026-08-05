@@ -1,6 +1,6 @@
 import { Injectable, ConflictException, OnApplicationBootstrap } from '@nestjs/common';
-import { InjectRepository, InjectDataSource } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -10,9 +10,6 @@ export class UsersService implements OnApplicationBootstrap {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-
-    @InjectDataSource()
-    private readonly dataSource: DataSource,
   ) {}
 
   async onApplicationBootstrap() {
@@ -60,20 +57,5 @@ export class UsersService implements OnApplicationBootstrap {
 
   async remove(id: number): Promise<void> {
     await this.usersRepository.delete(id);
-  }
-
-  // auth_user 테이블 전체 조회
-  async findAuthUsers(): Promise<any[]> {
-    return this.dataSource.query(
-      'SELECT * FROM auth_user',
-    );
-  }
-
-  // auth_user 단건 조회
-  async findAuthUserById(id: number): Promise<any[]> {
-    return this.dataSource.query(
-      'SELECT * FROM auth_user WHERE id = ?',
-      [id],
-    );
   }
 }

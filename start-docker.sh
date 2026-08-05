@@ -107,16 +107,16 @@ fi
 # =============================================================================
 cd "${SCRIPT_DIR}"
 
-info "기존 컨테이너 및 MariaDB 볼륨 삭제..."
+info "기존 컨테이너 및 PostgreSQL 볼륨 삭제..."
 docker compose down -v 2>/dev/null || true
 
 info "Docker 이미지 빌드 및 컨테이너 시작..."
 docker compose up --build -d
 
-# MariaDB 헬스체크 대기
-info "MariaDB 준비 대기 중..."
+# PostgreSQL 헬스체크 대기
+info "PostgreSQL 준비 대기 중..."
 RETRY=0
-until docker compose exec -T db mariadb -u appuser -papppass appdb -e "SELECT 1" &>/dev/null || [[ $RETRY -ge 30 ]]; do
+until docker compose exec -T db pg_isready -U appuser -d appdb &>/dev/null || [[ $RETRY -ge 30 ]]; do
   sleep 3
   RETRY=$((RETRY + 1))
   echo -n "."
@@ -124,34 +124,7 @@ done
 echo ""
 
 # =============================================================================
-# DB 마이그레이션 (TestDB_Horilla.sqlite3 → MariaDB)
-# =============================================================================
-if [[ -f "${SOURCE_DB}" ]]; then
-  info "DB 마이그레이션 시작 (TestDB_Horilla.sqlite3 → MariaDB)..."
-  cd "${SCRIPT_DIR}"
-
-  if ! command -v node &>/dev/null; then
-    warn "Node.js가 없어 마이그레이션을 건너뜁니다."
-  else
-    # server npm 의존성 확인
-    if [[ ! -d "${SCRIPT_DIR}/server/node_modules" ]]; then
-      info "server 의존성 설치 중..."
-      cd "${SCRIPT_DIR}/server" && npm install --silent
-      cd "${SCRIPT_DIR}"
-    fi
-
-    DB_HOST=localhost \
-    DB_PORT=3306 \
-    DB_USER=appuser \
-    DB_PASS=apppass \
-    DB_NAME=appdb \
-    node "${SCRIPT_DIR}/migrate-to-mariadb.js"
-
-    success "MariaDB 마이그레이션 완료"
-  fi
-else
-  warn "TestDB_Horilla.sqlite3 파일이 없습니다. 마이그레이션 건너뜁니다."
-fi
+# DB 마이그레이션 섹션 제거 (PostgreSQL은 TypeORM synchronize로 자동 처리)
 
 # 앱 서버 시작 대기
 info "앱 서버 시작 대기 중..."
@@ -169,7 +142,7 @@ echo -e "${GREEN}  실행 완료!${NC}"
 echo "============================================================"
 echo ""
 echo "  접속 주소  : http://localhost:3000"
-echo "  MariaDB    : localhost:3306 (user: appuser / pass: apppass)"
+echo "  PostgreSQL : localhost:5432 (user: appuser / pass: apppass)"
 echo ""
 echo "  로그 확인  : docker compose logs -f app"
 echo "  종료       : docker compose down"

@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: client-server         # Nginx + 클라이언트 빌드 스테이지
+      target: client-server
     volumes:
       - ./nginx.client.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
@@ -24,10 +24,11 @@ services:
       NODE_ENV: production
       PORT: 3000
       DB_HOST: db
-      DB_PORT: 3306
+      DB_PORT: 5432
       DB_USER: appuser
       DB_PASS: apppass
       DB_NAME: appdb
+      DB_SSL: "false"
       SESSION_SECRET: change_this_to_a_strong_random_secret!!
       SESSION_DB_PATH: /app/server/data/sessions.sqlite
       COOKIE_SECURE: "false"
@@ -40,22 +41,20 @@ services:
       db:
         condition: service_healthy
     restart: unless-stopped
-    # 외부 포트 미노출 — client(Nginx)를 통해서만 접근
 
-  # ── MariaDB ───────────────────────────────────────────────────────────────
+  # ── PostgreSQL ────────────────────────────────────────────────────────────
   db:
-    image: mariadb:11
+    image: postgres:16
     ports:
-      - "3306:3306"
+      - "5432:5432"
     environment:
-      MARIADB_ROOT_PASSWORD: rootpass
-      MARIADB_DATABASE: appdb
-      MARIADB_USER: appuser
-      MARIADB_PASSWORD: apppass
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppass
+      POSTGRES_DB: appdb
     volumes:
-      - mariadb-data:/var/lib/mysql
+      - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      test: ["CMD-SHELL", "pg_isready -U appuser -d appdb"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -63,4 +62,4 @@ services:
 
 volumes:
   app-data:
-  mariadb-data:
+  postgres-data:

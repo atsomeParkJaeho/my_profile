@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
-import { loadUsers } from '@store/usersSlice';
 import Layout from '@/componet/default/Layout';
 import { getInfo, updateInfo, getCareers, createCareer, updateCareer, deleteCareer } from '@api/profile';
 
@@ -10,7 +9,6 @@ const EMPTY_CAREER = { company: '', role: '', start_dt: '', end_dt: '', desc: ''
 export default function HomePage() {
   const dispatch    = useAppDispatch();
   const { user }    = useAppSelector((state) => state.auth);
-  const { list: userList, loading: userLoading } = useAppSelector((state) => state.users);
   const isAdmin     = user?.email === import.meta.env.VITE_ADMIN_EMAIL;
   const initialized = useRef(false);
 
@@ -27,7 +25,6 @@ export default function HomePage() {
   useEffect(() => {
     if (initialized.current) return;
     initialized.current = true;
-    dispatch(loadUsers());
     getInfo().then((d) => d && setInfo({ name: user?.name ?? '', email: user?.email ?? '', ...d })).catch(console.error);
     getCareers().then(setCareers).catch(console.error);
   }, [dispatch]);
