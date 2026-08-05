@@ -20,6 +20,10 @@ export class UsersService implements OnApplicationBootstrap {
   ) {}
 
   async onApplicationBootstrap() {
+    if (!ADMIN_EMAIL || !ADMIN_NAME || !ADMIN_PASSWORD) {
+      console.warn('[Init] 관리자 계정 환경변수(ADMIN_EMAIL, ADMIN_NAME, ADMIN_PASSWORD)가 설정되지 않아 초기 계정을 생성하지 않습니다.');
+      return;
+    }
     const exists = await this.usersRepository.findOne({ where: { email: ADMIN_EMAIL } });
     if (!exists) {
       const hashed = await bcrypt.hash(ADMIN_PASSWORD, 10);
