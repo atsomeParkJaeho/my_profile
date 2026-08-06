@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Req } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 
 @Controller('profile')
@@ -7,8 +7,8 @@ export class ProfileController {
 
   // ── myself_info ──
   @Get('info')
-  getInfo() {
-    return this.profileService.getInfo();
+  getInfo(@Req() req: any) {
+    return this.profileService.getInfo(req.session?.userId);
   }
 
   @Put('info')

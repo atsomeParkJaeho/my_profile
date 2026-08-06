@@ -115,9 +115,17 @@ export class ProfileService implements OnApplicationBootstrap {
     }
   }
 
-  async getInfo(): Promise<any> {
+  async getInfo(userId?: number): Promise<any> {
     const rows = await this.dataSource.query('SELECT * FROM myself_info LIMIT 1');
-    return rows[0] ?? null;
+    const info = rows[0] ?? null;
+    if (!info || !userId) return info;
+    const users = await this.dataSource.query(
+      this.isPostgres
+        ? 'SELECT "profileImage" FROM "user" WHERE id = $1'
+        : 'SELECT profileImage FROM user WHERE id = ?',
+      [userId],
+    );
+    return { ...info, profileImage: users[0]?.profileImage ?? null };
   }
 
   private getNow(): string {
