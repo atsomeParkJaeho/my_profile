@@ -66,7 +66,7 @@ export const LeftMenu = () => {
         <div className="list-group list-group-flush">
           {LeftMenuList?.map((item,idx)=>{
             
-            let active = location.pathname === item?.to ? 'active' : ''
+            let active = location.pathname.startsWith(item?.activePrefix ?? item?.to) ? 'active' : ''
             
             return (
               <button

@@ -1,3 +1,10 @@
+.layout-section {
+  background-color: #f8f9fa;
+}
+.dark .layout-section {
+  background-color: #0f1623;
+}
+
 .container_box  {
     /*display: flex;*/
     /*width: 100vw;*/

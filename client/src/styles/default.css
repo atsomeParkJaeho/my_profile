@@ -112,3 +112,93 @@ button {
 input::placeholder {
   color: #9ca3af;
 }
+
+/* ── 다크모드 전역 배경 / 텍스트 ──────────────────── */
+.dark body,
+.dark {
+  background-color: #0f1623;
+  color: #e2e8f0;
+}
+
+/* ── 다크모드 Bootstrap card ───────────────────────── */
+.dark .card {
+  background-color: #1a2236;
+  border-color: #2d3a4f;
+  color: #e2e8f0;
+}
+.dark .card-header {
+  background-color: #1e2a3f;
+  border-color: #2d3a4f;
+  color: #e2e8f0;
+}
+.dark .card-body {
+  background-color: #1a2236;
+}
+
+/* ── 다크모드 list-group ───────────────────────────── */
+.dark .list-group-item {
+  background-color: #1a2236;
+  border-color: #2d3a4f;
+  color: #e2e8f0;
+}
+.dark .list-group-item:hover {
+  background-color: #1e2a3f;
+  color: #e2e8f0;
+}
+.dark .list-group-item.active {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #ffffff;
+}
+
+/* ── 다크모드 텍스트 유틸 ──────────────────────────── */
+.dark .text-muted {
+  color: #94a3b8 !important;
+}
+.dark .border-bottom {
+  border-color: #2d3a4f !important;
+}
+.dark .bg-light {
+  background-color: #1e2a3f !important;
+}
+.dark .bg-white {
+  background-color: #1a2236 !important;
+}
+
+/* ── 다크모드 modal ────────────────────────────────── */
+.dark .modal-content {
+  background-color: #1a2236;
+  border-color: #2d3a4f;
+  color: #e2e8f0;
+}
+.dark .modal-header {
+  border-color: #2d3a4f;
+}
+.dark .modal-footer {
+  border-color: #2d3a4f;
+}
+
+/* ── 다크모드 input / form 스타일 ─────────────────── */
+.dark .form-control,
+.dark .form-select,
+.dark textarea {
+  background-color: #1e2430;
+  color: #e2e8f0;
+  border-color: #3d4a5c;
+}
+.dark .form-control::placeholder,
+.dark textarea::placeholder {
+  color: #64748b;
+}
+.dark .form-control:focus,
+.dark .form-select:focus,
+.dark textarea:focus {
+  background-color: #1e2430;
+  color: #e2e8f0;
+  border-color: #4e82d0;
+  box-shadow: 0 0 0 0.25rem rgba(78, 130, 208, 0.25);
+}
+.dark .form-control[readonly] {
+  background-color: #161b27;
+  color: #94a3b8;
+}

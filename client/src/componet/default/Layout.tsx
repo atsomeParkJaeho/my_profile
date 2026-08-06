@@ -12,7 +12,7 @@ export const Layout = ({ children }: any) => {
       {/* 배너 */}
       <div className="bg-primary" style={{height: 200}} />
       {/* 본문 */}
-      <section style={{backgroundColor: '#f8f9fa', flex: 1}}>
+      <section className="layout-section" style={{flex: 1}}>
         <div className="container py-4">
           <div className="row align-items-start">
             {/* 좌측 사이드바 */}

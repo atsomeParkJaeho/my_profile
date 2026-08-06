@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { logout } from '@store/authSlice';
 import { toggleTheme } from '@store/themeSlice';
+import '@styles/componet/header_menu.css';
 
 const SunIcon = () => (
 	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -29,14 +30,12 @@ export const HeaderMenu = () => {
 
 	return (
 		<nav
+			className="header-nav"
 			style={{
 				position: 'fixed',
 				top: 0, left: 0, right: 0,
 				zIndex: 1030,
 				height: 56,
-				backgroundColor: '#ffffff',
-				borderBottom: '1px solid #dee2e6',
-				boxShadow: '0 1px 4px rgba(0,0,0,.08)',
 				display: 'flex',
 				alignItems: 'center',
 				padding: '0 24px',
@@ -53,24 +52,22 @@ export const HeaderMenu = () => {
 					display: 'flex', alignItems: 'center', justifyContent: 'center',
 					fontWeight: 700, fontSize: '0.85rem',
 				}}>H</div>
-				<span style={{ fontWeight: 700, color: '#212529' }}>Horilla</span>
+				<span className="header-logo-text">Horilla</span>
 			</Link>
 
-			{/* ── 우측 영역 (항상 표시) ── */}
+			{/* ── 우측 영역 ── */}
 			<div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
 
 				{/* 다크/라이트 모드 토글 */}
 				<button
 					onClick={() => dispatch(toggleTheme())}
 					title={mode === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환'}
+					className="header-icon-btn"
 					style={{
 						width: 34, height: 34,
 						borderRadius: '50%',
-						border: '1px solid #6c757d',
-						backgroundColor: 'transparent',
 						cursor: 'pointer',
 						display: 'flex', alignItems: 'center', justifyContent: 'center',
-						color: '#495057',
 						flexShrink: 0,
 					}}
 				>
@@ -79,9 +76,7 @@ export const HeaderMenu = () => {
 
 				{/* 로그인 사용자 이름 */}
 				{user && (
-					<span style={{ color: '#6c757d', fontSize: '0.875rem', whiteSpace: 'nowrap' }}>
-						{user.name}
-					</span>
+					<span className="header-username">{user.name}</span>
 				)}
 
 				{/* 로그인 / 로그아웃 - 관리자만 표시 */}

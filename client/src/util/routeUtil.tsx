@@ -59,11 +59,13 @@ export const LeftMenuList = [
     name:`게시판`,
     to:`/community/list`,
     icon:`bi-journal-text`,
+    activePrefix: `/community`,
   },
   {
     name:`프로필`,
     to:`/home`,
     icon:`bi-person`,
+    activePrefix: `/home`,
   },
 ];
 
