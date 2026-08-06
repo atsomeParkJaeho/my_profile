@@ -16,7 +16,7 @@ const TOOLBAR_OPTIONS = [
 	['clean'],
 ];
 
-const WritePageLayout = ({id, actType, itemId}) => {
+const WritePageLayout = ({ id, actType, itemId, type = 'default' }) => {
 	const navigate   = useNavigate();
 	const quillRef   = useRef<any>(null);
 	const isEdit     = actType === 'edit';
@@ -88,9 +88,10 @@ const WritePageLayout = ({id, actType, itemId}) => {
 					title,
 					content,
 					c_user_name: id?.name ?? '',
+					type,
 				});
 			}
-			navigate('/community/list');
+			navigate(`/community/${type}/list`);
 		} catch (err) {
 			console.error(err);
 		}

@@ -93,6 +93,13 @@ export class CommunityService implements OnApplicationBootstrap {
     return this.dataSource.query('SELECT * FROM community_table ORDER BY id DESC');
   }
 
+  async findByType(type: string): Promise<any[]> {
+    return this.query(
+      'SELECT * FROM community_table WHERE type = ? ORDER BY id DESC',
+      [type],
+    );
+  }
+
   async create(dto: any): Promise<any> {
     const { date, time } = this.getNow();
     return this.query(

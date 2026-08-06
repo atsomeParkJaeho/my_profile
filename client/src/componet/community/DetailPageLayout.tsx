@@ -4,7 +4,7 @@ import 'react-quill-new/dist/quill.snow.css';
 import { getCommunityDetail } from '@api/community';
 import { useAppSelector } from '@store/hooks';
 
-const DetailPageLayout = ({id}) => {
+const DetailPageLayout = ({ id, type = 'default' }) => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { user } = useAppSelector((state) => state.auth);
@@ -15,7 +15,7 @@ const DetailPageLayout = ({id}) => {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		if (!itemId) { navigate('/community/list'); return; }
+		if (!itemId) { navigate(`/community/${type}/list`); return; }
 		getCommunityDetail(itemId)
 			.then((data) => setItem(data))
 			.catch(console.error)
@@ -68,14 +68,14 @@ const DetailPageLayout = ({id}) => {
 						{isAdmin && (
 							<button
 								className="btn btn-outline-primary btn-sm"
-								onClick={() => navigate('/community/write', { state: { id: item.id,actType: 'edit' } })}
+								onClick={() => navigate(`/community/${type}/write`, { state: { id: item.id, actType: 'edit' } })}
 							>
 								<i className="bi bi-pencil-square me-1"></i>수정
 							</button>
 						)}
 						<button
 							className="btn btn-outline-secondary btn-sm"
-							onClick={() => navigate('/community/list')}
+							onClick={() => navigate(`/community/${type}/list`)}
 						>
 							<i className="bi bi-list-ul me-1"></i>목록
 						</button>

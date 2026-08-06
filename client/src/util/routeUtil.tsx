@@ -3,7 +3,6 @@ import { useAppSelector } from '@store/hooks';
 import LoginPage from '@pages/login/LoginPage';
 import HomePage  from '@pages/home/HomePage';
 import CommunityPage from "@pages/community/Page";
-// import SigninPage from '@pages/signin/SigninPage';
 
 // ── 인증 필요 라우트 (미로그인 시 /login 이동) ─────────────────────────────
 const PrivateRoute = ({ element }: { element: JSX.Element }) => {
@@ -19,53 +18,33 @@ const PublicRoute = ({ element }: { element: JSX.Element }) => {
 
 // ── 라우트 목록 ────────────────────────────────────────────────────────────
 export const RouteList: { path: string; element: JSX.Element }[] = [
-  {
-    path: '/',
-    element: <Navigate to="/home" replace />,
-  },
-  {
-    path: '*',
-    element: <Navigate to="/home" replace />,
-  },
-  {
-    path: '/login',
-    element: <PublicRoute element={<LoginPage />} />,
-  },
-  // 회원가입 비활성화
-  // {
-  //   path: '/signin',
-  //   element: <PublicRoute element={<SigninPage />} />,
-  // },
-  {
-    path: '/home',
-    element: <HomePage />,
-  },
-  {
-    path: '/community/list',
-    element: <CommunityPage />,
-  },
-  {
-    path: '/community/write',
-    element: <CommunityPage />,
-  },
-  {
-    path: '/community/detail',
-    element: <CommunityPage />,
-  }
+  { path: '/',       element: <Navigate to="/home" replace /> },
+  { path: '*',       element: <Navigate to="/home" replace /> },
+  { path: '/login',  element: <PublicRoute element={<LoginPage />} /> },
+  { path: '/home',   element: <HomePage /> },
+
+  // community_table type 기반 경로
+  { path: '/community/:type/list',   element: <CommunityPage /> },
+  { path: '/community/:type/write',  element: <CommunityPage /> },
+  { path: '/community/:type/detail', element: <CommunityPage /> },
+
+  // 기존 경로 → default 타입으로 리다이렉트 (하위 호환)
+  { path: '/community/list',   element: <Navigate to="/community/default/list"   replace /> },
+  { path: '/community/write',  element: <Navigate to="/community/default/write"  replace /> },
+  { path: '/community/detail', element: <Navigate to="/community/default/detail" replace /> },
 ];
 
 export const LeftMenuList = [
   {
-    name:`게시판`,
-    to:`/community/list`,
-    icon:`bi-journal-text`,
-    activePrefix: `/community`,
+    name: '게시판',
+    to: '/community/default/list',
+    icon: 'bi-journal-text',
+    activePrefix: '/community',
   },
   {
-    name:`프로필`,
-    to:`/home`,
-    icon:`bi-person`,
-    activePrefix: `/home`,
+    name: '프로필',
+    to: '/home',
+    icon: 'bi-person',
+    activePrefix: '/home',
   },
 ];
-

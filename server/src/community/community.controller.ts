@@ -5,6 +5,13 @@ import { CommunityService } from './community.service';
 export class CommunityController {
   constructor(private readonly communityService: CommunityService) {}
 
+  // type별 목록 조회: GET /api/community/list/:type
+  @Get('list/:type')
+  findByType(@Param('type') type: string) {
+    return this.communityService.findByType(type);
+  }
+
+  // 전체 목록 (하위 호환)
   @Get('list')
   findAll() {
     return this.communityService.findAll();
