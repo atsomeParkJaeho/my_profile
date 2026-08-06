@@ -26,7 +26,7 @@ export const LeftMenu = () => {
     getInfo()
       .then((d) => {
         if (d) {
-          setInfo({ name: d.name || user?.name || '', email: d.email || user?.email || '' });
+          setInfo({ name: d.name || '', email: d.email || '' });
           if (d.profile_image) setImgSrc(d.profile_image);
         }
       })
