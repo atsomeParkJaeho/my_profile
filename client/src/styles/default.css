@@ -209,6 +209,11 @@ input::placeholder {
 .dark .section {
   background-color: #1a2236;
 }
+.dark .table th,
+.dark .table td {
+  color: #e2e8f0 !important;
+  background-color: #1a2236;
+}
 .dark .text-muted {
   color: #64748b !important;
 }
