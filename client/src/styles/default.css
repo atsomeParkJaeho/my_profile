@@ -165,6 +165,54 @@ input::placeholder {
   background-color: #1a2236 !important;
 }
 
+/* ── community table ───────────────────────────────── */
+.community-table {
+  border-top: 2px solid #dee2e6;
+}
+.community-table-head-row {
+  border-bottom: 2px solid #dee2e6;
+}
+.community-table-row {
+  border-bottom: 1px solid #dee2e6;
+}
+.dark .community-table {
+  border-top-color: #3d4a5c;
+}
+.dark .community-table-head-row {
+  border-bottom-color: #3d4a5c;
+}
+.dark .community-table-row {
+  border-bottom-color: #2d3a4f;
+}
+
+/* ── 다크모드 table ────────────────────────────────── */
+.dark .table {
+  color: #e2e8f0;
+  border-color: #2d3a4f;
+  background-color: #1a2236;
+}
+.dark .table thead tr {
+  border-bottom-color: #3d4a5c;
+  background-color: #1a2236;
+}
+.dark .table tbody tr {
+  border-bottom-color: #2d3a4f;
+  background-color: #1a2236;
+}
+.dark .table-borderless > :not(caption) > * > * {
+  border-bottom-color: #2d3a4f;
+  background-color: #1a2236;
+}
+.dark .table-responsive {
+  background-color: #1a2236;
+}
+.dark .section {
+  background-color: #1a2236;
+}
+.dark .text-muted {
+  color: #64748b !important;
+}
+
 /* ── 다크모드 modal ────────────────────────────────── */
 .dark .modal-content {
   background-color: #1a2236;

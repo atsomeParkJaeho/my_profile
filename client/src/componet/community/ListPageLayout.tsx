@@ -57,7 +57,7 @@ const ListPageLayout = ({id}) => {
 						<div className="text-center py-4">로딩 중...</div>
 					) : (
 						<div className="table-responsive">
-							<table className="table table-borderless" style={{borderTop: '2px solid #dee2e6', tableLayout: 'fixed', width: '100%'}}>
+							<table className="table table-borderless community-table" style={{tableLayout: 'fixed', width: '100%'}}>
 								<colgroup>
 									<col style={{width: '5%'}}/>
 									<col style={{width: isAdmin ? '25%' : '30%'}}/>
@@ -68,7 +68,7 @@ const ListPageLayout = ({id}) => {
 									{isAdmin && <col style={{width: '10%'}}/>}
 								</colgroup>
 								<thead>
-									<tr style={{borderBottom: '2px solid #dee2e6'}}>
+									<tr className="community-table-head-row">
 										<th className="fw-bold py-3 text-center">#</th>
 										<th className="fw-bold py-3 text-center">제목</th>
 										<th className="fw-bold py-3 text-center">작성일시</th>
@@ -80,12 +80,12 @@ const ListPageLayout = ({id}) => {
 								</thead>
 								<tbody>
 									{list.length === 0 ? (
-										<tr style={{borderBottom: '1px solid #dee2e6'}}>
+										<tr className="community-table-row">
 											<td colSpan={isAdmin ? 7 : 6} className="text-center py-4 text-muted">등록된 게시글이 없습니다.</td>
 										</tr>
 									) : (
 										list.map((item, index) => (
-											<tr className={`align-middle`} key={item.id} style={{borderBottom: '1px solid #dee2e6'}}>
+											<tr className={`align-middle`} key={item.id} className="community-table-row">
 												<td className="py-3 fw-bold text-center">{index + 1}</td>
 												<td className="py-3 text-center">
 													<span
