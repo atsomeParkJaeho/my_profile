@@ -27,9 +27,11 @@ export const RouteList: { path: string; element: JSX.Element }[] = [
   { path: '/community/:type/list',   element: <BoardPage /> },
   { path: '/community/:type/write',  element: <BoardPage /> },
   { path: '/community/:type/detail', element: <BoardPage /> },
+  
   { path: '/banner/:type/list',      element: <BoardPage /> },
   { path: '/banner/:type/write',     element: <BoardPage /> },
   { path: '/banner/:type/detail',    element: <BoardPage /> },
+  
   { path: '/gallery/:type/list',     element: <BoardPage /> },
   { path: '/gallery/:type/write',    element: <BoardPage /> },
   { path: '/gallery/:type/detail',   element: <BoardPage /> },

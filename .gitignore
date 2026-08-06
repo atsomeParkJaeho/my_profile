@@ -13,3 +13,4 @@ release/
 .migration-sqlite-done
 .migration-mariadb-done
 .idea/
+template/
