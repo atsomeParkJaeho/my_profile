@@ -46,7 +46,7 @@ const ListPageLayout = ({id}) => {
 	return (
 		<>
 			
-			<div className="section">
+			<div className="">
 				<div style={{width: '100%', overflow: 'hidden'}}>
 					{isAdmin && (
 						<div className="d-flex justify-content-end mb-3">

@@ -204,7 +204,7 @@ input::placeholder {
   background-color: #1a2236;
 }
 .dark .table-responsive {
-  background-color: #1a2236;
+  /*background-color: #1a2236;*/
 }
 .dark .section {
   background-color: #1a2236;
