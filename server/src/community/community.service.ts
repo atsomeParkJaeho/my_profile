@@ -43,40 +43,39 @@ export class CommunityService implements OnApplicationBootstrap {
     await this.dataSource.query(`
       CREATE TABLE IF NOT EXISTS community_table (
         ${this.pk},
-        title       VARCHAR(500),
-        content     TEXT,
-        c_date      VARCHAR(20),
-        c_time      VARCHAR(20),
-        c_user_name VARCHAR(100),
-        e_date      VARCHAR(20),
-        e_time      VARCHAR(20),
-        e_user_name VARCHAR(100),
-        type        VARCHAR(20) DEFAULT 'default',
-        extra1      TEXT,
-        extra2      TEXT,
-        extra3      TEXT,
-        extra4      TEXT
+        title        VARCHAR(500),
+        content      TEXT,
+        c_date       VARCHAR(20),
+        c_time       VARCHAR(20),
+        c_user_name  VARCHAR(100),
+        e_date       VARCHAR(20),
+        e_time       VARCHAR(20),
+        e_user_name  VARCHAR(100),
+        type         VARCHAR(50)  DEFAULT 'default',
+        board_layout VARCHAR(20)  DEFAULT 'community',
+        extra1       TEXT,
+        extra2       TEXT,
+        extra3       TEXT,
+        extra4       TEXT
       )
     `);
 
-    // 기존 테이블에 누락된 컬럼 추가
     const columns: [string, string][] = [
-      ['content',     'TEXT'],
-      ['type',        "VARCHAR(20) DEFAULT 'default'"],
-      ['extra1',      'TEXT'],
-      ['extra2',      'TEXT'],
-      ['extra3',      'TEXT'],
-      ['extra4',      'TEXT'],
+      ['content',      'TEXT'],
+      ['type',         "VARCHAR(50) DEFAULT 'default'"],
+      ['board_layout', "VARCHAR(20) DEFAULT 'community'"],
+      ['extra1',       'TEXT'],
+      ['extra2',       'TEXT'],
+      ['extra3',       'TEXT'],
+      ['extra4',       'TEXT'],
     ];
     for (const [col, type] of columns) {
       await this.addColumnIfMissing(col, type);
     }
 
-    // 기존 데이터 type 컬럼이 NULL인 경우 'default' 로 초기화
-    await this.query(
-      `UPDATE community_table SET type = ? WHERE type IS NULL`,
-      ['default'],
-    );
+    // NULL 값 초기화
+    await this.query(`UPDATE community_table SET type = ? WHERE type IS NULL`, ['default']);
+    await this.query(`UPDATE community_table SET board_layout = ? WHERE board_layout IS NULL`, ['community']);
   }
 
   private getNow() {
@@ -93,20 +92,25 @@ export class CommunityService implements OnApplicationBootstrap {
     return this.dataSource.query('SELECT * FROM community_table ORDER BY id DESC');
   }
 
-  async findByType(type: string): Promise<any[]> {
+  // 1차(board_layout) + 2차(type) 로 목록 조회
+  async findByLayoutAndType(boardLayout: string, type: string): Promise<any[]> {
     return this.query(
-      'SELECT * FROM community_table WHERE type = ? ORDER BY id DESC',
-      [type],
+      'SELECT * FROM community_table WHERE board_layout = ? AND type = ? ORDER BY id DESC',
+      [boardLayout, type],
     );
   }
 
   async create(dto: any): Promise<any> {
     const { date, time } = this.getNow();
     return this.query(
-      `INSERT INTO community_table (title, content, c_date, c_time, c_user_name, type, extra1, extra2, extra3, extra4)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [dto.title, dto.content ?? '', date, time, dto.c_user_name,
-       dto.type ?? 'default', dto.extra1 ?? null, dto.extra2 ?? null, dto.extra3 ?? null, dto.extra4 ?? null],
+      `INSERT INTO community_table
+        (title, content, c_date, c_time, c_user_name, type, board_layout, extra1, extra2, extra3, extra4)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        dto.title, dto.content ?? '', date, time, dto.c_user_name,
+        dto.type ?? 'default', dto.board_layout ?? 'community',
+        dto.extra1 ?? null, dto.extra2 ?? null, dto.extra3 ?? null, dto.extra4 ?? null,
+      ],
     );
   }
 
@@ -119,11 +123,14 @@ export class CommunityService implements OnApplicationBootstrap {
     return this.query(
       `UPDATE community_table
        SET title = ?, content = ?, e_date = ?, e_time = ?, e_user_name = ?,
-           type = ?, extra1 = ?, extra2 = ?, extra3 = ?, extra4 = ?
+           type = ?, board_layout = ?, extra1 = ?, extra2 = ?, extra3 = ?, extra4 = ?
        WHERE id = ?`,
-      [dto.title, dto.content ?? '', date, time, dto.e_user_name,
-       dto.type ?? 'default', dto.extra1 ?? null, dto.extra2 ?? null, dto.extra3 ?? null, dto.extra4 ?? null,
-       id],
+      [
+        dto.title, dto.content ?? '', date, time, dto.e_user_name,
+        dto.type ?? 'default', dto.board_layout ?? 'community',
+        dto.extra1 ?? null, dto.extra2 ?? null, dto.extra3 ?? null, dto.extra4 ?? null,
+        id,
+      ],
     );
   }
 }

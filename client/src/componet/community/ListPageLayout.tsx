@@ -5,7 +5,7 @@ import { useAppSelector } from "@store/hooks";
 
 const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL;
 
-const ListPageLayout = ({ id, type = 'default' }) => {
+const ListPageLayout = ({ id, layout = 'community', type = 'default' }) => {
 	const navigate = useNavigate();
 	const { user } = useAppSelector((state) => state.auth);
 	const isAdmin  = user?.email === ADMIN_EMAIL;
@@ -14,14 +14,14 @@ const ListPageLayout = ({ id, type = 'default' }) => {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		getCommunity(type).then((res) => {
+		getCommunity(layout, type).then((res) => {
 			if (res) setList(res);
 			setLoading(false);
 		});
-	}, [type]);
+	}, [layout, type]);
 
 	const onHandleClick = () => {
-		navigate(`/community/${type}/write`, { state: { actType: 'create' } });
+		navigate(`/${layout}/${type}/write`, { state: { actType: 'create' } });
 	};
 
 	const onHandleDelete = async (itemId: number) => {
@@ -81,7 +81,7 @@ const ListPageLayout = ({ id, type = 'default' }) => {
 											<span
 												className="text-primary"
 												style={{ cursor: 'pointer' }}
-												onClick={() => navigate(`/community/${type}/detail`, { state: { id: item.id } })}
+												onClick={() => navigate(`/${layout}/${type}/detail`, { state: { id: item.id } })}
 											>
 												{item.title}
 											</span>

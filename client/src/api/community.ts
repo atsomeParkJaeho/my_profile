@@ -1,8 +1,8 @@
 import { clientApi } from "@api/api";
 
-export const getCommunity = async (type = 'default') => {
+export const getCommunity = async (layout = 'community', type = 'default') => {
 	try {
-		const { data } = await clientApi.get(`/community/list/${type}`);
+		const { data } = await clientApi.get(`/community/list/${layout}/${type}`);
 		return data;
 	} catch (err: any) {
 		alert(err?.message);
