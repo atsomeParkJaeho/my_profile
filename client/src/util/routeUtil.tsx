@@ -48,17 +48,20 @@ export const LeftMenuList = [
     to: '/home',
     icon: 'bi-person',
     activePrefix: '/home',
+    renderType: 'home',
   },
   {
     name: '포트폴리오',
     to: '/community/portfolio/list',
     icon: 'bi-images',
     activePrefix: '/community/portfolio',
+    renderType: 'gallery',
   },
   {
     name: '게시판',
     to: '/community/default/list',
     icon: 'bi-journal-text',
     activePrefix: '/community/default',
+    renderType: 'community',
   },
 ];
