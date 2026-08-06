@@ -6,6 +6,6 @@ export const clientApi = axios.create({
 });
 
 export const updateProfileImage = async (profileImage: string) => {
-  const { data } = await clientApi.patch('/users/profile-image', { profileImage });
+  const { data } = await clientApi.patch('/profile/profile-image', { profileImage });
   return data;
 };

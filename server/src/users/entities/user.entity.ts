@@ -15,9 +15,6 @@ export class User {
   @Column({ type: 'text', select: false, nullable: true })
   password: string;
 
-  @Column({ type: 'text', nullable: true })
-  profileImage: string;
-
   @CreateDateColumn()
   createdAt: Date;
 }

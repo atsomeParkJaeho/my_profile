@@ -58,8 +58,4 @@ export class UsersService implements OnApplicationBootstrap {
   async remove(id: number): Promise<void> {
     await this.usersRepository.delete(id);
   }
-
-  async updateProfileImage(id: number, profileImage: string): Promise<void> {
-    await this.usersRepository.update(id, { profileImage });
-  }
 }

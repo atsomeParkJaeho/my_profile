@@ -75,6 +75,7 @@ export class ProfileService implements OnApplicationBootstrap {
       ['name', vc(100)], ['email', vc(200)],
       ['langue', vc(200)], ['school', vc(300)], ['birthday', vc(20)],
       ['c_datetime', vc(30)], ['e_datetime', vc(30)],
+      ['profile_image', 'TEXT'],
     ];
     for (const [col, type] of infoColumns) {
       await this.addColumnIfMissing('myself_info', col, type);
@@ -115,17 +116,13 @@ export class ProfileService implements OnApplicationBootstrap {
     }
   }
 
-  async getInfo(userId?: number): Promise<any> {
+  async getInfo(_userId?: number): Promise<any> {
     const rows = await this.dataSource.query('SELECT * FROM myself_info LIMIT 1');
-    const info = rows[0] ?? null;
-    if (!info || !userId) return info;
-    const users = await this.dataSource.query(
-      this.isPostgres
-        ? 'SELECT "profileImage" FROM "user" WHERE id = $1'
-        : 'SELECT profileImage FROM user WHERE id = ?',
-      [userId],
-    );
-    return { ...info, profileImage: users[0]?.profileImage ?? null };
+    return rows[0] ?? null;
+  }
+
+  async updateProfileImage(profileImage: string): Promise<void> {
+    await this.query('UPDATE myself_info SET profile_image=? WHERE id=1', [profileImage]);
   }
 
   private getNow(): string {
