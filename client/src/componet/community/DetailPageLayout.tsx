@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import 'react-quill-new/dist/quill.snow.css';
 import { getCommunityDetail } from '@api/community';
 import { useAppSelector } from '@store/hooks';
+import CommentSection from '@/componet/community/CommentSection';
 
 const DetailPageLayout = ({ id, layout = 'community', type = 'default' }) => {
 	const location = useLocation();
@@ -81,6 +82,11 @@ const DetailPageLayout = ({ id, layout = 'community', type = 'default' }) => {
 						</button>
 					</div>
 				</div>
+			</div>
+
+			{/* 댓글 */}
+			<div className="border-top pt-4 mt-2">
+				<CommentSection postId={item.id} />
 			</div>
 		</article>
 	);

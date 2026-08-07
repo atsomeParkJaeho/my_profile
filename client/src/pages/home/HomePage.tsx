@@ -123,12 +123,12 @@ export default function HomePage() {
             <InfoItem icon="bi-person"       label="이름"     value={info.name}     editMode={infoEdit} onChange={(v) => setInfo({ ...info, name: v })}     placeholder="이름" />
             <InfoItem icon="bi-envelope"     label="이메일"   value={info.email}    editMode={infoEdit} onChange={(v) => setInfo({ ...info, email: v })}    placeholder="이메일" />
             <InfoItem icon="bi-phone"        label="연락처"   value={info.phone}    editMode={infoEdit} onChange={(v) => setInfo({ ...info, phone: v })}    placeholder="연락처" />
-            <InfoItem icon="bi-map"          label="위치"     value={info.location} editMode={infoEdit} onChange={(v) => setInfo({ ...info, location: v })} placeholder="위치" />
+            <InfoItem icon="bi-map"          label="주소"     value={info.location} editMode={infoEdit} onChange={(v) => setInfo({ ...info, location: v })} placeholder="주소" />
             <InfoItem icon="bi-link"         label="웹사이트" value={info.website}  editMode={infoEdit} onChange={(v) => setInfo({ ...info, website: v })}  placeholder="URL" />
             <InfoItem icon="bi-building"     label="소속"     value={info.org}      editMode={infoEdit} onChange={(v) => setInfo({ ...info, org: v })}      placeholder="소속 조직" />
             <InfoItem icon="bi-tags"         label="기술스택" value={info.tech}     editMode={infoEdit} onChange={(v) => setInfo({ ...info, tech: v })}     placeholder="기술 스택" />
             <InfoItem icon="bi-translate"    label="언어"     value={info.langue}   editMode={infoEdit} onChange={(v) => setInfo({ ...info, langue: v })}   placeholder="사용 언어" />
-            <InfoItem icon="bi-mortarboard" label="학력"     value={info.school}   editMode={infoEdit} onChange={(v) => setInfo({ ...info, school: v })}   placeholder="학교명" />
+            <InfoItem icon="bi-mortarboard"  label="학력"     value={info.school}   editMode={infoEdit} onChange={(v) => setInfo({ ...info, school: v })}   placeholder="학교명" />
             <InfoItem icon="bi-cake"         label="생년월일" value={info.birthday} editMode={infoEdit} onChange={(v) => setInfo({ ...info, birthday: v })} placeholder="YYYY.MM.DD" />
           </div>
 
