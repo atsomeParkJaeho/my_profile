@@ -115,7 +115,7 @@ export default function HomePage() {
             <textarea className="form-control mb-4" rows={3} placeholder="자기소개를 입력하세요"
               value={info.intro} onChange={(e) => setInfo({ ...info, intro: e.target.value })} />
           ) : (
-            <p className="text-muted mb-4">{info.intro || '자기소개를 입력해주세요.'}</p>
+            <p className="text-muted mb-4" style={{ whiteSpace: 'pre-wrap' }}>{info.intro || '자기소개를 입력해주세요.'}</p>
           )}
 
           {/* 상세 정보 */}

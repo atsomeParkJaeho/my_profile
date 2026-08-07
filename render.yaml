@@ -63,6 +63,10 @@ services:
       - key: ADMIN_PASSWORD
         sync: false
 
+      # ── Resend 이메일 ──────────────────────────────────────────
+      - key: RESEND_API_KEY
+        sync: false
+
 databases:
   - name: my-profile-db
     databaseName: appdb
