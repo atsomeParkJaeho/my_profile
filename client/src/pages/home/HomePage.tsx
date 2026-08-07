@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
+import { compressImage } from '@/util/imageUtil';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import Layout from '@/componet/default/Layout';
 import { getInfo, updateInfo, getCareers, createCareer, updateCareer, deleteCareer } from '@api/profile';
 
 const EMPTY_INFO = { intro: '', phone: '', location: '', website: '', org: '', tech: '', sns_instar: '', sns_naver_blog: '', name: '', email: '', langue: '', school: '', birthday: '' };
-const EMPTY_CAREER = { company: '', role: '', start_dt: '', end_dt: '', desc: '', order_no: 0 };
+const EMPTY_CAREER = { company: '', role: '', start_dt: '', end_dt: '', desc: '', order_no: 0, company_img: '' };
+const MAX_IMG_SIZE = 5 * 1024 * 1024;
 
 export default function HomePage() {
   const dispatch    = useAppDispatch();
@@ -65,9 +67,20 @@ export default function HomePage() {
   const openCareerModal = (career?: any) => {
     setCareerModal({
       open: true,
-      data: career ? { company: career.company, role: career.role, start_dt: career.start_dt, end_dt: career.end_dt, desc: career.desc, order_no: career.order_no } : { ...EMPTY_CAREER },
+      data: career ? { company: career.company, role: career.role, start_dt: career.start_dt, end_dt: career.end_dt, desc: career.desc, order_no: career.order_no, company_img: career.company_img ?? '' } : { ...EMPTY_CAREER },
       id: career?.id ?? null,
     });
+  };
+
+  const handleCareerImgChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > MAX_IMG_SIZE) { alert('5MB 이하의 이미지만 업로드할 수 있습니다.'); e.target.value = ''; return; }
+    try {
+      const base64 = await compressImage(file, 0.8);
+      setCareerModal((prev) => ({ ...prev, data: { ...prev.data, company_img: base64 } }));
+    } catch (err) { console.error(err); }
+    finally { e.target.value = ''; }
   };
 
   return (
@@ -144,9 +157,15 @@ export default function HomePage() {
             careers.map((c) => (
               <div key={c.id} className="bg-light p-3 rounded mb-3">
                 <div className="d-flex align-items-center mb-2">
-                  <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
+                  <div className="rounded-circle flex-shrink-0 overflow-hidden d-flex align-items-center justify-content-center"
                     style={{width: 44, height: 44}}>
-                    {c.company?.charAt(0) ?? '?'}
+                    {c.company_img ? (
+                      <img src={c.company_img} alt={c.company} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                    ) : (
+                      <div className="bg-primary text-white fw-bold d-flex align-items-center justify-content-center w-100 h-100">
+                        {c.company?.charAt(0) ?? '?'}
+                      </div>
+                    )}
                   </div>
                   <div className="ps-3 flex-grow-1">
                     <h6 className="mb-0 fw-bold">{c.company}</h6>
@@ -181,6 +200,32 @@ export default function HomePage() {
               </div>
               <div className="modal-body">
                 <div className="row g-3">
+                  <div className="col-12">
+                    <label className="form-label">회사 이미지</label>
+                    <div className="d-flex align-items-center gap-3">
+                      <div className="rounded-circle overflow-hidden flex-shrink-0 d-flex align-items-center justify-content-center bg-light border"
+                        style={{width: 56, height: 56}}>
+                        {careerModal.data.company_img ? (
+                          <img src={careerModal.data.company_img} alt="회사" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                        ) : (
+                          <i className="bi bi-building text-muted" style={{fontSize: '1.4rem'}} />
+                        )}
+                      </div>
+                      <div>
+                        <label className="btn btn-outline-secondary btn-sm mb-1" style={{cursor: 'pointer'}}>
+                          이미지 선택
+                          <input type="file" accept="image/*" style={{display: 'none'}} onChange={handleCareerImgChange} />
+                        </label>
+                        {careerModal.data.company_img && (
+                          <button type="button" className="btn btn-outline-danger btn-sm ms-2 mb-1"
+                            onClick={() => setCareerModal((p) => ({ ...p, data: { ...p.data, company_img: '' } }))}>
+                            삭제
+                          </button>
+                        )}
+                        <p className="text-muted small mb-0">5MB 이하</p>
+                      </div>
+                    </div>
+                  </div>
                   <div className="col-12">
                     <label className="form-label">회사명</label>
                     <input className="form-control" value={careerModal.data.company}

@@ -107,9 +107,13 @@ export class ProfileService implements OnApplicationBootstrap {
     `);
 
     const careerColumns: [string, string][] = [
-      ['company', vc(200)], ['role', vc(200)],
-      ['start_dt', vc(20)], ['end_dt', vc(20)],
-      ['"desc"', 'TEXT'], ['order_no', 'INT DEFAULT 0'],
+      ['company',     vc(200)],
+      ['role',        vc(200)],
+      ['start_dt',    vc(20)],
+      ['end_dt',      vc(20)],
+      ['"desc"',      'TEXT'],
+      ['order_no',    'INT DEFAULT 0'],
+      ['company_img', 'TEXT'],
     ];
     for (const [col, type] of careerColumns) {
       await this.addColumnIfMissing('career_list', col, type);
@@ -153,17 +157,17 @@ export class ProfileService implements OnApplicationBootstrap {
 
   async createCareer(dto: any): Promise<any> {
     return this.query(
-      `INSERT INTO career_list (company, role, start_dt, end_dt, "desc", order_no)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [dto.company, dto.role, dto.start_dt, dto.end_dt, dto.desc, dto.order_no ?? 0],
+      `INSERT INTO career_list (company, role, start_dt, end_dt, "desc", order_no, company_img)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [dto.company, dto.role, dto.start_dt, dto.end_dt, dto.desc, dto.order_no ?? 0, dto.company_img ?? null],
     );
   }
 
   async updateCareer(id: number, dto: any): Promise<any> {
     return this.query(
-      `UPDATE career_list SET company=?, role=?, start_dt=?, end_dt=?, "desc"=?, order_no=?
+      `UPDATE career_list SET company=?, role=?, start_dt=?, end_dt=?, "desc"=?, order_no=?, company_img=?
        WHERE id=?`,
-      [dto.company, dto.role, dto.start_dt, dto.end_dt, dto.desc, dto.order_no ?? 0, id],
+      [dto.company, dto.role, dto.start_dt, dto.end_dt, dto.desc, dto.order_no ?? 0, dto.company_img ?? null, id],
     );
   }
 
