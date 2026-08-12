@@ -69,11 +69,14 @@ export class PricefindService {
       });
       if (childAlsoMatches) return;
 
+      const title = $el.find('strong').first().text().trim();
+      if (title === '개인정보처리방침') return;
+
       const target = $el.find('.TZ9pAJh_Sk');
       const yen = this.toNumber(target.first().text()) / 12;
 
       results.push({
-        title: $el.find('strong').first().text().trim(),
+        title,
         img:   $el.find('img').first().attr('src') ?? '',
         price: target.length > 0 ? this.toNumber(target.first().text()) : 0,
         yen,
