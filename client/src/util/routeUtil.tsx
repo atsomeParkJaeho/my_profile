@@ -1,9 +1,10 @@
 import { Navigate } from 'react-router-dom';
 import { useAppSelector } from '@store/hooks';
-import LoginPage    from '@pages/login/LoginPage';
-import HomePage     from '@pages/home/HomePage';
-import BoardPage    from '@pages/community/Page';
-import ContactPage  from '@pages/contact/ContactPage';
+import LoginPage      from '@pages/login/LoginPage';
+import HomePage       from '@pages/home/HomePage';
+import BoardPage      from '@pages/community/Page';
+import ContactPage    from '@pages/contact/ContactPage';
+import PriceFindPage  from '@pages/pricefind/PriceFindPage';
 
 // ── 인증 필요 라우트 ───────────────────────────────────────────────────────
 const PrivateRoute = ({ element }: { element: JSX.Element }) => {
@@ -23,7 +24,8 @@ export const RouteList: { path: string; element: JSX.Element }[] = [
   { path: '*',        element: <Navigate to="/home" replace /> },
   { path: '/login',   element: <PublicRoute element={<LoginPage />} /> },
   { path: '/home',    element: <HomePage /> },
-  { path: '/contact', element: <ContactPage /> },
+  { path: '/contact',    element: <ContactPage /> },
+  { path: '/pricefind', element: <PriceFindPage /> },
 
   // 1차 카테고리 / 2차 카테고리 / 액션
   { path: '/community/:type/list',   element: <BoardPage /> },
@@ -65,6 +67,13 @@ export const LeftMenuList = [
     icon: 'bi-journal-text',
     activePrefix: '/community/default',
     renderType: 'community',
+  },
+  {
+    name: '가격 비교',
+    to: '/pricefind',
+    icon: 'bi-search',
+    activePrefix: '/pricefind',
+    renderType: 'pricefind',
   },
   {
     name: '문의하기',
