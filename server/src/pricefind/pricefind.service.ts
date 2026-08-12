@@ -1,34 +1,31 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import puppeteer from 'puppeteer-core';
-import chromium from '@sparticuz/chromium';
 import * as cheerio from 'cheerio';
 
 @Injectable()
 export class PricefindService {
   async searchNaver(q: string): Promise<any> {
     const url = `https://m.brand.naver.com/bandai/search?q=${encodeURIComponent(q)}`;
+    const isProd = process.env.NODE_ENV === 'production';
 
-    // 로컬(개발)환경은 puppeteer 내장 Chromium 경로, 서버(Render)는 sparticuz/chromium 사용
-    const isLocal = process.env.NODE_ENV !== 'production';
-    let executablePath: string | undefined;
-    if (isLocal) {
-      // 로컬: 설치된 puppeteer 패키지의 Chromium 경로
-      const { executablePath: localPath } = await import('puppeteer');
-      executablePath = await localPath();
+    let browser: any;
+
+    if (isProd) {
+      // ── 프로덕션(Render): sparticuz/chromium + puppeteer-core ──
+      const puppeteer = await import('puppeteer-core');
+      const chromium  = await import('@sparticuz/chromium');
+      browser = await puppeteer.default.launch({
+        headless: true,
+        executablePath: await chromium.default.executablePath(),
+        args: chromium.default.args,
+      });
     } else {
-      executablePath = await chromium.executablePath();
+      // ── 로컬(개발): 일반 puppeteer ──
+      const puppeteer = await import('puppeteer');
+      browser = await puppeteer.default.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-blink-features=AutomationControlled'],
+      });
     }
-
-    const browser = await puppeteer.launch({
-      headless: true,
-      executablePath,
-      args: [
-        ...chromium.args,
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-blink-features=AutomationControlled',
-      ],
-    });
 
     try {
       const page = await browser.newPage();
@@ -52,7 +49,7 @@ export class PricefindService {
         HttpStatus.BAD_GATEWAY,
       );
     } finally {
-      await browser.close();
+      await browser.close().catch(() => null);
     }
   }
 
@@ -60,14 +57,12 @@ export class PricefindService {
     const $ = cheerio.load(html);
     const results: { title: string; img: string; price: number; yen: number; html: string }[] = [];
 
-    // <strong> 과 <img> 를 모두 포함하는 요소만 추출
     $('*').each((_, el) => {
       const $el = $(el);
       const hasStrong = $el.find('strong').length > 0;
       const hasImg    = $el.find('img').length > 0;
       if (!hasStrong || !hasImg) return;
 
-      // 자식 중에도 동일 조건을 만족하는 요소가 있으면 더 작은 단위(자식)가 담당하므로 스킵
       const childAlsoMatches = $el.children().toArray().some((child) => {
         const $c = $(child);
         return $c.find('strong').length > 0 && $c.find('img').length > 0;
@@ -81,8 +76,8 @@ export class PricefindService {
         title: $el.find('strong').first().text().trim(),
         img:   $el.find('img').first().attr('src') ?? '',
         price: target.length > 0 ? this.toNumber(target.first().text()) : 0,
+        yen,
         html:  $.html(el),
-        yen:yen,
       });
     });
 
