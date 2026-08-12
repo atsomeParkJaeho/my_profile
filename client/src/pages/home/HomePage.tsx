@@ -87,6 +87,13 @@ export default function HomePage() {
     <Layout>
       <div className="profile-content-area my-4 card card-body">
 
+        {/* ── PDF 인쇄 버튼 ── */}
+        <div className="d-flex justify-content-end mb-3 btn-print-profile">
+          <button className="btn btn-outline-secondary btn-sm" onClick={() => window.print()}>
+            <i className="bi bi-printer me-1"></i>PDF 저장 / 인쇄
+          </button>
+        </div>
+
         {/* ── 프로필 소개 + 상세정보 + SNS ── */}
         <div className="border-bottom mb-4 pb-4">
           <div className="d-flex justify-content-between align-items-start mb-3">
@@ -95,7 +102,7 @@ export default function HomePage() {
               <h6 className="text-muted fw-normal mb-2">{info?.email}</h6>
             </div>
             {isAdmin && (
-              <div className="ms-3 flex-shrink-0">
+              <div className="ms-3 flex-shrink-0 profile-admin-actions">
                 {infoEdit ? (
                   <div className="d-flex gap-2">
                     <button className="btn btn-primary btn-sm" onClick={handleInfoSave} disabled={saving}>저장</button>
@@ -110,13 +117,7 @@ export default function HomePage() {
             )}
           </div>
 
-          {/* 자기소개 */}
-          {infoEdit ? (
-            <textarea className="form-control mb-4" rows={3} placeholder="자기소개를 입력하세요"
-              value={info.intro} onChange={(e) => setInfo({ ...info, intro: e.target.value })} />
-          ) : (
-            <p className="text-muted mb-4" style={{ whiteSpace: 'pre-wrap' }}>{info.intro || '자기소개를 입력해주세요.'}</p>
-          )}
+          
 
           {/* 상세 정보 */}
           <div className="row mb-4">
@@ -141,7 +142,7 @@ export default function HomePage() {
         </div>
 
         {/* ── 커리어 ── */}
-        <div>
+        <div className="border-bottom mb-4 pb-4">
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h5 className="mb-0">Career</h5>
             {isAdmin && (
@@ -174,7 +175,7 @@ export default function HomePage() {
                   <div className="text-muted small text-end">
                     <div>{c.start_dt} ~ {c.end_dt || '재직 중'}</div>
                     {isAdmin && (
-                      <div className="d-flex gap-2 justify-content-end mt-1">
+                      <div className="d-flex gap-2 justify-content-end mt-1 profile-admin-actions">
                         <button className="btn btn-outline-primary btn-sm py-0" onClick={() => openCareerModal(c)}>수정</button>
                         <button className="btn btn-outline-danger btn-sm py-0" onClick={() => handleCareerDelete(c.id)}>삭제</button>
                       </div>
@@ -186,7 +187,16 @@ export default function HomePage() {
             ))
           )}
         </div>
-
+        {/*자기 소개*/}
+        {/* 자기소개 */}
+        <div className="border-bottom mb-4 pb-4">
+          {infoEdit ? (
+            <textarea className="form-control mb-4" rows={3} placeholder="자기소개를 입력하세요"
+                      value={info.intro} onChange={(e) => setInfo({ ...info, intro: e.target.value })} />
+          ) : (
+            <p className="text-muted mb-4" style={{ whiteSpace: 'pre-wrap' }}>{info.intro || '자기소개를 입력해주세요.'}</p>
+          )}
+        </div>
       </div>
 
       {/* ── 커리어 모달 ── */}

@@ -255,3 +255,60 @@ input::placeholder {
   background-color: #161b27;
   color: #94a3b8;
 }
+
+/* ── 프로필 PDF 인쇄 ───────────────────────────────── */
+@page {
+  size: A4 portrait;
+  margin: 10mm;
+}
+
+@media print {
+  /* 다크모드 강제 해제 */
+  html, body,
+  .dark, .dark * {
+    background-color: #fff !important;
+    color: #000 !important;
+    border-color: #dee2e6 !important;
+  }
+  .dark .card,
+  .dark .card-body,
+  .dark .modal-content,
+  .dark .bg-light { background-color: #fff !important; }
+  .dark .text-muted { color: #6c757d !important; }
+
+  /* 레이아웃 초기화 */
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  /* 헤더·배너·사이드바·버튼 숨김 */
+  .navbar, .top-header,
+  .bg-primary,
+  .col-lg-4, .col-xl-3,
+  .btn-print-profile,
+  .profile-admin-actions { display: none !important; }
+
+  /* 콘텐츠 컬럼을 전체 너비로 확장 */
+  .layout-section .container { padding: 0 !important; max-width: 100% !important; }
+  .layout-section .row { margin: 0 !important; }
+  .col-lg-8, .col-xl-9 {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+    padding: 0 !important;
+  }
+
+  /* 프로필 카드: @page 마진(10mm)이 여백이므로 카드 자체 여백 제거 */
+  .profile-content-area {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: auto !important;
+  }
+}
