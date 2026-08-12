@@ -1,5 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-core';
+import chromium from '@sparticuz/chromium';
 import * as cheerio from 'cheerio';
 
 @Injectable()
@@ -7,9 +8,22 @@ export class PricefindService {
   async searchNaver(q: string): Promise<any> {
     const url = `https://m.brand.naver.com/bandai/search?q=${encodeURIComponent(q)}`;
 
+    // 로컬(개발)환경은 puppeteer 내장 Chromium 경로, 서버(Render)는 sparticuz/chromium 사용
+    const isLocal = process.env.NODE_ENV !== 'production';
+    let executablePath: string | undefined;
+    if (isLocal) {
+      // 로컬: 설치된 puppeteer 패키지의 Chromium 경로
+      const { executablePath: localPath } = await import('puppeteer');
+      executablePath = localPath();
+    } else {
+      executablePath = await chromium.executablePath();
+    }
+
     const browser = await puppeteer.launch({
       headless: true,
+      executablePath,
       args: [
+        ...chromium.args,
         '--no-sandbox',
         '--disable-setuid-sandbox',
         '--disable-blink-features=AutomationControlled',
