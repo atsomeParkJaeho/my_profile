@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Layout from '@/componet/default/Layout';
 import axios from 'axios';
 
@@ -11,16 +12,14 @@ interface SearchItem {
 }
 
 export default function PriceFindPage() {
-  const [inputVal, setInputVal] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [inputVal, setInputVal] = useState(searchParams.get('q') ?? '');
   const [keyword,  setKeyword]  = useState('');
   const [items,    setItems]    = useState<SearchItem[]>([]);
   const [loading,  setLoading]  = useState(false);
   const [searched, setSearched] = useState(false);
 
-  const handleSearch = async (e?: React.FormEvent) => {
-    e?.preventDefault();
-    const q = inputVal.trim();
-    if (!q) return;
+  const fetchSearch = async (q: string) => {
     setKeyword(q);
     setLoading(true);
     setSearched(false);
@@ -38,11 +37,26 @@ export default function PriceFindPage() {
     }
   };
 
+  // 새로고침 시 URL의 q 파라미터로 자동 검색
+  useEffect(() => {
+    const q = searchParams.get('q');
+    if (q) fetchSearch(q);
+  }, []);
+
+  const handleSearch = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    const q = inputVal.trim();
+    if (!q) return;
+    setSearchParams({ q });
+    await fetchSearch(q);
+  };
+
   const handleReset = () => {
     setInputVal('');
     setKeyword('');
     setItems([]);
     setSearched(false);
+    setSearchParams({});
   };
 
   return (

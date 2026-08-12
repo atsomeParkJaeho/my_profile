@@ -77,7 +77,7 @@ export class PricefindService {
 
       results.push({
         title,
-        img:   $el.find('img').first().attr('src') ?? '',
+        img:   ($el.find('img').first().attr('src') ?? '').replace('?type=f80_80', '?type=f750_750'),
         price: target.length > 0 ? this.toNumber(target.first().text()) : 0,
         yen,
         html:  $.html(el),

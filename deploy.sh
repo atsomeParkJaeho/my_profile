@@ -26,7 +26,11 @@ PM2_APP_NAME="nestjs-app"
 # ────────────────────────────────────────────────────────────
 echo "==> [1/9] 시스템 패키지 업데이트"
 apt-get update -y
-apt-get install -y curl git build-essential nginx mariadb-server openssl
+apt-get install -y curl git build-essential nginx mariadb-server openssl \
+  libgbm-dev libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 \
+  libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 \
+  libglib2.0-0 libasound2 libpangocairo-1.0-0 libx11-xcb1 libxcb-dri3-0 \
+  fonts-liberation xdg-utils
 
 # ────────────────────────────────────────────────────────────
 # 2. Node.js 설치 (nvm 경유)
@@ -88,6 +92,9 @@ DB_PORT=3306
 DB_USER=${DB_USER}
 DB_PASS=${DB_PASS}
 DB_NAME=${DB_NAME}
+
+# Puppeteer: 서버에서 Chromium을 직접 실행 (가격비교 크롤링)
+PUPPETEER_CACHE_DIR=${APP_DIR}/server/.cache/puppeteer
 ENV
 
 # ────────────────────────────────────────────────────────────
@@ -104,8 +111,11 @@ echo "클라이언트 빌드 완료: ${APP_DIR}/client/dist"
 # ────────────────────────────────────────────────────────────
 echo "==> [7/9] 서버 빌드 (NestJS)"
 cd "${APP_DIR}/server"
-npm ci --prefer-offline --omit=dev
+# devDependencies 포함 설치 (puppeteer 로컬 Chromium 포함)
+npm ci --prefer-offline
 npm run build
+# Puppeteer Chromium 캐시 다운로드 확인
+node -e "require('puppeteer')" 2>/dev/null || npx puppeteer browsers install chrome
 echo "서버 빌드 완료: ${APP_DIR}/server/dist"
 
 # ────────────────────────────────────────────────────────────
@@ -153,7 +163,7 @@ server {
         proxy_set_header   X-Real-IP         \$remote_addr;
         proxy_set_header   X-Forwarded-For   \$proxy_add_x_forwarded_for;
         proxy_set_header   Connection        "";
-        proxy_read_timeout 60s;
+        proxy_read_timeout 120s;  # Puppeteer 크롤링 대기 시간 확보
     }
 
     # SPA → NestJS (정적 파일 서빙 포함)

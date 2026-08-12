@@ -118,6 +118,29 @@ else
   warn "server 디렉토리를 찾을 수 없습니다. 건너뜁니다."
 fi
 
+# ── Puppeteer Chromium 의존 라이브러리 설치 (가격비교 크롤링용) ────────────────
+info "[4-1] Puppeteer Chromium 시스템 의존성 설치..."
+apt-get install -y \
+  libgbm-dev \
+  libnss3 \
+  libatk1.0-0 \
+  libatk-bridge2.0-0 \
+  libcups2 \
+  libdrm2 \
+  libxkbcommon0 \
+  libxcomposite1 \
+  libxdamage1 \
+  libxfixes3 \
+  libxrandr2 \
+  libglib2.0-0 \
+  libasound2 \
+  libpangocairo-1.0-0 \
+  libx11-xcb1 \
+  libxcb-dri3-0 \
+  fonts-liberation \
+  xdg-utils
+success "Chromium 의존성 설치 완료"
+
 # =============================================================================
 # 5. 실행 모드 선택
 # =============================================================================
