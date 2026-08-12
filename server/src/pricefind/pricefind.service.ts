@@ -14,7 +14,7 @@ export class PricefindService {
     if (isLocal) {
       // 로컬: 설치된 puppeteer 패키지의 Chromium 경로
       const { executablePath: localPath } = await import('puppeteer');
-      executablePath = localPath();
+      executablePath = await localPath();
     } else {
       executablePath = await chromium.executablePath();
     }
