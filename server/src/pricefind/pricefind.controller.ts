@@ -7,8 +7,8 @@ export class PricefindController {
 
   // GET /api/pricefind/search?q=건담
   @Get('search')
-  search(@Query('q') q: string) {
+  search(@Query('q') q: string, @Query('url') url?: string) {
     if (!q?.trim()) throw new BadRequestException('검색어(q)를 입력해주세요.');
-    return this.pricefindService.searchNaver(q.trim());
+    return this.pricefindService.searchNaver(q.trim(), url?.trim());
   }
 }

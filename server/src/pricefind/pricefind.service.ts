@@ -3,8 +3,11 @@ import * as cheerio from 'cheerio';
 
 @Injectable()
 export class PricefindService {
-  async searchNaver(q: string): Promise<any> {
-    const url = `https://m.brand.naver.com/bandai/search?q=${encodeURIComponent(q)}`;
+  private readonly DEFAULT_BASE_URL = 'https://m.brand.naver.com/bandai';
+
+  async searchNaver(q: string, baseUrl?: string): Promise<any> {
+    const base = baseUrl ?? this.DEFAULT_BASE_URL;
+    const url = `${base}/search?q=${encodeURIComponent(q)}`;
     const isProd = process.env.NODE_ENV === 'production';
 
     let browser: any;

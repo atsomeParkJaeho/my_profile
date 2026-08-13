@@ -11,21 +11,28 @@ interface SearchItem {
   html: string;
 }
 
+const CATEGORIES = [
+  { label: '반다이',          url: 'https://m.brand.naver.com/bandai' },
+  { label: '굿스마일코리아',  url: 'https://m.brand.naver.com/goodsmilekr' },
+  { label: '굿스마일컴퍼니_pw', url: 'https://m.smartstore.naver.com/gsc_korea_dt_pw' },
+];
+
 export default function PriceFindPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [inputVal, setInputVal] = useState(searchParams.get('q') ?? '');
-  const [keyword,  setKeyword]  = useState('');
-  const [items,    setItems]    = useState<SearchItem[]>([]);
-  const [loading,  setLoading]  = useState(false);
-  const [searched, setSearched] = useState(false);
+  const [inputVal,        setInputVal]        = useState(searchParams.get('q') ?? '');
+  const [keyword,         setKeyword]         = useState('');
+  const [items,           setItems]           = useState<SearchItem[]>([]);
+  const [loading,         setLoading]         = useState(false);
+  const [searched,        setSearched]        = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<typeof CATEGORIES[number] | null>(null);
 
-  const fetchSearch = async (q: string) => {
+  const fetchSearch = async (q: string, url?: string) => {
     setKeyword(q);
     setLoading(true);
     setSearched(false);
     try {
       const { data } = await axios.get<{ items: SearchItem[]; total: number }>(
-        '/api/pricefind/search', { params: { q } }
+        '/api/pricefind/search', { params: url ? { q, url } : { q } }
       );
       setItems(data.items ?? []);
     } catch (err) {
@@ -47,8 +54,10 @@ export default function PriceFindPage() {
     e?.preventDefault();
     const q = inputVal.trim();
     if (!q) return;
-    setSearchParams({ q });
-    await fetchSearch(q);
+    const params: Record<string, string> = { q };
+    if (selectedCategory) params.category = selectedCategory.label;
+    setSearchParams(params);
+    await fetchSearch(q, selectedCategory?.url);
   };
 
   const handleReset = () => {
@@ -56,6 +65,7 @@ export default function PriceFindPage() {
     setKeyword('');
     setItems([]);
     setSearched(false);
+    setSelectedCategory(null);
     setSearchParams({});
   };
 
@@ -84,13 +94,35 @@ export default function PriceFindPage() {
               }
             </button>
           </form>
+
+          {/* 카테고리 버튼 */}
+          <div className="mt-3">
+            <p className="text-muted small mb-2">카테고리 선택 후 검색버튼을 클릭하세요.</p>
+            <div className="d-flex flex-wrap gap-2">
+              {CATEGORIES.map((cat) => {
+                const isSelected = selectedCategory?.label === cat.label;
+                return (
+                  <button
+                    key={cat.label}
+                    type="button"
+                    className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-secondary'}`}
+                    disabled={loading}
+                    onClick={() => setSelectedCategory(isSelected ? null : cat)}
+                  >
+                    {isSelected && <i className="bi bi-check2 me-1"></i>}
+                    {cat.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
         {/* ── 결과 헤더 ── */}
         {searched && (
           <div className="d-flex align-items-center justify-content-between mb-3 px-1">
             <span className="text-muted small">
-              <strong className="text-dark">"{keyword}"</strong> 검색 결과 · 총 <strong>{items.length}</strong>건
+              <strong>"{keyword}"</strong> 검색 결과 · 총 <strong>{items.length}</strong>건
             </span>
             <button className="btn btn-sm btn-outline-secondary" onClick={handleReset}>
               <i className="bi bi-x-circle me-1"></i>초기화
@@ -128,13 +160,13 @@ export default function PriceFindPage() {
                   {/* 상품 이미지 */}
                   <div
                     className="d-flex align-items-center justify-content-center bg-light rounded-top overflow-hidden"
-                    style={{ height: 160 }}
+                    style={{ position: 'relative', paddingTop: '100%' }}
                   >
                     {item.img ? (
                       <img
                         src={item.img}
                         alt={item.title}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', left:0, top:0 }}
                         onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                       />
                     ) : (
@@ -144,7 +176,7 @@ export default function PriceFindPage() {
 
                   <div className="card-body p-3 d-flex flex-column">
                     <h6
-                      className="fw-bold mb-3 text-dark"
+                      className="fw-bold mb-3"
                       style={{
                         fontSize: '0.88rem', lineHeight: 1.4,
                         display: '-webkit-box', WebkitLineClamp: 2,
