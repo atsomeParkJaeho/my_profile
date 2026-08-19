@@ -1,5 +1,27 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import * as cheerio from 'cheerio';
+import * as fs from 'fs';
+
+const isPkg = typeof (process as any).pkg !== 'undefined';
+
+// 사용자 PC에 설치된 Chrome 경로 자동 탐색 (exe 패키지 전용)
+function findLocalChrome(): string {
+  const candidates = [
+    'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+    'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+    `${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`,
+    'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
+    `${process.env.LOCALAPPDATA}\\Microsoft\\Edge\\Application\\msedge.exe`,
+  ];
+  for (const p of candidates) {
+    if (p && fs.existsSync(p)) return p;
+  }
+  throw new Error(
+    'Chrome 또는 Edge를 찾을 수 없습니다.\n' +
+    'Google Chrome을 설치한 후 다시 시도해주세요.\n' +
+    'https://www.google.com/chrome'
+  );
+}
 
 @Injectable()
 export class PricefindService {
@@ -12,7 +34,15 @@ export class PricefindService {
 
     let browser: any;
 
-    if (isProd) {
+    if (isPkg) {
+      // ── exe 패키지: 사용자 PC의 Chrome 사용 ──
+      const puppeteer = await import('puppeteer-core');
+      browser = await puppeteer.default.launch({
+        headless: true,
+        executablePath: findLocalChrome(),
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-blink-features=AutomationControlled'],
+      });
+    } else if (isProd) {
       // ── 프로덕션(Render): sparticuz/chromium + puppeteer-core ──
       const puppeteer = await import('puppeteer-core');
       const chromium  = await import('@sparticuz/chromium');
@@ -45,7 +75,7 @@ export class PricefindService {
 
       const html = await page.content();
       const items = this.parseItems(html);
-      return { items, total: items.length };
+      return { items, total: items.length,html:html };
     } catch (err: any) {
       throw new HttpException(
         err?.message ?? 'puppeteer fetch failed',

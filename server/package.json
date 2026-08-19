@@ -9,6 +9,7 @@
     "start:prod:db": "docker compose -f ../docker-compose.db.yml up -d && npm run start:prod",
     "build:exe": "nest build && pkg . --compress GZip"
   },
+  "bin": "dist/main.js",
   "pkg": {
     "scripts": [
       "dist/**/*.js"
@@ -16,10 +17,11 @@
     "assets": [
       "dist/**/*",
       "../client/dist/**/*",
-      "node_modules/better-sqlite3/build/Release/better_sqlite3.node"
+      "node_modules/better-sqlite3/build/Release/better_sqlite3.node",
+      "node_modules/bcrypt/prebuilds/win32-x64/bcrypt.node"
     ],
     "targets": [
-      "node22-win-x64"
+      "node24-win-x64"
     ],
     "outputPath": "../release"
   },

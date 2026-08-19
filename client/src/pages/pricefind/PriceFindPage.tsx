@@ -14,7 +14,7 @@ interface SearchItem {
 const CATEGORIES = [
   { label: '반다이',          url: 'https://m.brand.naver.com/bandai' },
   { label: '굿스마일코리아',  url: 'https://m.brand.naver.com/goodsmilekr' },
-  { label: '굿스마일컴퍼니_pw', url: 'https://m.smartstore.naver.com/gsc_korea_dt_pw' },
+  { label: '굿스마일컴퍼니_pw', url: 'https://smartstore.naver.com/gsc_korea_dt_pw' },
 ];
 
 export default function PriceFindPage() {
@@ -34,6 +34,7 @@ export default function PriceFindPage() {
       const { data } = await axios.get<{ items: SearchItem[]; total: number }>(
         '/api/pricefind/search', { params: url ? { q, url } : { q } }
       );
+      console.log(data,'/[data]')
       setItems(data.items ?? []);
     } catch (err) {
       console.error(err);
