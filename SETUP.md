@@ -1,290 +1,216 @@
-# 프로젝트 환경 설정 문서
+# 렌슈 프로젝트 설치 및 실행 가이드
 
-## 기술 스택
-
-| 구분 | 기술 | 버전 |
-|---|---|---|
-| 런타임 | Node.js | 24.x |
-| 백엔드 | NestJS + Fastify | 10.x |
-| 프론트엔드 | React + Vite | 18.x / 5.x |
-| 라우팅 | react-router-dom | 7.x |
-| HTTP 클라이언트 | axios | 1.x |
-| ORM | TypeORM | 0.3.x |
-| DB 드라이버 | mysql2 / better-sqlite3 | 3.x / 12.x |
-| DB | MariaDB (Docker) 또는 SQLite (기본/exe) | 11 / - |
-| 인증 | 서버 세션 (@fastify/session + @fastify/cookie) | - |
-| 비밀번호 해싱 | bcrypt | 6.x |
-| 컨테이너 | Docker + Docker Compose | - |
-| 패키징 | @yao-pkg/pkg (Windows exe) | 6.x |
+## 목차
+1. [필수 프로그램 설치](#1-필수-프로그램-설치)
+2. [프로젝트 패키지 설치](#2-프로젝트-패키지-설치)
+3. [build.bat - 실행 파일 빌드](#3-buildbat---실행-파일-빌드)
+4. [start.bat - 뷰어 실행](#4-startbat---뷰어-실행)
+5. [결과물 구조](#5-결과물-구조)
+6. [자주 발생하는 오류](#6-자주-발생하는-오류)
 
 ---
 
-## 프로젝트 구조
+## 1. 필수 프로그램 설치
+
+### 1-1. Node.js v22 이상
+- 다운로드: https://nodejs.org
+- 버전 확인:
+```
+node -v
+npm -v
+```
+
+### 1-2. Google Chrome 또는 Microsoft Edge
+- 검색 기능(Puppeteer)이 사용자 PC의 Chrome/Edge를 사용합니다.
+- 다운로드: https://www.google.com/chrome
+
+### 1-3. Inno Setup 6 (선택 - RenshuSetup.exe 생성 시 필요)
+- 다운로드: https://jrsoftware.org/isinfo.php
+- 없으면 `build.bat` 실행 시 installer 생성 단계를 건너뜁니다.
+- `release\server.exe` 단독 실행은 Inno Setup 없이도 가능합니다.
+
+---
+
+## 2. 프로젝트 패키지 설치
+
+`build.bat` 실행 전 **최초 1회** 반드시 진행해야 합니다.
+
+### 2-1. client 패키지 설치
+PowerShell 또는 명령 프롬프트에서:
+```
+cd D:\renshu\client
+npm install
+```
+
+### 2-2. server 패키지 설치
+```
+cd D:\renshu\server
+npm install
+```
+
+### 2-3. better-sqlite3 재빌드 (중요)
+`npm install` 후 SQLite 네이티브 바이너리를 현재 Node.js 버전에 맞게 재빌드합니다.
+```
+cd D:\renshu\server
+npm rebuild better-sqlite3
+```
+> 이 단계를 건너뛰면 서버 실행 시 `Could not locate the bindings file` 오류 발생
+
+### 2-4. viewer 패키지 설치
+```
+cd D:\renshu\viewer
+npm install
+```
+
+---
+
+## 3. build.bat - 실행 파일 빌드
+
+### 실행 방법
+`D:\renshu\build.bat` 더블클릭
+
+### 내부 실행 순서
 
 ```
-nestjs-react-sqlite_1/
-├── Dockerfile              멀티스테이지 프로덕션 빌드
-├── docker-compose.yml      app + MariaDB 컨테이너 구성
-├── .dockerignore
-├── build-exe.ps1           Windows exe 빌드 스크립트
-├── setup.sh                Ubuntu 환경 초기 설치 스크립트
-├── release/                exe 빌드 결과물 (server.exe)
-├── SETUP.md                현재 문서
-├── client/                 React 프론트엔드
-│   ├── src/
-│   │   ├── api.ts          axios 인스턴스 (withCredentials: true)
-│   │   ├── auth.ts         GET /api/auth/me 세션 확인 유틸
-│   │   ├── styles.ts       공통 인라인 스타일
-│   │   ├── App.tsx         라우터 + 세션 초기화
-│   │   └── pages/
-│   │       ├── LoginPage.tsx   /login
-│   │       ├── SigninPage.tsx  /signin
-│   │       └── HomePage.tsx   /home
+[1/4] React 클라이언트 빌드
+      client\ 에서 npm run build 실행
+      결과: client\dist\ 생성 (HTML, JS, CSS 번들)
+
+[2/4] NestJS 빌드 + exe 패키징
+      server\ 에서 npm run build:exe 실행
+        1단계 nest build   : TypeScript -> server\dist\*.js 변환
+        2단계 pkg          : dist + client\dist + SQLite 바이너리를
+                             하나의 server.exe로 패키징
+      결과: release\server.exe 생성
+
+[3/4] 환경설정 및 정적 파일 복사
+      server\.env.dev  ->  release\.env
+      client\dist\     ->  release\client\dist\
+      (server.exe 실행 시 같은 폴더의 .env와 client\dist를 참조)
+
+[4/4] 설치 프로그램 생성 (Inno Setup 설치된 경우에만)
+      setup.iss 기반으로 RenshuSetup.exe 생성
+      결과: installer\RenshuSetup.exe
+      (Inno Setup 없으면 이 단계 건너뜀)
+```
+
+### 소요 시간
+- 최초 빌드: 약 3~10분 (네트워크 속도에 따라 다름)
+- 이후 빌드: 약 1~3분
+
+### 빌드 완료 후 생성되는 파일
+```
+D:\renshu\
+├── release\
+│   ├── server.exe          <- 단독 실행 가능한 서버
+│   ├── .env                <- 환경설정 (.env.dev 복사본)
+│   └── client\
+│       └── dist\           <- React 정적 파일
+└── installer\
+    └── RenshuSetup.exe     <- 설치 프로그램 (Inno Setup 있는 경우)
+```
+
+---
+
+## 4. start.bat - 뷰어 실행
+
+### 실행 방법
+`D:\renshu\start.bat` 더블클릭
+
+### 사전 조건
+- `build.bat` 실행 완료 (`release\server.exe` 존재해야 함)
+- `viewer\node_modules` 존재 (`npm install` 완료 상태)
+
+### 내부 실행 순서
+
+```
+start.bat 더블클릭
+  -> viewer\ 폴더에서 npm start 실행
+  -> Electron 앱 시작
+       1. release\server.exe 백그라운드 실행 (콘솔 창 없음)
+       2. localhost:3000 응답 대기 (0.5초 간격, 최대 10초)
+       3. 서버 준비 완료 -> Electron 창 열림
+       4. http://localhost:3000 자동 접속
+  -> 창 닫으면 server.exe도 함께 종료
+```
+
+### 실행 화면
+- 브라우저 없이 독립 앱 창으로 실행됩니다.
+- 상단 메뉴바는 숨겨져 있습니다.
+- 외부 링크 클릭 시 기본 브라우저에서 열립니다.
+
+---
+
+## 5. 결과물 구조
+
+```
+D:\renshu\
+├── build.bat               <- 빌드 실행 (더블클릭)
+├── start.bat               <- 뷰어 실행 (더블클릭)
+├── build-exe.ps1           <- 빌드 스크립트 본체
+├── setup.iss               <- Inno Setup 설치 스크립트
+│
+├── client\                 <- React 프론트엔드 소스
+├── server\                 <- NestJS 백엔드 소스
+│   └── .env.dev            <- 개발/빌드용 환경설정
+│
+├── viewer\                 <- Electron 뷰어
+│   ├── main.js
 │   └── package.json
-└── server/
-    ├── src/
-    │   ├── main.ts                         서버 진입점, Fastify + 세션 설정
-    │   ├── app.module.ts                   TypeORM 연결, 모듈 등록
-    │   ├── auth/
-    │   │   ├── dto/
-    │   │   │   ├── signup.dto.ts           이름·이메일·비밀번호 검증
-    │   │   │   └── login.dto.ts            이메일·비밀번호 검증
-    │   │   ├── guards/
-    │   │   │   └── session-auth.guard.ts   세션 인증 가드
-    │   │   ├── auth.controller.ts          인증 엔드포인트 5개
-    │   │   ├── auth.service.ts             회원가입·로그인·로그아웃·탈퇴
-    │   │   └── auth.module.ts
-    │   └── users/
-    │       ├── entities/user.entity.ts     DB 테이블 스키마
-    │       ├── dto/create-user.dto.ts      입력값 검증
-    │       ├── users.controller.ts         유저 CRUD 엔드포인트
-    │       ├── users.service.ts            DB 조작
-    │       └── users.module.ts
-    ├── .env.dev            개발 환경변수 (SQLite)
-    ├── .env.prod           운영 환경변수 (MariaDB)
-    ├── .env.example        환경변수 템플릿 (git 추적)
-    └── package.json
+│
+├── release\                <- 빌드 결과물 (build.bat 실행 후 생성)
+│   ├── server.exe
+│   ├── .env
+│   └── client\dist\
+│
+└── installer\              <- 설치 프로그램 (Inno Setup 있는 경우)
+    └── RenshuSetup.exe
 ```
 
 ---
 
-## API 엔드포인트
+## 6. 자주 발생하는 오류
 
-글로벌 prefix: `/api`
-
-### 인증 (`/api/auth`)
-
-| 메서드 | URL | 인증 필요 | 설명 |
-|---|---|---|---|
-| POST | `/api/auth/signup` | 없음 | 회원가입 |
-| POST | `/api/auth/login` | 없음 | 로그인 → 세션 생성 |
-| POST | `/api/auth/logout` | 세션 | 로그아웃 → 세션 파기 |
-| GET | `/api/auth/me` | 세션 | 현재 로그인 유저 확인 |
-| DELETE | `/api/auth/me` | 세션 | 회원탈퇴 → 세션 파기 |
-
-### 유저 (`/api/users`)
-
-| 메서드 | URL | 설명 |
-|---|---|---|
-| GET | `/api/users` | 전체 유저 조회 (id DESC) |
-| POST | `/api/users` | 유저 생성 |
-| DELETE | `/api/users/:id` | 유저 삭제 |
-
-### 요청/응답 예시
-
-```json
-// POST /api/auth/signup
-{ "name": "홍길동", "email": "hong@test.com", "password": "123456" }
-→ { "id": 1, "name": "홍길동", "email": "hong@test.com" }
-
-// POST /api/auth/login
-{ "email": "hong@test.com", "password": "123456" }
-→ { "name": "홍길동", "email": "hong@test.com" }
-  + Set-Cookie: sessionId=xxx (HttpOnly)
-
-// GET /api/auth/me
-→ { "id": 1, "name": "홍길동", "email": "hong@test.com" }
+### Could not locate the bindings file (better-sqlite3)
+```
+원인: SQLite 네이티브 바이너리가 없거나 Node.js 버전 불일치
+해결: cd D:\renshu\server && npm rebuild better-sqlite3
 ```
 
----
-
-## 인증 방식 — 서버 세션
-
+### EADDRINUSE: address already in use 3000
 ```
-로그인
-  → 서버: 세션 생성 (메모리 저장)
-  → 브라우저: HttpOnly 쿠키로 session ID만 수신
-  → JS에서 쿠키 접근 불가 (XSS 방어)
-
-요청
-  → 브라우저가 쿠키 자동 전송 (axios withCredentials: true)
-  → 서버: 세션 ID로 유저 정보 조회
-
-새로고침
-  → App.tsx: GET /api/auth/me 호출
-  → 세션 유효 → 로그인 상태 유지
-  → 세션 만료 → /login 이동
-
-로그아웃 / 탈퇴
-  → 서버: session.destroy() → 즉시 무효화
+원인: 이전에 실행한 서버가 아직 살아있음
+해결: PowerShell에서 아래 명령 실행
+(Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue).OwningProcess | ForEach-Object { taskkill /PID $_ /F }
 ```
 
----
-
-## DB 선택 로직
-
+### Cannot GET / (404)
 ```
-DB_HOST 환경변수 없음  →  SQLite  (db.sqlite 파일, 기본값 / exe)
-DB_HOST 환경변수 있음  →  MariaDB (Docker 실행 시)
+원인: release\client\dist 폴더가 없음
+해결: build.bat 재실행 (3단계에서 자동 복사됨)
 ```
 
----
-
-## DB 테이블 스키마 (user)
-
-```sql
-CREATE TABLE `user` (
-  `id`        INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `name`      VARCHAR(255) NOT NULL,
-  `email`     VARCHAR(255) NOT NULL UNIQUE,
-  `password`  VARCHAR(255) NOT NULL,   -- bcrypt 해시, SELECT 기본 제외
-  `createdAt` DATETIME(6)  NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
-);
+### Property 'bin' does not exist (pkg 오류)
+```
+원인: server\package.json에 bin 항목 누락
+현재 상태: 이미 수정 완료 ("bin": "dist/main.js")
 ```
 
-> `password` 컬럼은 `select: false` — 일반 조회에서 자동 제외되며,
-> `findByEmail()` 내 `createQueryBuilder().addSelect('user.password')` 로만 포함됩니다.
-
----
-
-## 환경변수
-
-| 변수 | 기본값 | 설명 |
-|---|---|---|
-| `NODE_ENV` | `development` | 실행 환경 |
-| `PORT` | `3000` | 서버 포트 |
-| `SESSION_SECRET` | *(필수)* | 세션 서명 비밀키 (32자 이상 권장) |
-| `DB_PATH` | `db.sqlite` | SQLite 파일 경로 |
-| `DB_HOST` | *(없음)* | MariaDB 호스트 — **설정 시 MariaDB 사용** |
-| `DB_PORT` | `3306` | MariaDB 포트 |
-| `DB_USER` | `root` | MariaDB 사용자 |
-| `DB_PASS` | `` | MariaDB 비밀번호 |
-| `DB_NAME` | `appdb` | MariaDB DB 이름 |
-
----
-
-## 클라이언트 라우팅
-
-| 경로 | 로그인 상태 | 비로그인 상태 |
-|---|---|---|
-| `/` | `/home` 리다이렉트 | `/login` 리다이렉트 |
-| `/login` | `/home` 리다이렉트 | 로그인 화면 |
-| `/signin` | `/home` 리다이렉트 | 회원가입 화면 |
-| `/home` | 홈 화면 | `/login` 리다이렉트 |
-
-> 앱 최초 마운트 시 `GET /api/auth/me` 로 세션 확인 후 라우팅 결정
-
----
-
-## 서버 서빙 방식
-
-| 환경 | 방식 |
-|---|---|
-| 개발 (`NODE_ENV != production`) | Vite 미들웨어 모드 (HMR, `transformIndexHtml`) |
-| 프로덕션 / exe | `@fastify/static` 으로 `client/dist` 정적 서빙 |
-
-SPA 라우팅 fallback: `app.init()` 이후 Fastify 와일드카드 `GET /*` 등록
-→ `/api/*` 는 NestJS 라우트가 선처리, 나머지는 `index.html` 반환
-
----
-
-## Docker 구성
-
+### No native build was found (bcrypt)
 ```
-┌─────────────────────────┐       ┌──────────────────────────┐
-│  app (NestJS)  :3000    │──DB──▶│  db (MariaDB 11)  :3306  │
-│  멀티스테이지 빌드       │       │  볼륨: mariadb-data       │
-└─────────────────────────┘       └──────────────────────────┘
+원인: bcrypt 바이너리가 pkg assets에 포함 안 됨
+현재 상태: 이미 수정 완료 (package.json assets에 추가됨)
 ```
 
-### Dockerfile 멀티스테이지 빌드
-
+### Chrome을 찾을 수 없습니다 (검색 기능 오류)
 ```
-Stage 1 (client-build)  →  npm ci + vite build       → client/dist/
-Stage 2 (server-build)  →  npm ci + nest build        → server/dist/
-Stage 3 (production)    →  프로덕션 의존성 + 결과물만  → 최종 이미지
+원인: Google Chrome 또는 Microsoft Edge 미설치
+해결: https://www.google.com/chrome 에서 Chrome 설치
 ```
 
----
-
-## 실행 방법
-
-### Docker (MariaDB)
-
-```bash
-# 빌드 + 실행
-docker compose up --build -d
-
-# 로그 확인
-docker compose logs -f app
-
-# MariaDB 접속
-docker compose exec db mariadb -u appuser -papppass appdb
-
-# 종료 (데이터 유지)
-docker compose down
-
-# 종료 + 데이터 삭제
-docker compose down -v
+### pkg cache 오류 (NODE_MODULE_VERSION 불일치)
 ```
-
-### 로컬 개발 (SQLite)
-
-```bash
-# 환경변수 설정
-cp server/.env.dev server/.env
-
-# 터미널 1 — 백엔드 (포트 3000)
-cd server && npm install && npm run start:dev
-
-# 터미널 2 — 프론트엔드 (포트 5173)
-cd client && npm install && npm run dev
+원인: pkg 캐시에 이전 버전 Node 바이너리가 남아있음
+해결: PowerShell에서 아래 명령 실행 후 build.bat 재실행
+Remove-Item "$env:USERPROFILE\.cache\pkg" -Recurse -Force
 ```
-
-### Windows exe (SQLite, 도커 불필요)
-
-```powershell
-# 빌드 (client + server + pkg 패키징)
-.\build-exe.ps1
-
-# 실행
-.\release\server.exe
-
-# 포트 변경
-$env:PORT=8080; .\release\server.exe
-```
-
-접속: `http://localhost:3000`
-
-### Ubuntu 초기 설치
-
-```bash
-chmod +x setup.sh && sudo ./setup.sh
-# 대화형으로 Docker / 개발모드 / 설치만 선택
-```
-
----
-
-## 변경 이력
-
-| 날짜 | 내용 |
-|---|---|
-| 2026-07-29 | 초기 구성: NestJS + React + SQLite |
-| 2026-07-29 | better-sqlite3 v12 업그레이드 (Node.js 24 호환) |
-| 2026-07-29 | SQLite → MariaDB 전환, Docker Compose 구성 추가 |
-| 2026-07-29 | fetch → axios 전환, pkg exe 빌드 환경 추가 |
-| 2026-07-29 | DB 자동 선택 로직 (DB_HOST 유무 기준) |
-| 2026-07-29 | 회원가입·로그인·회원탈퇴 기능 추가 (bcrypt 해싱) |
-| 2026-07-29 | JWT + localStorage → 서버 세션 + HttpOnly 쿠키로 전환 |
-| 2026-07-29 | SPA 라우팅 추가 (/login, /signin, /home), 새로고침 세션 유지 |
-| 2026-07-29 | Ubuntu 설치 스크립트 (setup.sh), .env 파일 분리 (.env.dev / .env.prod) |

@@ -3,9 +3,25 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir --win"
+  },
+  "build": {
+    "appId": "com.renshu.viewer",
+    "productName": "렌슈",
+    "win": {
+      "target": "dir"
+    },
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js"
+    ],
+    "extraResources": []
   },
   "devDependencies": {
-    "electron": "^33.0.0"
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
   }
 }

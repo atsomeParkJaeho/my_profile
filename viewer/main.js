@@ -6,8 +6,13 @@ const http = require('http');
 const SERVER_PORT = 3000;
 const SERVER_URL  = `http://localhost:${SERVER_PORT}`;
 
-// server.exe 경로 (viewer 폴더 기준 상위의 release 폴더)
-const serverExe = path.join(__dirname, '..', 'release', 'server.exe');
+// server.exe 경로
+// - 개발(npm start): viewer/../release/server.exe
+// - 패키징 후 설치: 렌슈.exe 옆의 server.exe
+const isPackaged = app.isPackaged;
+const serverExe = isPackaged
+  ? path.join(path.dirname(process.execPath), 'server.exe')
+  : path.join(__dirname, '..', 'release', 'server.exe');
 
 let win        = null;
 let serverProc = null;

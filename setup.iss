@@ -1,6 +1,7 @@
 #define AppName    "렌슈"
 #define AppVersion "1.0.0"
 #define AppExe     "server.exe"
+#define ViewerExe  "렌슈.exe"
 #define AppURL     "http://localhost:3000"
 
 [Setup]
@@ -26,26 +27,31 @@ PrivilegesRequiredOverridesAllowed=dialog
 Name: "korean"; MessagesFile: "compiler:Languages\Korean.isl"
 
 [Files]
-; 메인 실행 파일
+; 백엔드 서버
 Source: "release\{#AppExe}"; DestDir: "{app}"; Flags: ignoreversion
 
-; SQLite DB (없으면 첫 실행 시 자동 생성)
-; Source: "release\db.sqlite"; DestDir: "{app}"; Flags: ignoreversion onlyifdoesntexist
+; Electron 뷰어 전체 (win-unpacked 폴더 통째로 복사)
+Source: "viewer\dist\win-unpacked\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+; React 정적 파일
+Source: "release\client\dist\*"; DestDir: "{app}\client\dist"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+; 환경설정
+Source: "release\.env"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-; 시작 메뉴
-Name: "{group}\{#AppName} 실행";    Filename: "{app}\{#AppExe}"
+; 시작 메뉴 (Electron 뷰어로 실행)
+Name: "{group}\{#AppName} 실행";    Filename: "{app}\{#ViewerExe}"
 Name: "{group}\{#AppName} 제거";    Filename: "{uninstallexe}"
-; 바탕화면
-Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#AppExe}"; Tasks: desktopicon
+; 바탕화면 (Electron 뷰어로 실행)
+Name: "{userdesktop}\{#AppName}"; Filename: "{app}\{#ViewerExe}"; Tasks: desktopicon
 
 [Tasks]
-Name: "desktopicon"; Description: "바탕화면에 바로가기 만들기"; GroupDescription: "추가 설정:"; Flags: checked
+Name: "desktopicon"; Description: "바탕화면에 바로가기 만들기"; GroupDescription: "추가 설정:"
 
 [Run]
-; 설치 완료 후 실행 + 브라우저 자동 오픈
-Filename: "{app}\{#AppExe}";          Description: "{#AppName} 서버 시작"; Flags: postinstall nowait
-Filename: "{#AppURL}";                Description: "브라우저로 열기";       Flags: postinstall shellexec nowait skipifsilent
+; 설치 완료 후 Electron 뷰어 실행
+Filename: "{app}\{#ViewerExe}"; Description: "{#AppName} 시작"; Flags: postinstall nowait
 
 [UninstallRun]
 ; 제거 시 프로세스 종료
