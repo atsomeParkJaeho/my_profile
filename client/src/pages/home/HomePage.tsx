@@ -83,6 +83,9 @@ export default function HomePage() {
     finally { e.target.value = ''; }
   };
 
+  console.log(`home page render: ${new Date().toISOString()}`);
+
+
   return (
     <Layout>
       <div className="profile-content-area my-4 card card-body">

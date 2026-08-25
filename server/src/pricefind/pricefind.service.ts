@@ -36,8 +36,8 @@ export class PricefindService {
 
     if (isPkg) {
       // ── exe 패키지: 사용자 PC의 Chrome 사용 ──
-      const puppeteer = await import('puppeteer-core');
-      browser = await puppeteer.default.launch({
+      const puppeteer = require('puppeteer-core');
+      browser = await puppeteer.launch({
         headless: true,
         executablePath: findLocalChrome(),
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-blink-features=AutomationControlled'],
@@ -46,15 +46,15 @@ export class PricefindService {
       // ── 프로덕션(Render): sparticuz/chromium + puppeteer-core ──
       const puppeteer = await import('puppeteer-core');
       const chromium  = await import('@sparticuz/chromium');
-      browser = await puppeteer.default.launch({
+      browser = await (puppeteer.default ?? puppeteer).launch({
         headless: true,
         executablePath: await chromium.default.executablePath(),
         args: chromium.default.args,
       });
     } else {
-      // ── 로컬(개발): 일반 puppeteer ──
-      const puppeteer = await import('puppeteer');
-      browser = await puppeteer.default.launch({
+      // ── 로컬(개발): 일반 puppeteer (pkg 번들 제외 - eval로 정적 분석 우회)
+      const puppeteer = await eval("import('puppeteer')");
+      browser = await (puppeteer.default ?? puppeteer).launch({
         headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-blink-features=AutomationControlled'],
       });
