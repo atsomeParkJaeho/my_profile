@@ -1,0 +1,9 @@
+{
+	"id": "pLxTYM0HXXOdiL9",
+	"json": "{\"id\":\"pLxTYM0HXXOdiL9\",\"url\":\"https://smartstore.naver.com/gsc_korea_dt_pw/search?q=%EB%84%A8%EB%8F%84\",\"loadedUrl\":\"https://nid.naver.com/nidlogin.login?url=https%3A%2F%2Fm.smartstore.naver.com%2Fgsc_korea_dt_pw%2Fsearch%3Fq%3D%25EB%2584%25A8%25EB%258F%2584\",\"uniqueKey\":\"https://smartstore.naver.com/gsc_korea_dt_pw/search?q=%EB%84%A8%EB%8F%84\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2026-08-25T08:30:05.941Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://smartstore.naver.com/gsc_korea_dt_pw/search?q=%EB%84%A8%EB%8F%84",
+	"url": "https://smartstore.naver.com/gsc_korea_dt_pw/search?q=%EB%84%A8%EB%8F%84"
+}

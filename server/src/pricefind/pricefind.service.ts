@@ -1,10 +1,10 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { PuppeteerCrawler } from 'crawlee';
 import * as cheerio from 'cheerio';
 import * as fs from 'fs';
 
 const isPkg = typeof (process as any).pkg !== 'undefined';
 
-// 사용자 PC에 설치된 Chrome 경로 자동 탐색 (exe 패키지 전용)
 function findLocalChrome(): string {
   const candidates = [
     'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
@@ -32,58 +32,88 @@ export class PricefindService {
     const url = `${base}/search?q=${encodeURIComponent(q)}`;
     const isProd = process.env.NODE_ENV === 'production';
 
-    let browser: any;
+    let html = '';
 
-    if (isPkg) {
-      // ── exe 패키지: 사용자 PC의 Chrome 사용 ──
-      const puppeteer = require('puppeteer-core');
-      browser = await puppeteer.launch({
-        headless: true,
-        executablePath: findLocalChrome(),
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-blink-features=AutomationControlled'],
-      });
-    } else if (isProd) {
-      // ── 프로덕션(Render): sparticuz/chromium + puppeteer-core ──
-      const puppeteer = await import('puppeteer-core');
-      const chromium  = await import('@sparticuz/chromium');
-      browser = await (puppeteer.default ?? puppeteer).launch({
-        headless: true,
-        executablePath: await chromium.default.executablePath(),
-        args: chromium.default.args,
-      });
-    } else {
-      // ── 로컬(개발): 일반 puppeteer (pkg 번들 제외 - eval로 정적 분석 우회)
-      const puppeteer = await eval("import('puppeteer')");
-      browser = await (puppeteer.default ?? puppeteer).launch({
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-blink-features=AutomationControlled'],
-      });
-    }
+    // exe 패키지 또는 프로덕션: launchContext로 브라우저 직접 지정
+    const launchContext = await this.buildLaunchContext(isProd);
+
+    const crawler = new PuppeteerCrawler({
+      ...launchContext,
+      maxRequestRetries: 3,
+      maxConcurrency: 1,
+      requestHandlerTimeoutSecs: 30,
+      preNavigationHooks: [
+        async ({ page }) => {
+          await page.setUserAgent(
+            'Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Mobile Safari/537.36'
+          );
+          await page.evaluateOnNewDocument(() => {
+            Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+          });
+        },
+      ],
+      requestHandler: async ({ page }) => {
+        await page.waitForSelector('body', { timeout: 10000 });
+        html = await page.content();
+      },
+    });
 
     try {
-      const page = await browser.newPage();
-
-      await page.setUserAgent(
-        'Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Mobile Safari/537.36'
-      );
-      await page.evaluateOnNewDocument(() => {
-        Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
-      });
-
-      await page.goto(url, { waitUntil: 'networkidle2', timeout: 20000 });
-      await page.waitForSelector('body', { timeout: 10000 });
-
-      const html = await page.content();
-      const items = this.parseItems(html);
-      return { items, total: items.length,html:html };
+      await crawler.run([url]);
     } catch (err: any) {
       throw new HttpException(
-        err?.message ?? 'puppeteer fetch failed',
+        err?.message ?? 'crawlee fetch failed',
         HttpStatus.BAD_GATEWAY,
       );
-    } finally {
-      await browser.close().catch(() => null);
     }
+
+    if (!html) {
+      throw new HttpException('페이지 로드 실패', HttpStatus.BAD_GATEWAY);
+    }
+
+    const items = this.parseItems(html);
+    return { items, total: items.length, html };
+  }
+
+  private async buildLaunchContext(isProd: boolean) {
+    if (isPkg) {
+      const puppeteerCore = require('puppeteer-core');
+      return {
+        launchContext: {
+          launcher: puppeteerCore,
+          launchOptions: {
+            headless: true,
+            executablePath: findLocalChrome(),
+            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-blink-features=AutomationControlled'],
+          },
+        },
+      };
+    }
+
+    if (isProd) {
+      const puppeteerCore = await import('puppeteer-core');
+      const chromium = await import('@sparticuz/chromium');
+      return {
+        launchContext: {
+          launcher: puppeteerCore.default ?? puppeteerCore,
+          launchOptions: {
+            headless: true,
+            executablePath: await chromium.default.executablePath(),
+            args: chromium.default.args,
+          },
+        },
+      };
+    }
+
+    // 로컬 개발: crawlee 기본 puppeteer 사용
+    return {
+      launchContext: {
+        launchOptions: {
+          headless: true,
+          args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-blink-features=AutomationControlled'],
+        },
+      },
+    };
   }
 
   private parseItems(html: string) {

@@ -3,7 +3,7 @@
  * 실행: npx ts-node src/pricefind/pricefind.test.ts
  */
 
-import * as puppeteer from 'puppeteer';
+import { PuppeteerCrawler } from 'crawlee';
 import * as cheerio from 'cheerio';
 
 const TARGET_URL = 'https://smartstore.naver.com/gsc_korea_dt_pw';
@@ -11,28 +11,34 @@ const TARGET_URL = 'https://smartstore.naver.com/gsc_korea_dt_pw';
 async function run() {
   console.log(`\n접속 URL: ${TARGET_URL}\n`);
 
-  let browser!: puppeteer.Browser;
+  let html = '';
+
+  const crawler = new PuppeteerCrawler({
+    maxRequestRetries: 2,
+    maxConcurrency: 1,
+    requestHandlerTimeoutSecs: 40,
+    preNavigationHooks: [
+      async ({ page }) => {
+        await page.setUserAgent(
+          'Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Mobile Safari/537.36'
+        );
+        await page.evaluateOnNewDocument(() => {
+          Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+        });
+      },
+    ],
+    requestHandler: async ({ page }) => {
+      console.log('페이지 로딩 중...');
+      await page.waitForSelector('body', { timeout: 10000 });
+      html = await page.content();
+    },
+  });
+
   try {
-    browser = await (puppeteer as any).default.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-blink-features=AutomationControlled'],
-    });
+    await crawler.run([TARGET_URL]);
 
-    const page = await browser.newPage();
-    await page.setUserAgent(
-      'Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Mobile Safari/537.36'
-    );
-    await page.evaluateOnNewDocument(() => {
-      Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
-    });
-
-    console.log('페이지 로딩 중...');
-    await page.goto(TARGET_URL, { waitUntil: 'networkidle2', timeout: 30000 });
-    await page.waitForSelector('body', { timeout: 10000 });
-    const html = await page.content();
-    const $    = cheerio.load(html);
-
-    console.log(html,'/[html]')
+    const $ = cheerio.load(html);
+    console.log(html, '/[html]');
     console.log(`HTML 길이: ${html.length} bytes\n`);
     console.log('='.repeat(60));
 
@@ -98,8 +104,6 @@ async function run() {
 
   } catch (err: any) {
     console.error('오류:', err?.message ?? err);
-  } finally {
-    await browser?.close();
   }
 }
 
