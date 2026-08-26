@@ -4,6 +4,7 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { ValidationPipe } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as path from 'path';
 import * as fs from 'fs';
 import fastifyStatic  from '@fastify/static';
@@ -43,6 +44,19 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
+  // ── Swagger (개발 환경에서만 활성화) ──────────────────────────────────────
+  if (!isProd && !isPkg) {
+    const config = new DocumentBuilder()
+      .setTitle('API 문서')
+      .setDescription('NestJS 서버 REST API')
+      .setVersion('1.0')
+      .addCookieAuth('connect.sid')
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api/docs', app, document);
+    console.log('[Swagger] http://localhost:3000/api/docs');
+  }
+
   const fastifyInstance = app.getHttpAdapter().getInstance();
 
   // ── 쿠키 + 세션 플러그인 등록 ────────────────────────────────────────────
@@ -73,7 +87,7 @@ async function bootstrap() {
 
   let vite: ViteDevServer | null = null;
 
-  if (isProd || isPkg) {
+  if (isProd || isPkg) {        // 배포 서비스 일경우 빌드 압축한 dist를 사용
     await app.register(fastifyStatic, {
       root: resolvePath('client', 'dist'),
       wildcard: false,
