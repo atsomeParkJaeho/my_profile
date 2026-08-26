@@ -41,6 +41,7 @@
     "@sparticuz/chromium": "^149.0.0",
     "axios": "^1.19.0",
     "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "better-sqlite3": "^12.11.1",
     "cheerio": "^1.2.0",
     "class-transformer": "^0.5.1",
@@ -59,6 +60,7 @@
   "devDependencies": {
     "@nestjs/cli": "^10.3.0",
     "@types/bcrypt": "^6.0.0",
+    "@types/bcryptjs": "^2.4.6",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20.14.0",
     "@yao-pkg/pkg": "^6.21.0",

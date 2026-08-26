@@ -1,7 +1,7 @@
 import { Injectable, ConflictException, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 
@@ -18,7 +18,7 @@ export class UsersService implements OnApplicationBootstrap {
     const password = process.env.ADMIN_PASSWORD;
 
     if (!email || !name || !password) {
-      console.warn('[Init] 관리자 계정 환경변수(ADMIN_EMAIL, ADMIN_NAME, ADMIN_PASSWORD)가 설정되지 않아 초기 계정을 생성하지 않습니다.');
+      console.warn('[Init] 관리자 계정 ?�경변??ADMIN_EMAIL, ADMIN_NAME, ADMIN_PASSWORD)가 ?�정?��? ?�아 초기 계정???�성?��? ?�습?�다.');
       return;
     }
     const exists = await this.usersRepository.findOne({ where: { email } });
@@ -27,7 +27,7 @@ export class UsersService implements OnApplicationBootstrap {
       await this.usersRepository.save(
         this.usersRepository.create({ name, email, password: hashed }),
       );
-      console.log(`[Init] 관리자 계정 생성 완료: ${email}`);
+      console.log(`[Init] 관리자 계정 ?�성 ?�료: ${email}`);
     }
   }
 
@@ -35,7 +35,7 @@ export class UsersService implements OnApplicationBootstrap {
     return this.usersRepository.find({ order: { id: 'DESC' } });
   }
 
-  // password 컬럼은 select:false 이므로 명시적으로 포함
+  // password 컬럼?� select:false ?��?�?명시?�으�??�함
   findByEmail(email: string): Promise<User | null> {
     return this.usersRepository
       .createQueryBuilder('user')
@@ -49,7 +49,7 @@ export class UsersService implements OnApplicationBootstrap {
       where: { email: dto.email },
     });
     if (existing) {
-      throw new ConflictException('이미 등록된 이메일입니다.');
+      throw new ConflictException('?��? ?�록???�메?�입?�다.');
     }
     const user = this.usersRepository.create(dto);
     return this.usersRepository.save(user);

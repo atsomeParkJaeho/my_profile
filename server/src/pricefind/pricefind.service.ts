@@ -1,5 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { PuppeteerCrawler } from 'crawlee';
+import { PuppeteerCrawler } from '@crawlee/puppeteer';
 import * as cheerio from 'cheerio';
 import * as fs from 'fs';
 
@@ -83,7 +83,9 @@ export class PricefindService {
   }
 
   private async buildLaunchContext(isProd: boolean) {
-    if (isPkg) {
+    // Electron utilityProcess 또는 pkg 환경 → 시스템 Chrome 사용
+    const isElectron = !!(process.versions as any).electron;
+    if (isPkg || isElectron) {
       const puppeteerCore = require('puppeteer-core');
       return {
         launchContext: {
@@ -98,6 +100,7 @@ export class PricefindService {
     }
 
     if (isProd) {
+      // 서버리스 환경(Lambda 등)에서만 @sparticuz/chromium 사용
       const puppeteerCore = await import('puppeteer-core');
       const chromium = await import('@sparticuz/chromium');
       return {

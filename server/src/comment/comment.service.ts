@@ -1,7 +1,7 @@
 import { Injectable, OnApplicationBootstrap, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class CommentService implements OnApplicationBootstrap {
@@ -71,9 +71,9 @@ export class CommentService implements OnApplicationBootstrap {
     const rows = await this.query(
       'SELECT password FROM community_comment WHERE id = ?', [id],
     );
-    if (!rows.length) throw new NotFoundException('댓글을 찾을 수 없습니다.');
+    if (!rows.length) throw new NotFoundException('?��???찾을 ???�습?�다.');
     const match = await bcrypt.compare(password, rows[0].password);
-    if (!match) throw new ForbiddenException('비밀번호가 일치하지 않습니다.');
+    if (!match) throw new ForbiddenException('비�?번호가 ?�치?��? ?�습?�다.');
     await this.query('DELETE FROM community_comment WHERE id = ?', [id]);
   }
 }
