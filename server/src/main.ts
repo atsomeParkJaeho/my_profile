@@ -17,6 +17,8 @@ import { SqliteSessionStore } from './session-store';
 const isPkg = typeof (process as any).pkg !== 'undefined';
 
 function resolvePath(...segments: string[]): string {
+  // isPkg: server.exe (레거시) → execPath 기준
+  // 그 외 (utilityProcess / 개발): __dirname = dist/ 기준으로 두 단계 위가 server 루트
   const base = isPkg
     ? path.dirname(process.execPath)
     : path.join(__dirname, '..', '..');

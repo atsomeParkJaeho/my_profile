@@ -18,9 +18,23 @@
     "files": [
       "main.js"
     ],
-    "extraResources": []
+    "extraResources": [
+      {
+        "from": "../server/dist",
+        "to": "server/dist"
+      },
+      {
+        "from": "../server/node_modules",
+        "to": "server/node_modules"
+      },
+      {
+        "from": "../client/dist",
+        "to": "client/dist"
+      }
+    ]
   },
   "devDependencies": {
+    "@electron/rebuild": "^3.6.0",
     "electron": "^33.0.0",
     "electron-builder": "^25.0.0"
   }

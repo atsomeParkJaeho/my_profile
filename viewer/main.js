@@ -1,36 +1,52 @@
-const { app, BrowserWindow, shell } = require('electron');
-const { spawn } = require('child_process');
+const { app, BrowserWindow, shell, utilityProcess } = require('electron');
 const path = require('path');
 const http = require('http');
+const fs = require('fs');
 
 const SERVER_PORT = 3000;
 const SERVER_URL  = `http://localhost:${SERVER_PORT}`;
 
-// server.exe 경로
-// - 개발(npm start): viewer/../release/server.exe
-// - 패키징 후 설치: 렌슈.exe 옆의 server.exe
 const isPackaged = app.isPackaged;
-const serverExe = isPackaged
-  ? path.join(path.dirname(process.execPath), 'server.exe')
-  : path.join(__dirname, '..', 'release', 'server.exe');
+
+// 패키징 후: resources/server/dist/main.js
+// 개발 중:   ../server/dist/main.js
+const serverScript = isPackaged
+  ? path.join(process.resourcesPath, 'server', 'dist', 'main.js')
+  : path.join(__dirname, '..', 'server', 'dist', 'main.js');
+
+const serverDir = isPackaged
+  ? path.join(process.resourcesPath, 'server')
+  : path.join(__dirname, '..', 'server');
 
 let win        = null;
 let serverProc = null;
 
-// ── server.exe 기동 ──────────────────────────────────────────────────────────
+// ── server 기동 (utilityProcess — server.exe 없음, 백신 탐지 없음) ───────────
 function startServer() {
-  serverProc = spawn(serverExe, [], {
-    cwd: path.dirname(serverExe),
-    detached: false,
-    windowsHide: true,   // 콘솔 창 숨김
-  });
+  const userData = app.getPath('userData'); // %APPDATA%\렌슈
+  if (!fs.existsSync(userData)) fs.mkdirSync(userData, { recursive: true });
 
-  serverProc.stdout.on('data', (d) => console.log('[server]', d.toString()));
-  serverProc.stderr.on('data', (d) => console.error('[server]', d.toString()));
+  serverProc = utilityProcess.fork(serverScript, [], {
+    cwd: serverDir,
+    env: {
+      ...process.env,
+      NODE_ENV: 'production',
+      PORT: String(SERVER_PORT),
+      // DB / 세션 파일은 사용자 AppData에 저장 (설치 폴더 쓰기 권한 불필요)
+      DB_PATH: path.join(userData, 'app.sqlite'),
+      SESSION_DB_PATH: path.join(userData, 'sessions.sqlite'),
+      SESSION_SECRET: 'renshu_prod_secret_must_be_32chars!',
+      COOKIE_SECURE: 'false',
+      ADMIN_EMAIL: 'admin@renshu.com',
+      ADMIN_NAME: '관리자',
+      ADMIN_PASSWORD: '123456',
+    },
+    stdio: 'inherit',
+  });
 }
 
-// ── 서버 준비될 때까지 폴링 후 창 열기 ──────────────────────────────────────
-function waitAndOpen(retries = 20) {
+// ── 서버 준비될 때까지 폴링 후 창 열기 (최대 20초 대기) ──────────────────────
+function waitAndOpen(retries = 40) {
   http.get(SERVER_URL, () => {
     createWindow();
   }).on('error', () => {
@@ -49,7 +65,7 @@ function createWindow() {
     width: 1280,
     height: 800,
     title: '렌슈',
-    autoHideMenuBar: true,   // 상단 메뉴바 숨김
+    autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -58,7 +74,6 @@ function createWindow() {
 
   win.loadURL(SERVER_URL);
 
-  // 외부 링크는 기본 브라우저로 열기
   win.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url);
     return { action: 'deny' };

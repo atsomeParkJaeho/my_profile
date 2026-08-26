@@ -33,13 +33,13 @@ export class PricefindService {
     const isProd = process.env.NODE_ENV === 'production';
 
     let html = '';
+    let crawlError: string | null = null;
 
-    // exe 패키지 또는 프로덕션: launchContext로 브라우저 직접 지정
     const launchContext = await this.buildLaunchContext(isProd);
 
     const crawler = new PuppeteerCrawler({
       ...launchContext,
-      maxRequestRetries: 3,
+      maxRequestRetries: 2,
       maxConcurrency: 1,
       requestHandlerTimeoutSecs: 30,
       preNavigationHooks: [
@@ -56,6 +56,9 @@ export class PricefindService {
         await page.waitForSelector('body', { timeout: 10000 });
         html = await page.content();
       },
+      failedRequestHandler: async ({ request, error }: any) => {
+        crawlError = error?.message ?? '크롤링 실패';
+      },
     });
 
     try {
@@ -65,6 +68,10 @@ export class PricefindService {
         err?.message ?? 'crawlee fetch failed',
         HttpStatus.BAD_GATEWAY,
       );
+    }
+
+    if (crawlError) {
+      throw new HttpException(crawlError, HttpStatus.BAD_GATEWAY);
     }
 
     if (!html) {

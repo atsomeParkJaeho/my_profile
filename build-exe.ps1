@@ -3,7 +3,10 @@
 #
 # Requirements:
 #   - Node.js
-#   - Inno Setup (https://jrsoftware.org/isinfo.php)
+#   - Inno Setup 6 (https://jrsoftware.org/isinfo.php)
+#
+# 구조 변경: server.exe(pkg) 제거 → Electron utilityProcess 방식으로 변경
+# 이유: pkg 번들 exe가 백신에 악성코드로 오탐 탐지됨
 
 $ErrorActionPreference = "Stop"
 $root = $PSScriptRoot
@@ -15,37 +18,38 @@ $innoPath = @(
   "C:\Program Files (x86)\Inno Setup 5\ISCC.exe"
 ) | Where-Object { Test-Path $_ } | Select-Object -First 1
 
-# [1/5] React client build
-Write-Host "[1/5] React client build..." -ForegroundColor Cyan
+# [1/4] React client build
+Write-Host "[1/4] React client build..." -ForegroundColor Cyan
 Set-Location "$root\client"
 npm run build
 
-# [2/5] NestJS build + pkg -> server.exe
-Write-Host "[2/5] NestJS build + exe packaging..." -ForegroundColor Cyan
+# [2/4] NestJS build (TypeScript → JavaScript only, pkg 사용 안 함)
+Write-Host "[2/4] NestJS build..." -ForegroundColor Cyan
 Set-Location "$root\server"
-$env:NODE_ENV = "production"
-npm run build:exe
-$env:NODE_ENV = ""
+npm run build
 
-# [3/5] Copy .env.dev and client/dist to release folder
-Write-Host "[3/5] Copy env file and client dist..." -ForegroundColor Cyan
-$releaseDir = "$root\release"
-if (-not (Test-Path $releaseDir)) { New-Item -ItemType Directory -Path $releaseDir | Out-Null }
+# server/node_modules 설치 (puppeteer Chromium 자동 다운로드 방지)
+Write-Host "  server node_modules 설치..." -ForegroundColor Gray
+$env:PUPPETEER_SKIP_DOWNLOAD = "true"
+npm install --omit=dev
+$env:PUPPETEER_SKIP_DOWNLOAD = ""
 
-Copy-Item "$root\server\.env.dev" "$releaseDir\.env" -Force
-Write-Host "  .env.dev -> release\.env done"
-
-if (Test-Path "$releaseDir\client") { Remove-Item "$releaseDir\client" -Recurse -Force }
-Copy-Item "$root\client\dist" "$releaseDir\client\dist" -Recurse -Force
-Write-Host "  client/dist -> release/client/dist done"
-
-# [4/5] Electron viewer build
-Write-Host "[4/5] Electron viewer build..." -ForegroundColor Cyan
+# [3/4] Electron viewer 빌드 + native module 재컴파일
+Write-Host "[3/4] Electron viewer build..." -ForegroundColor Cyan
 Set-Location "$root\viewer"
 npm install
+
+# Electron 버전 확인
+$electronVersion = node -e "console.log(require('./node_modules/electron/package.json').version)"
+Write-Host "  Electron 버전: $electronVersion" -ForegroundColor Gray
+
+# better-sqlite3, bcrypt 등 native module을 Electron Node.js ABI로 재컴파일
+Write-Host "  Native module rebuild (Electron $electronVersion)..." -ForegroundColor Gray
+npx @electron/rebuild --version $electronVersion --module-dir "$root\server" --types prod
+
+Write-Host "  Electron 패키징..." -ForegroundColor Gray
 npm run pack
 
-# 빌드된 Electron exe를 release 폴더로 복사
 $electronExe = Get-ChildItem "$root\viewer\dist\win-unpacked\*.exe" | Select-Object -First 1
 if ($electronExe) {
   Write-Host "  Electron build done: $($electronExe.Name)"
@@ -53,8 +57,8 @@ if ($electronExe) {
   Write-Host "[Warning] Electron exe not found in viewer\dist\win-unpacked\" -ForegroundColor Yellow
 }
 
-# [5/5] Inno Setup installer
-Write-Host "[5/5] Build installer..." -ForegroundColor Cyan
+# [4/4] Inno Setup installer
+Write-Host "[4/4] Build installer..." -ForegroundColor Cyan
 Set-Location $root
 
 if ($innoPath) {
@@ -63,16 +67,13 @@ if ($innoPath) {
   }
   & $innoPath "$root\setup.iss"
   Write-Host "[Done]" -ForegroundColor Green
-  Write-Host "  Server exe : $releaseDir\server.exe"
-  Write-Host "  Viewer exe : $releaseDir\Renshu.exe"
-  Write-Host "  Installer  : $root\installer\RenshuSetup.exe"
+  Write-Host "  Installer: $root\installer\RenshuSetup.exe"
 } else {
   Write-Host "[Warning] Inno Setup not found. Skipping installer." -ForegroundColor Yellow
   Write-Host "  Download: https://jrsoftware.org/isinfo.php"
-  Write-Host "[Done] Executable only" -ForegroundColor Green
-  Write-Host "  Server exe : $releaseDir\server.exe"
-  Write-Host "  Viewer exe : $releaseDir\Renshu.exe"
+  Write-Host "[Done] Electron build only" -ForegroundColor Green
+  Write-Host "  Viewer: $root\viewer\dist\win-unpacked\렌슈.exe"
 }
 
-Write-Host "  URL        : http://localhost:3000"
+Write-Host "  URL: http://localhost:3000"
 Set-Location $root

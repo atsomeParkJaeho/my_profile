@@ -1,0 +1,9 @@
+{
+	"id": "AlTWO7kPrH96XQz",
+	"json": "{\"id\":\"AlTWO7kPrH96XQz\",\"url\":\"https://m.brand.naver.com/goodsmilekr/search?q=%EC%A3%BC%EC%88%A0%ED%9A%8C%EC%A0%84\",\"loadedUrl\":\"https://m.brand.naver.com/goodsmilekr/search?q=%EC%A3%BC%EC%88%A0%ED%9A%8C%EC%A0%84\",\"uniqueKey\":\"https://m.brand.naver.com/goodsmilekr/search?q=%EC%A3%BC%EC%88%A0%ED%9A%8C%EC%A0%84\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2026-08-26T01:16:09.232Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://m.brand.naver.com/goodsmilekr/search?q=%EC%A3%BC%EC%88%A0%ED%9A%8C%EC%A0%84",
+	"url": "https://m.brand.naver.com/goodsmilekr/search?q=%EC%A3%BC%EC%88%A0%ED%9A%8C%EC%A0%84"
+}
