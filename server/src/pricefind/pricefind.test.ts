@@ -3,26 +3,31 @@
  * 실행: npx ts-node src/pricefind/pricefind.test.ts
  */
 
-import { PuppeteerCrawler } from 'crawlee';
+import { PlaywrightCrawler } from 'crawlee';
 import * as cheerio from 'cheerio';
 
-const TARGET_URL = 'https://smartstore.naver.com/gsc_korea_dt_pw';
+const TARGET_URL = 'https://m.smartstore.naver.com/gsc_korea_dt_pw';
 
 async function run() {
   console.log(`\n접속 URL: ${TARGET_URL}\n`);
 
   let html = '';
 
-  const crawler = new PuppeteerCrawler({
+  const crawler = new PlaywrightCrawler({
     maxRequestRetries: 2,
     maxConcurrency: 1,
     requestHandlerTimeoutSecs: 40,
+    launchContext: {
+      userAgent:
+        'Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Mobile Safari/537.36',
+    },
     preNavigationHooks: [
       async ({ page }) => {
-        await page.setUserAgent(
-          'Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Mobile Safari/537.36'
-        );
-        await page.evaluateOnNewDocument(() => {
+        const delayMs = 2000 + Math.random() * 2000; // 2~4초 랜덤 딜레이
+        console.log(`요청 전 대기: ${(delayMs / 1000).toFixed(1)}초`);
+        await new Promise((r) => setTimeout(r, delayMs));
+
+        await page.addInitScript(() => {
           Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
         });
       },

@@ -14,7 +14,8 @@ interface SearchItem {
 const CATEGORIES = [
   { label: '반다이',          url: 'https://m.brand.naver.com/bandai' },
   { label: '굿스마일코리아',  url: 'https://m.brand.naver.com/goodsmilekr' },
-  { label: '굿스마일컴퍼니_pw', url: 'https://smartstore.naver.com/gsc_korea_dt_pw' },
+  { label: '굿스마일컴퍼니_pw', url: 'https://m.smartstore.naver.com/gsc_korea_dt_pw' },
+  { label: '건담붐', url: 'https://m.gundamboom.com' },
 ];
 
 export default function PriceFindPage() {
@@ -22,7 +23,7 @@ export default function PriceFindPage() {
   const [inputVal,        setInputVal]        = useState(searchParams.get('q') ?? '');
   const [keyword,         setKeyword]         = useState('');
   const [items,           setItems]           = useState<SearchItem[]>([]);
-  const [loading,         setLoading]         = useState(false);
+  const [loading,         setLoading]         = useState(false);  
   const [searched,        setSearched]        = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<typeof CATEGORIES[number] | null>(null);
 

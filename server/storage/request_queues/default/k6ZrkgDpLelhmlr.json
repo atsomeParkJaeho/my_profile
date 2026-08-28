@@ -1,0 +1,9 @@
+{
+	"id": "k6ZrkgDpLelhmlr",
+	"json": "{\"id\":\"k6ZrkgDpLelhmlr\",\"url\":\"https://m.gundamboom.com/product/list.php?mode=view\",\"loadedUrl\":\"https://m.gundamboom.com/product/list.php?mode=view\",\"uniqueKey\":\"https://m.gundamboom.com/product/list.php?mode=view#프리덤#1787879808433\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2026-08-28T01:16:53.896Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://m.gundamboom.com/product/list.php?mode=view#프리덤#1787879808433",
+	"url": "https://m.gundamboom.com/product/list.php?mode=view"
+}

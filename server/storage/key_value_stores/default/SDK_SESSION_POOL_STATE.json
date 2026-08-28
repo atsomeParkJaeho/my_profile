@@ -1,9 +1,9 @@
 {
-  "usableSessionsCount": 2,
+  "usableSessionsCount": 14,
   "retiredSessionsCount": 0,
   "sessions": [
     {
-      "id": "session_DygowWEko9",
+      "id": "session_45ii0TNtxc",
       "cookieJar": {
         "version": "tough-cookie@6.0.2",
         "storeType": "MemoryCookieStore",
@@ -16,14 +16,14 @@
       "userData": {},
       "maxErrorScore": 3,
       "errorScoreDecrement": 0.5,
-      "expiresAt": "2026-08-27T06:41:59.247Z",
-      "createdAt": "2026-08-27T05:51:59.247Z",
+      "expiresAt": "2026-08-28T02:05:09.673Z",
+      "createdAt": "2026-08-28T01:15:09.673Z",
       "usageCount": 0,
       "maxUsageCount": 50,
       "errorScore": 0
     },
     {
-      "id": "session_XuWKpn3bhH",
+      "id": "session_nJfQrMs7hx",
       "cookieJar": {
         "version": "tough-cookie@6.0.2",
         "storeType": "MemoryCookieStore",
@@ -33,42 +33,609 @@
         "prefixSecurity": "silent",
         "cookies": [
           {
-            "key": "_fwb",
-            "value": "155ZbCtsrvLTifHRCwzdOWb.1787809920886",
-            "expires": "2027-10-01T05:52:00.886Z",
-            "domain": "m.brand.naver.com",
+            "key": "isMobile",
+            "value": "Mozilla%2F5.0+%28Linux%3B+Android+13%3B+SM-G991B%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F124.0+Mobile+Safari%2F537.36",
+            "expires": "2026-08-28T02:05:12.100Z",
+            "domain": "m.gundamboom.com",
             "path": "/",
-            "hostOnly": false,
-            "creation": "2026-08-27T05:52:01.095Z",
-            "lastAccessed": "2026-08-27T05:52:01.095Z"
+            "hostOnly": true,
+            "creation": "2026-08-28T01:15:12.101Z",
+            "lastAccessed": "2026-08-28T01:15:12.101Z"
           },
           {
-            "key": "smartstore-STORE_LAST_VISITED_DATETIME",
-            "value": "1787756400000",
-            "expires": "2026-08-27T06:42:01.093Z",
-            "domain": "brand.naver.com",
-            "path": "/bandai",
+            "key": "setcook",
+            "value": "2ea9ea7ed8e9936ddf6695ae822b922f",
+            "expires": "2026-08-28T02:05:12.100Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:15:12.101Z",
+            "lastAccessed": "2026-08-28T01:15:12.101Z"
+          },
+          {
+            "key": "_gcl_au",
+            "value": "1.1.1811299436.1787879710",
+            "expires": "2026-11-26T01:15:10.000Z",
+            "domain": "gundamboom.com",
+            "path": "/",
             "hostOnly": false,
-            "creation": "2026-08-27T05:52:01.096Z",
-            "lastAccessed": "2026-08-27T05:52:01.096Z"
+            "creation": "2026-08-28T01:15:12.101Z",
+            "lastAccessed": "2026-08-28T01:15:12.101Z"
+          },
+          {
+            "key": "_fwb",
+            "value": "1562yMP5TEMy77ROLlET1AL.1787879711396",
+            "expires": "2027-10-02T01:15:11.396Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:15:12.103Z",
+            "lastAccessed": "2026-08-28T01:15:12.103Z"
           },
           {
             "key": "wcs_bt",
-            "value": "s_2df09aba46f5e:1787809920",
-            "expires": "2027-10-01T05:52:00.987Z",
-            "domain": "m.brand.naver.com",
+            "value": "s_50284fe1e516:1787879711",
+            "expires": "2027-10-02T01:15:11.414Z",
+            "domain": "m.gundamboom.com",
             "path": "/",
             "hostOnly": true,
-            "creation": "2026-08-27T05:52:01.098Z",
-            "lastAccessed": "2026-08-27T05:52:01.098Z"
+            "creation": "2026-08-28T01:15:12.103Z",
+            "lastAccessed": "2026-08-28T01:15:12.103Z"
           }
         ]
       },
       "userData": {},
       "maxErrorScore": 3,
       "errorScoreDecrement": 0.5,
-      "expiresAt": "2026-08-27T06:41:59.249Z",
-      "createdAt": "2026-08-27T05:51:59.249Z",
+      "expiresAt": "2026-08-28T02:05:09.675Z",
+      "createdAt": "2026-08-28T01:15:09.675Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_aMcg1aUerj",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-08-28T02:05:14.725Z",
+      "createdAt": "2026-08-28T01:15:14.725Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_wL9qY13nkn",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "isMobile",
+            "value": "Mozilla%2F5.0+%28Linux%3B+Android+13%3B+SM-G991B%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F124.0+Mobile+Safari%2F537.36",
+            "expires": "2026-08-28T02:05:16.635Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:15:16.635Z",
+            "lastAccessed": "2026-08-28T01:15:16.635Z"
+          },
+          {
+            "key": "setcook",
+            "value": "ccd9e06d803c82c6d0bf464c39f9111a",
+            "expires": "2026-08-28T02:05:16.635Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:15:16.635Z",
+            "lastAccessed": "2026-08-28T01:15:16.635Z"
+          },
+          {
+            "key": "_gcl_au",
+            "value": "1.1.147003266.1787879715",
+            "expires": "2026-11-26T01:15:15.000Z",
+            "domain": "gundamboom.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:15:16.635Z",
+            "lastAccessed": "2026-08-28T01:15:16.635Z"
+          },
+          {
+            "key": "_fwb",
+            "value": "36BZQHbyPG4X6oVgrBi1IL.1787879716440",
+            "expires": "2027-10-02T01:15:16.440Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:15:16.636Z",
+            "lastAccessed": "2026-08-28T01:15:16.636Z"
+          },
+          {
+            "key": "wcs_bt",
+            "value": "s_50284fe1e516:1787879716",
+            "expires": "2027-10-02T01:15:16.441Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:15:16.636Z",
+            "lastAccessed": "2026-08-28T01:15:16.636Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-08-28T02:05:14.725Z",
+      "createdAt": "2026-08-28T01:15:14.725Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_Mspn0CqLmi",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-08-28T02:06:11.735Z",
+      "createdAt": "2026-08-28T01:16:11.735Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_NJdaBvSNNJ",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "isMobile",
+            "value": "Mozilla%2F5.0+%28Linux%3B+Android+13%3B+SM-G991B%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F124.0+Mobile+Safari%2F537.36",
+            "expires": "2026-08-28T02:06:14.425Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:16:14.425Z",
+            "lastAccessed": "2026-08-28T01:16:14.425Z"
+          },
+          {
+            "key": "setcook",
+            "value": "9c4bbc1f056481d1a2ce5aa538ca749a",
+            "expires": "2026-08-28T02:06:14.425Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:16:14.425Z",
+            "lastAccessed": "2026-08-28T01:16:14.425Z"
+          },
+          {
+            "key": "_gcl_au",
+            "value": "1.1.1711448210.1787879773",
+            "expires": "2026-11-26T01:16:12.000Z",
+            "domain": "gundamboom.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:16:14.425Z",
+            "lastAccessed": "2026-08-28T01:16:14.425Z"
+          },
+          {
+            "key": "_fwb",
+            "value": "173zHHq6ENo8nLWeSbwHqdF.1787879773647",
+            "expires": "2027-10-02T01:16:13.647Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:16:14.425Z",
+            "lastAccessed": "2026-08-28T01:16:14.425Z"
+          },
+          {
+            "key": "wcs_bt",
+            "value": "s_50284fe1e516:1787879773",
+            "expires": "2027-10-02T01:16:13.649Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:16:14.425Z",
+            "lastAccessed": "2026-08-28T01:16:14.425Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-08-28T02:06:11.736Z",
+      "createdAt": "2026-08-28T01:16:11.736Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_OLsVwW4kff",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-08-28T02:06:21.247Z",
+      "createdAt": "2026-08-28T01:16:21.247Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_cQ9Kuv17n8",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "isMobile",
+            "value": "Mozilla%2F5.0+%28Linux%3B+Android+13%3B+SM-G991B%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F124.0+Mobile+Safari%2F537.36",
+            "expires": "2026-08-28T02:06:23.330Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:16:23.330Z",
+            "lastAccessed": "2026-08-28T01:16:23.330Z"
+          },
+          {
+            "key": "setcook",
+            "value": "e2ad0b01ae1b2960ac5c27c18e4408cb",
+            "expires": "2026-08-28T02:06:23.330Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:16:23.330Z",
+            "lastAccessed": "2026-08-28T01:16:23.330Z"
+          },
+          {
+            "key": "_gcl_au",
+            "value": "1.1.117503918.1787879782",
+            "expires": "2026-11-26T01:16:21.000Z",
+            "domain": "gundamboom.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:16:23.330Z",
+            "lastAccessed": "2026-08-28T01:16:23.330Z"
+          },
+          {
+            "key": "_fwb",
+            "value": "172hz2KxLiLW5Hv5JpSgPga.1787879783066",
+            "expires": "2027-10-02T01:16:23.066Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:16:23.330Z",
+            "lastAccessed": "2026-08-28T01:16:23.330Z"
+          },
+          {
+            "key": "wcs_bt",
+            "value": "s_50284fe1e516:1787879783",
+            "expires": "2027-10-02T01:16:23.068Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:16:23.330Z",
+            "lastAccessed": "2026-08-28T01:16:23.330Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-08-28T02:06:21.248Z",
+      "createdAt": "2026-08-28T01:16:21.248Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_Mv3NzQR0JN",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-08-28T02:06:41.671Z",
+      "createdAt": "2026-08-28T01:16:41.671Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_DWZpKflaKW",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "NACT",
+            "value": "1",
+            "expires": "2026-08-29T01:16:43.026Z",
+            "domain": "naver.com",
+            "path": "/bandai",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:16:43.092Z",
+            "lastAccessed": "2026-08-28T01:16:43.092Z"
+          },
+          {
+            "key": "smartstore-STORE_LAST_VISITED_DATETIME",
+            "value": "1787842800000",
+            "expires": "2026-08-28T02:06:43.092Z",
+            "domain": "brand.naver.com",
+            "path": "/bandai",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:16:43.092Z",
+            "lastAccessed": "2026-08-28T01:16:43.092Z"
+          },
+          {
+            "key": "_fwb",
+            "value": "55hHOWU92pBM8rbBbRd7hP.1787879802874",
+            "expires": "2027-10-02T01:16:42.874Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:16:43.092Z",
+            "lastAccessed": "2026-08-28T01:16:43.092Z"
+          },
+          {
+            "key": "wcs_bt",
+            "value": "s_2df09aba46f5e:1787879803",
+            "expires": "2027-10-02T01:16:43.016Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:16:43.092Z",
+            "lastAccessed": "2026-08-28T01:16:43.092Z"
+          },
+          {
+            "key": "NAC",
+            "value": "F672BMxgeM7tB",
+            "expires": "2027-10-02T01:16:43.019Z",
+            "domain": "naver.com",
+            "path": "/",
+            "secure": true,
+            "hostOnly": false,
+            "creation": "2026-08-28T01:16:43.092Z",
+            "lastAccessed": "2026-08-28T01:16:43.092Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-08-28T02:06:41.671Z",
+      "createdAt": "2026-08-28T01:16:41.671Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_b67MPTS4GR",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-08-28T02:06:48.997Z",
+      "createdAt": "2026-08-28T01:16:48.997Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_51KqXHLU3u",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "isMobile",
+            "value": "Mozilla%2F5.0+%28Linux%3B+Android+13%3B+SM-G991B%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F124.0+Mobile+Safari%2F537.36",
+            "expires": "2026-08-28T02:06:51.991Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:16:51.991Z",
+            "lastAccessed": "2026-08-28T01:16:51.991Z"
+          },
+          {
+            "key": "setcook",
+            "value": "429788f0419cb2596fe6627660664eb3",
+            "expires": "2026-08-28T02:06:51.991Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:16:51.991Z",
+            "lastAccessed": "2026-08-28T01:16:51.991Z"
+          },
+          {
+            "key": "_gcl_au",
+            "value": "1.1.2011521235.1787879810",
+            "expires": "2026-11-26T01:16:49.000Z",
+            "domain": "gundamboom.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:16:51.991Z",
+            "lastAccessed": "2026-08-28T01:16:51.991Z"
+          },
+          {
+            "key": "_fwb",
+            "value": "19E5fhjKfkirSmRBLves9M.1787879810743",
+            "expires": "2027-10-02T01:16:50.743Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:16:51.991Z",
+            "lastAccessed": "2026-08-28T01:16:51.991Z"
+          },
+          {
+            "key": "wcs_bt",
+            "value": "s_50284fe1e516:1787879810",
+            "expires": "2027-10-02T01:16:50.744Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:16:51.991Z",
+            "lastAccessed": "2026-08-28T01:16:51.991Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-08-28T02:06:48.997Z",
+      "createdAt": "2026-08-28T01:16:48.997Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_twhv9Fkqw9",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-08-28T02:07:10.433Z",
+      "createdAt": "2026-08-28T01:17:10.433Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_tyuXw5jpfy",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "isMobile",
+            "value": "Mozilla%2F5.0+%28Linux%3B+Android+13%3B+SM-G991B%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F124.0+Mobile+Safari%2F537.36",
+            "expires": "2026-08-28T02:07:13.122Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:17:13.122Z",
+            "lastAccessed": "2026-08-28T01:17:13.122Z"
+          },
+          {
+            "key": "setcook",
+            "value": "3092174e64ca0987a22ce0368bd6bfc5",
+            "expires": "2026-08-28T02:07:13.122Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:17:13.122Z",
+            "lastAccessed": "2026-08-28T01:17:13.122Z"
+          },
+          {
+            "key": "_gcl_au",
+            "value": "1.1.1785104101.1787879831",
+            "expires": "2026-11-26T01:17:11.000Z",
+            "domain": "gundamboom.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:17:13.122Z",
+            "lastAccessed": "2026-08-28T01:17:13.122Z"
+          },
+          {
+            "key": "_fwb",
+            "value": "44ITJiHfuengdT7TRIN6uW.1787879832193",
+            "expires": "2027-10-02T01:17:12.193Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:17:13.122Z",
+            "lastAccessed": "2026-08-28T01:17:13.122Z"
+          },
+          {
+            "key": "wcs_bt",
+            "value": "s_50284fe1e516:1787879832",
+            "expires": "2027-10-02T01:17:12.213Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:17:13.122Z",
+            "lastAccessed": "2026-08-28T01:17:13.122Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-08-28T02:07:10.433Z",
+      "createdAt": "2026-08-28T01:17:10.433Z",
       "usageCount": 1,
       "maxUsageCount": 50,
       "errorScore": 0

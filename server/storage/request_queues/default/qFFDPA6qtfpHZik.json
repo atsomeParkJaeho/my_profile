@@ -1,0 +1,9 @@
+{
+	"id": "qFFDPA6qtfpHZik",
+	"json": "{\"id\":\"qFFDPA6qtfpHZik\",\"url\":\"https://m.gundamboom.com/product/list.php?mode=view\",\"loadedUrl\":\"https://m.gundamboom.com/product/list.php?mode=view\",\"uniqueKey\":\"https://m.gundamboom.com/product/list.php?mode=view#주술회전#1787879771152\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2026-08-28T01:16:16.344Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://m.gundamboom.com/product/list.php?mode=view#주술회전#1787879771152",
+	"url": "https://m.gundamboom.com/product/list.php?mode=view"
+}

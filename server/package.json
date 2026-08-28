@@ -25,10 +25,11 @@
     ],
     "outputPath": "../release",
     "ignore": [
-      "node_modules/puppeteer"
+      "node_modules/playwright"
     ]
   },
   "dependencies": {
+    "@crawlee/playwright": "^3.18.1",
     "@fastify/cookie": "^9.4.0",
     "@fastify/middie": "^8.3.1",
     "@fastify/session": "^10.9.0",
@@ -50,8 +51,8 @@
     "crawlee": "^3.18.1",
     "cross-env": "^7.0.3",
     "pg": "^8.22.0",
-    "puppeteer": "^25.9.0",
-    "puppeteer-core": "^19.11.1",
+    "playwright": "^1.62.1",
+    "playwright-core": "^1.62.1",
     "reflect-metadata": "^0.2.0",
     "resend": "^6.18.1",
     "rxjs": "^7.8.1",

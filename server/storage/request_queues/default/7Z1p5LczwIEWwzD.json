@@ -1,0 +1,9 @@
+{
+	"id": "7Z1p5LczwIEWwzD",
+	"json": "{\"id\":\"7Z1p5LczwIEWwzD\",\"url\":\"https://m.gundamboom.com/product/list.php?mode=view\",\"loadedUrl\":\"https://m.gundamboom.com/product/list.php?mode=view\",\"uniqueKey\":\"https://m.gundamboom.com/product/list.php?mode=view#피그마#1787879829841\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2026-08-28T01:17:15.019Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://m.gundamboom.com/product/list.php?mode=view#피그마#1787879829841",
+	"url": "https://m.gundamboom.com/product/list.php?mode=view"
+}

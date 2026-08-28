@@ -1,0 +1,9 @@
+{
+	"id": "43AqmVUpmIiAbsI",
+	"json": "{\"id\":\"43AqmVUpmIiAbsI\",\"url\":\"https://m.gundamboom.com/product/list.php?mode=view\",\"loadedUrl\":\"https://m.gundamboom.com/product/list.php?mode=view\",\"uniqueKey\":\"https://m.gundamboom.com/product/list.php?mode=view#넨도로이드#1787879780696\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2026-08-28T01:16:25.244Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://m.gundamboom.com/product/list.php?mode=view#넨도로이드#1787879780696",
+	"url": "https://m.gundamboom.com/product/list.php?mode=view"
+}
