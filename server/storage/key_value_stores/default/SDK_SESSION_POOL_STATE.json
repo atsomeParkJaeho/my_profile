@@ -3,7 +3,7 @@
   "retiredSessionsCount": 0,
   "sessions": [
     {
-      "id": "session_zVB9tMGfgL",
+      "id": "session_DygowWEko9",
       "cookieJar": {
         "version": "tough-cookie@6.0.2",
         "storeType": "MemoryCookieStore",
@@ -16,14 +16,14 @@
       "userData": {},
       "maxErrorScore": 3,
       "errorScoreDecrement": 0.5,
-      "expiresAt": "2026-08-26T02:32:31.930Z",
-      "createdAt": "2026-08-26T01:42:31.930Z",
+      "expiresAt": "2026-08-27T06:41:59.247Z",
+      "createdAt": "2026-08-27T05:51:59.247Z",
       "usageCount": 0,
       "maxUsageCount": 50,
       "errorScore": 0
     },
     {
-      "id": "session_0EWs9cSpr1",
+      "id": "session_XuWKpn3bhH",
       "cookieJar": {
         "version": "tough-cookie@6.0.2",
         "storeType": "MemoryCookieStore",
@@ -33,63 +33,42 @@
         "prefixSecurity": "silent",
         "cookies": [
           {
-            "key": "NAC",
-            "value": "4VGmBMReSbZNA",
-            "expires": "2027-09-30T01:42:33.221Z",
-            "domain": "naver.com",
-            "path": "/",
-            "secure": true,
-            "hostOnly": false,
-            "creation": "2026-08-26T01:42:33.527Z",
-            "lastAccessed": "2026-08-26T01:42:33.527Z"
-          },
-          {
             "key": "_fwb",
-            "value": "194HWHpUlS7zb2PT6tbYshr.1787708553121",
-            "expires": "2027-09-30T01:42:33.121Z",
+            "value": "155ZbCtsrvLTifHRCwzdOWb.1787809920886",
+            "expires": "2027-10-01T05:52:00.886Z",
             "domain": "m.brand.naver.com",
             "path": "/",
             "hostOnly": false,
-            "creation": "2026-08-26T01:42:33.529Z",
-            "lastAccessed": "2026-08-26T01:42:33.529Z"
-          },
-          {
-            "key": "NACT",
-            "value": "1",
-            "expires": "2026-08-27T01:42:33.251Z",
-            "domain": "naver.com",
-            "path": "/bandai",
-            "hostOnly": false,
-            "creation": "2026-08-26T01:42:33.530Z",
-            "lastAccessed": "2026-08-26T01:42:33.530Z"
+            "creation": "2026-08-27T05:52:01.095Z",
+            "lastAccessed": "2026-08-27T05:52:01.095Z"
           },
           {
             "key": "smartstore-STORE_LAST_VISITED_DATETIME",
-            "value": "1787670000000",
-            "expires": "2026-08-26T02:32:33.526Z",
+            "value": "1787756400000",
+            "expires": "2026-08-27T06:42:01.093Z",
             "domain": "brand.naver.com",
             "path": "/bandai",
             "hostOnly": false,
-            "creation": "2026-08-26T01:42:33.530Z",
-            "lastAccessed": "2026-08-26T01:42:33.530Z"
+            "creation": "2026-08-27T05:52:01.096Z",
+            "lastAccessed": "2026-08-27T05:52:01.096Z"
           },
           {
             "key": "wcs_bt",
-            "value": "s_2df09aba46f5e:1787708553",
-            "expires": "2027-09-30T01:42:33.240Z",
+            "value": "s_2df09aba46f5e:1787809920",
+            "expires": "2027-10-01T05:52:00.987Z",
             "domain": "m.brand.naver.com",
             "path": "/",
             "hostOnly": true,
-            "creation": "2026-08-26T01:42:33.530Z",
-            "lastAccessed": "2026-08-26T01:42:33.530Z"
+            "creation": "2026-08-27T05:52:01.098Z",
+            "lastAccessed": "2026-08-27T05:52:01.098Z"
           }
         ]
       },
       "userData": {},
       "maxErrorScore": 3,
       "errorScoreDecrement": 0.5,
-      "expiresAt": "2026-08-26T02:32:31.932Z",
-      "createdAt": "2026-08-26T01:42:31.932Z",
+      "expiresAt": "2026-08-27T06:41:59.249Z",
+      "createdAt": "2026-08-27T05:51:59.249Z",
       "usageCount": 1,
       "maxUsageCount": 50,
       "errorScore": 0

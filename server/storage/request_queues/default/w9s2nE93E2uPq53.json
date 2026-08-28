@@ -1,9 +1,0 @@
-{
-	"id": "w9s2nE93E2uPq53",
-	"json": "{\"id\":\"w9s2nE93E2uPq53\",\"url\":\"https://m.brand.naver.com/bandai/search?q=%EC%8A%A4%ED%8A%B8%EB%9D%BC%EC%9D%B4%ED%81%AC\",\"loadedUrl\":\"https://m.brand.naver.com/bandai/search?q=%EC%8A%A4%ED%8A%B8%EB%9D%BC%EC%9D%B4%ED%81%AC\",\"uniqueKey\":\"https://m.brand.naver.com/bandai/search?q=%EC%8A%A4%ED%8A%B8%EB%9D%BC%EC%9D%B4%ED%81%AC\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2026-08-26T01:42:33.631Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://m.brand.naver.com/bandai/search?q=%EC%8A%A4%ED%8A%B8%EB%9D%BC%EC%9D%B4%ED%81%AC",
-	"url": "https://m.brand.naver.com/bandai/search?q=%EC%8A%A4%ED%8A%B8%EB%9D%BC%EC%9D%B4%ED%81%AC"
-}
