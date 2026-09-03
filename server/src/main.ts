@@ -7,6 +7,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as path from 'path';
 import * as fs from 'fs';
+import { exec } from 'child_process';
 import fastifyStatic  from '@fastify/static';
 import fastifyMiddie  from '@fastify/middie';
 import fastifyCookie  from '@fastify/cookie';
@@ -16,6 +17,19 @@ import { AppModule } from './app.module';
 import { SqliteSessionStore } from './session-store';
 
 const isPkg = typeof (process as any).pkg !== 'undefined';
+
+function openBrowser(url: string) {
+  const platform = process.platform;
+  const cmd =
+    platform === 'win32'
+      ? `start "" "${url}"`
+      : platform === 'darwin'
+        ? `open "${url}"`
+        : `xdg-open "${url}"`;
+  exec(cmd, (err) => {
+    if (err) console.error('[Browser] 자동 실행 실패:', err.message);
+  });
+}
 
 function resolvePath(...segments: string[]): string {
   // isPkg: server.exe (레거시) → execPath 기준
@@ -137,7 +151,12 @@ async function bootstrap() {
   await app.listen({ port, host: '0.0.0.0' });
 
   const mode = isPkg ? 'exe' : isProd ? 'production' : 'development';
-  console.log(`서버 실행 중: http://localhost:${port} (${mode})`);
+  const url = `http://localhost:${port}`;
+  console.log(`서버 실행 중: ${url} (${mode})`);
+
+  if (process.env.OPEN_BROWSER !== 'false') {
+    openBrowser(url);
+  }
 }
 
 bootstrap();

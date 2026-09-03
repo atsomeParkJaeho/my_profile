@@ -1,5 +1,5 @@
 {
-  "usableSessionsCount": 14,
+  "usableSessionsCount": 16,
   "retiredSessionsCount": 0,
   "sessions": [
     {
@@ -636,6 +636,98 @@
       "errorScoreDecrement": 0.5,
       "expiresAt": "2026-08-28T02:07:10.433Z",
       "createdAt": "2026-08-28T01:17:10.433Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_Z2fednDEmn",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-08-28T02:07:56.038Z",
+      "createdAt": "2026-08-28T01:17:56.038Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_i6oRc5F4gL",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "smartstore-STORE_LAST_VISITED_DATETIME",
+            "value": "1787842800000",
+            "expires": "2026-08-28T02:07:57.314Z",
+            "domain": "brand.naver.com",
+            "path": "/goodsmilekr",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:17:57.314Z",
+            "lastAccessed": "2026-08-28T01:17:57.314Z"
+          },
+          {
+            "key": "NACT",
+            "value": "1",
+            "expires": "2026-08-29T01:17:57.259Z",
+            "domain": "naver.com",
+            "path": "/goodsmilekr",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:17:57.314Z",
+            "lastAccessed": "2026-08-28T01:17:57.314Z"
+          },
+          {
+            "key": "_fwb",
+            "value": "160MnpkXNjIJwLgETgPigyt.1787879877034",
+            "expires": "2027-10-02T01:17:57.034Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-08-28T01:17:57.314Z",
+            "lastAccessed": "2026-08-28T01:17:57.314Z"
+          },
+          {
+            "key": "wcs_bt",
+            "value": "s_115cc73d71e83:1787879877",
+            "expires": "2027-10-02T01:17:57.127Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-08-28T01:17:57.314Z",
+            "lastAccessed": "2026-08-28T01:17:57.314Z"
+          },
+          {
+            "key": "NAC",
+            "value": "TVwkBMxgfcfeG",
+            "expires": "2027-10-02T01:17:57.257Z",
+            "domain": "naver.com",
+            "path": "/",
+            "secure": true,
+            "hostOnly": false,
+            "creation": "2026-08-28T01:17:57.314Z",
+            "lastAccessed": "2026-08-28T01:17:57.314Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-08-28T02:07:56.039Z",
+      "createdAt": "2026-08-28T01:17:56.039Z",
       "usageCount": 1,
       "maxUsageCount": 50,
       "errorScore": 0
