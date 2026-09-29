@@ -24,6 +24,7 @@ const OTT_COLORS: Record<string, string> = {
   티빙:     '#ff143d',
   웨이브:   '#0050ff',
   왓챠:     '#ff0558',
+  CoupangPlay: '#00bdff',
 };
 
 const OTT_LABELS: Record<string, string> = {
@@ -32,6 +33,7 @@ const OTT_LABELS: Record<string, string> = {
   티빙:     'TVING',
   웨이브:   'Wavve',
   왓챠:     'WATCHA',
+  CoupangPlay: 'CoupangPlay',
 };
 
 const CATEGORIES = [
@@ -84,6 +86,7 @@ const MOCK_ITEMS: OttItem[] = [
       { name: '티빙',   subtitle: true, dubbing: false },
       { name: '웨이브', subtitle: true, dubbing: false },
       { name: '왓챠',   subtitle: true, dubbing: true },
+      { name: 'CoupangPlay', subtitle: true, dubbing: false },
     ],
   },
 ];
