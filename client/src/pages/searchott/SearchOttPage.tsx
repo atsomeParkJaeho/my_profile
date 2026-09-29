@@ -233,7 +233,7 @@ export default function SearchOttPage() {
         {!loading && items.length > 0 && (
           <div className="row g-3">
             {items.map((item, idx) => (
-              <div key={idx} className="col-sm-6 col-lg-4 col-xl-3">
+              <div key={idx} className="col-sm-6 col-lg-4 col-xl-3 col-6">
                 <div className="card hover-scale overflow-hidden">
                   {/* 콘텐츠 이미지 */}
                   <div

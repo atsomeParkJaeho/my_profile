@@ -80,15 +80,15 @@ export const LeftMenuList = [
   {
     name: 'ott 정보',
     to: '/searchott',
-    icon: 'bi-journal-text',
+    icon: 'bi-tv',
     activePrefix: '/searchott',
     renderType: 'gallery',
   },
-  {
-    name: '문의하기',
-    to: '/contact',
-    icon: 'bi-envelope',
-    activePrefix: '/contact',
-    renderType: 'contact',
-  },
+  // {
+  //   name: '문의하기',
+  //   to: '/contact',
+  //   icon: 'bi-envelope',
+  //   activePrefix: '/contact',
+  //   renderType: 'contact',
+  // },
 ];
