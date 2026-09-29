@@ -15,13 +15,13 @@ const PrivateRoute = ({ element }: { element: JSX.Element }) => {
 // ── 비인증 전용 라우트 ─────────────────────────────────────────────────────
 const PublicRoute = ({ element }: { element: JSX.Element }) => {
   const { user } = useAppSelector((state) => state.auth);
-  return user ? <Navigate to="/home" replace /> : element;
+  return user ? <Navigate to="/pricefind" replace /> : element;
 };
 
 // ── 라우트 목록 ────────────────────────────────────────────────────────────
 export const RouteList: { path: string; element: JSX.Element }[] = [
-  { path: '/',        element: <Navigate to="/home" replace /> },
-  { path: '*',        element: <Navigate to="/home" replace /> },
+  { path: '/',        element: <Navigate to="/pricefind" replace /> },
+  { path: '*',        element: <Navigate to="/pricefind" replace /> },
   { path: '/login',   element: <PublicRoute element={<LoginPage />} /> },
   { path: '/home',    element: <HomePage /> },
   { path: '/contact',    element: <ContactPage /> },
@@ -47,13 +47,13 @@ export const RouteList: { path: string; element: JSX.Element }[] = [
 ];
 
 export const LeftMenuList = [
-  {
-    name: '프로필',
-    to: '/home',
-    icon: 'bi-person',
-    activePrefix: '/home',
-    renderType: 'home',
-  },
+  // {
+  //   name: '프로필',
+  //   to: '/home',
+  //   icon: 'bi-person',
+  //   activePrefix: '/home',
+  //   renderType: 'home',
+  // },
   {
     name: '포트폴리오',
     to: '/community/portfolio/list',
@@ -61,6 +61,13 @@ export const LeftMenuList = [
     activePrefix: '/community/portfolio',
     renderType: 'gallery',
   },
+  // {
+  //   name: 'ott 정보',
+  //   to: '/community/default/list',
+  //   icon: 'bi-journal-text',
+  //   activePrefix: '/community/default',
+  //   renderType: 'community',
+  // },
   {
     name: '게시판',
     to: '/community/default/list',

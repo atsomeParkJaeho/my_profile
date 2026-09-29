@@ -71,10 +71,10 @@ export const LeftMenu = () => {
   return (
     <div className="col-lg-12 col-xl-12">
       {/* 프로필 카드 */}
+      {/* 
       <div className="card mb-4">
         <div className="p-4 text-center">
 
-          {/* 프로필 이미지 */}
           <div
             onClick={handleImageClick}
             style={{
@@ -123,8 +123,8 @@ export const LeftMenu = () => {
               <button className="btn btn-outline-danger btn-sm" onClick={handleWithdraw}>회원탈퇴</button>
             </div>
           )}
-        </div>
       </div>
+      </div> */}
 
       {/* 사이드 메뉴 */}
       <div className="card mb-4">

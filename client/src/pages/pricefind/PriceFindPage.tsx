@@ -25,7 +25,9 @@ export default function PriceFindPage() {
   const [items,           setItems]           = useState<SearchItem[]>([]);
   const [loading,         setLoading]         = useState(false);  
   const [searched,        setSearched]        = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<typeof CATEGORIES[number] | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<typeof CATEGORIES[number] | null>(
+    CATEGORIES.find((cat) => cat.label === '반다이') ?? null
+  );
 
   const fetchSearch = async (q: string, url?: string) => {
     setKeyword(q);
@@ -67,7 +69,7 @@ export default function PriceFindPage() {
     setKeyword('');
     setItems([]);
     setSearched(false);
-    setSelectedCategory(null);
+    setSelectedCategory(CATEGORIES.find((cat) => cat.label === '반다이') ?? null);
     setSearchParams({});
   };
 
