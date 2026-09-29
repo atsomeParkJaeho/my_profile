@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sqlite3 db.sqlite \"SELECT id, title, type, board_layout FROM community_table WHERE type='ott_list';\")",
+      "Bash(node -e \"const db=require\\('better-sqlite3'\\)\\('db.sqlite'\\); console.log\\(db.prepare\\(\\\\\"SELECT id, title, type, board_layout FROM community_table WHERE type='ott_list'\\\\\"\\).all\\(\\)\\);\")",
+      "Bash(node -e ' *)"
+    ]
+  }
+}
