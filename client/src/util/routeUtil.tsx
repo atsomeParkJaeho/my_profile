@@ -5,6 +5,7 @@ import HomePage       from '@pages/home/HomePage';
 import BoardPage      from '@pages/community/Page';
 import ContactPage    from '@pages/contact/ContactPage';
 import PriceFindPage  from '@pages/pricefind/PriceFindPage';
+import SearchOttPage  from '@pages/searchott/SearchOttPage';
 
 // ── 인증 필요 라우트 ───────────────────────────────────────────────────────
 const PrivateRoute = ({ element }: { element: JSX.Element }) => {
@@ -26,6 +27,7 @@ export const RouteList: { path: string; element: JSX.Element }[] = [
   { path: '/home',    element: <HomePage /> },
   { path: '/contact',    element: <ContactPage /> },
   { path: '/pricefind', element: <PriceFindPage /> },
+  { path: '/searchott', element: <SearchOttPage /> },
 
   // 1차 카테고리 / 2차 카테고리 / 액션
   { path: '/community/:type/list',   element: <BoardPage /> },
@@ -54,33 +56,33 @@ export const LeftMenuList = [
   //   activePrefix: '/home',
   //   renderType: 'home',
   // },
-  {
-    name: '포트폴리오',
-    to: '/community/portfolio/list',
-    icon: 'bi-images',
-    activePrefix: '/community/portfolio',
-    renderType: 'gallery',
-  },
   // {
-  //   name: 'ott 정보',
+  //   name: '포트폴리오',
+  //   to: '/community/portfolio/list',
+  //   icon: 'bi-images',
+  //   activePrefix: '/community/portfolio',
+  //   renderType: 'gallery',
+  // },
+  // {
+  //   name: '게시판',
   //   to: '/community/default/list',
   //   icon: 'bi-journal-text',
   //   activePrefix: '/community/default',
   //   renderType: 'community',
   // },
   {
-    name: '게시판',
-    to: '/community/default/list',
-    icon: 'bi-journal-text',
-    activePrefix: '/community/default',
-    renderType: 'community',
-  },
-  {
     name: '가격 비교',
     to: '/pricefind',
     icon: 'bi-search',
     activePrefix: '/pricefind',
     renderType: 'pricefind',
+  },
+  {
+    name: 'ott 정보',
+    to: '/searchott',
+    icon: 'bi-journal-text',
+    activePrefix: '/searchott',
+    renderType: 'gallery',
   },
   {
     name: '문의하기',
