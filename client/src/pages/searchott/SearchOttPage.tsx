@@ -129,7 +129,7 @@ export default function SearchOttPage() {
         {!loading && items.length > 0 && (
           <div className="row g-3">
             {items.map((item) => (
-              <div key={item.id} className="col-sm-6 col-lg-4 col-xl-3">
+              <div key={item.id} className="col-sm-6 col-lg-4 col-xl-3 col-6">
                 <div
                   className="card hover-scale overflow-hidden"
                   style={{ cursor: 'pointer' }}
