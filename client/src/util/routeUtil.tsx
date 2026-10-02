@@ -92,3 +92,20 @@ export const LeftMenuList = [
   //   renderType: 'contact',
   // },
 ];
+
+export const MobileMenuList = [
+  {
+    name: '가격 비교',
+    to: '/pricefind',
+    icon: 'bi-search',
+    activePrefix: '/pricefind',
+    renderType: 'pricefind',
+  },
+  {
+    name: 'ott 정보',
+    to: '/searchott',
+    icon: 'bi-tv',
+    activePrefix: '/searchott',
+    renderType: 'gallery',
+  },
+];
