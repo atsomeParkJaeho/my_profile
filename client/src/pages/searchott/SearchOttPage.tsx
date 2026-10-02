@@ -163,18 +163,20 @@ export default function SearchOttPage() {
             <p className="mb-0">OTT 정보를 불러오는 중...</p>
           </div>
         )}
-
+        
         {/* ── 결과 없음 ── */}
-        {!loading && searched && items.length === 0 && (
+        {!loading && searched && keyword && items.length === 0 && (
           <div className="card card-body text-center py-5 text-muted">
             <i className="bi bi-inbox fs-1 mb-2"></i>
             <p className="mb-0">등록된 게시글이 없습니다.</p>
           </div>
         )}
 
-        {/* ── 갤러리 결과 ── */}
-        {!loading && items.length > 0 && (
+
+        {/* ── 갤러리 결과 (검색어가 있을 때) ── */}
+        {!loading && keyword && items.length > 0 && (
           <div className="row g-3">
+
             {items.map((item) => (
               <div key={item.id} className="col-sm-6 col-lg-4 col-xl-3 col-6">
                 <div
@@ -212,6 +214,25 @@ export default function SearchOttPage() {
             ))}
           </div>
         )}
+
+        {/* ── 검색어가 없을 때: 분기별 탭 ── */}
+        {!loading && !keyword && (
+          <>
+            <div className='season_tab border-bottom mb-5'>
+              <h3>2026년 4분기</h3>
+            </div>
+            <div className='season_tab border-bottom mb-5'>
+              <h3>2026년 3분기</h3>
+            </div>
+            <div className='season_tab border-bottom mb-5'>
+              <h3>2026년 2분기</h3>
+            </div>
+            <div className='season_tab border-bottom mb-5'>
+              <h3>2026년 1분기</h3>
+            </div>
+          </>
+        )}
+
       </div>
     </Layout>
   );

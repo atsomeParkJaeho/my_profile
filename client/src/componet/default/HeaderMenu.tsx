@@ -43,7 +43,7 @@ export const HeaderMenu = () => {
 		>
 			{/* ── 로고 ── */}
 			<Link
-				to="/home"
+				to="/pricefind"
 				style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', flexShrink: 0 }}
 			>
 				<div style={{
@@ -51,8 +51,8 @@ export const HeaderMenu = () => {
 					backgroundColor: '#0d6efd', color: '#fff',
 					display: 'flex', alignItems: 'center', justifyContent: 'center',
 					fontWeight: 700, fontSize: '0.85rem',
-				}}>H</div>
-				<span className="header-logo-text">Horilla</span>
+				}}>J</div>
+				<span className="header-logo-text">jutoku</span>
 			</Link>
 
 			{/* ── 우측 영역 ── */}

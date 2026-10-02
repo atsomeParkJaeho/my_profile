@@ -15,13 +15,13 @@ export const Layout = ({ children }: any) => {
       {/* navbar 높이 spacer */}
       <div style={{ height: 56 }} />
       {/* 배너 */}
-      <div className="bg-primary" style={{height: 200}} />
+      {/* <div className="bg-primary" style={{height: 200}} /> */}
       {/* 본문 */}
       <section className="layout-section" style={{flex: 1}}>
         <div className="container py-4">
           <div className="row align-items-start">
             {/* 좌측 사이드바 */}
-            <div className={`col-lg-4 col-xl-3`}>
+            <div className={`col-lg-4 col-xl-3 d-none d-lg-block`}>
               <LeftMenu />
             </div>
             {/* 우측 콘텐츠 */}

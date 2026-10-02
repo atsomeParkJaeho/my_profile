@@ -1,5 +1,5 @@
 {
-  "usableSessionsCount": 14,
+  "usableSessionsCount": 30,
   "retiredSessionsCount": 0,
   "sessions": [
     {
@@ -548,6 +548,647 @@
       "errorScoreDecrement": 0.5,
       "expiresAt": "2026-10-02T05:34:00.833Z",
       "createdAt": "2026-10-02T04:44:00.833Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_kRg2cMgtG6",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-10-02T05:38:41.730Z",
+      "createdAt": "2026-10-02T04:48:41.730Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_V6T4jPzcvM",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "NACT",
+            "value": "1",
+            "expires": "2026-10-03T04:48:43.356Z",
+            "domain": "naver.com",
+            "path": "/bandai",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:48:43.584Z",
+            "lastAccessed": "2026-10-02T04:48:43.584Z"
+          },
+          {
+            "key": "smartstore-STORE_LAST_VISITED_DATETIME",
+            "value": "1790866800000",
+            "expires": "2026-10-02T05:38:43.584Z",
+            "domain": "brand.naver.com",
+            "path": "/bandai",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:48:43.584Z",
+            "lastAccessed": "2026-10-02T04:48:43.584Z"
+          },
+          {
+            "key": "_fwb",
+            "value": "108WTAErx6Jd13N0CgfQqnq.1790916523166",
+            "expires": "2027-11-06T04:48:43.166Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:48:43.584Z",
+            "lastAccessed": "2026-10-02T04:48:43.584Z"
+          },
+          {
+            "key": "NAC",
+            "value": "LFMfCgCceZgDB",
+            "expires": "2027-11-06T04:48:43.353Z",
+            "domain": "naver.com",
+            "path": "/",
+            "secure": true,
+            "hostOnly": false,
+            "creation": "2026-10-02T04:48:43.584Z",
+            "lastAccessed": "2026-10-02T04:48:43.584Z"
+          },
+          {
+            "key": "wcs_bt",
+            "value": "s_2df09aba46f5e:1790916523",
+            "expires": "2027-11-06T04:48:43.455Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-10-02T04:48:43.584Z",
+            "lastAccessed": "2026-10-02T04:48:43.584Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-10-02T05:38:41.731Z",
+      "createdAt": "2026-10-02T04:48:41.731Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_s3mgFRGkgP",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-10-02T05:39:33.402Z",
+      "createdAt": "2026-10-02T04:49:33.402Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_dgsuurFbO0",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "smartstore-STORE_LAST_VISITED_DATETIME",
+            "value": "1790866800000",
+            "expires": "2026-10-02T05:39:35.364Z",
+            "domain": "brand.naver.com",
+            "path": "/bandai",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:49:35.364Z",
+            "lastAccessed": "2026-10-02T04:49:35.364Z"
+          },
+          {
+            "key": "_fwb",
+            "value": "202JB41fEllkkYPpOYIIspr.1790916575035",
+            "expires": "2027-11-06T04:49:35.035Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:49:35.364Z",
+            "lastAccessed": "2026-10-02T04:49:35.364Z"
+          },
+          {
+            "key": "wcs_bt",
+            "value": "s_2df09aba46f5e:1790916575",
+            "expires": "2027-11-06T04:49:35.179Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-10-02T04:49:35.364Z",
+            "lastAccessed": "2026-10-02T04:49:35.364Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-10-02T05:39:33.403Z",
+      "createdAt": "2026-10-02T04:49:33.403Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_RdU7ctrOmO",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-10-02T05:40:03.899Z",
+      "createdAt": "2026-10-02T04:50:03.899Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_u8XXTu02mI",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "smartstore-STORE_LAST_VISITED_DATETIME",
+            "value": "1790866800000",
+            "expires": "2026-10-02T05:40:05.831Z",
+            "domain": "brand.naver.com",
+            "path": "/bandai",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:50:05.831Z",
+            "lastAccessed": "2026-10-02T04:50:05.831Z"
+          },
+          {
+            "key": "_fwb",
+            "value": "233b7HMDD9ZUWIph1Xipx0i.1790916605491",
+            "expires": "2027-11-06T04:50:05.492Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:50:05.831Z",
+            "lastAccessed": "2026-10-02T04:50:05.831Z"
+          },
+          {
+            "key": "wcs_bt",
+            "value": "s_2df09aba46f5e:1790916605",
+            "expires": "2027-11-06T04:50:05.641Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-10-02T04:50:05.831Z",
+            "lastAccessed": "2026-10-02T04:50:05.831Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-10-02T05:40:03.900Z",
+      "createdAt": "2026-10-02T04:50:03.900Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_lfh2XNZ13L",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-10-02T05:40:13.125Z",
+      "createdAt": "2026-10-02T04:50:13.125Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_subDhw3wGD",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "smartstore-STORE_LAST_VISITED_DATETIME",
+            "value": "1790866800000",
+            "expires": "2026-10-02T05:40:14.918Z",
+            "domain": "brand.naver.com",
+            "path": "/bandai",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:50:14.918Z",
+            "lastAccessed": "2026-10-02T04:50:14.918Z"
+          },
+          {
+            "key": "_fwb",
+            "value": "113Amf9vKqWaxzNJdHOwpRA.1790916614582",
+            "expires": "2027-11-06T04:50:14.582Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:50:14.919Z",
+            "lastAccessed": "2026-10-02T04:50:14.919Z"
+          },
+          {
+            "key": "wcs_bt",
+            "value": "s_2df09aba46f5e:1790916614",
+            "expires": "2027-11-06T04:50:14.741Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-10-02T04:50:14.919Z",
+            "lastAccessed": "2026-10-02T04:50:14.919Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-10-02T05:40:13.125Z",
+      "createdAt": "2026-10-02T04:50:13.125Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_wRztlbeqcp",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-10-02T05:40:29.283Z",
+      "createdAt": "2026-10-02T04:50:29.283Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_rCseyVgotw",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "smartstore-STORE_LAST_VISITED_DATETIME",
+            "value": "1790866800000",
+            "expires": "2026-10-02T05:40:31.320Z",
+            "domain": "brand.naver.com",
+            "path": "/bandai",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:50:31.320Z",
+            "lastAccessed": "2026-10-02T04:50:31.320Z"
+          },
+          {
+            "key": "_fwb",
+            "value": "32cbTGlV9tOhm2WOTTp2pj.1790916631015",
+            "expires": "2027-11-06T04:50:31.015Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:50:31.320Z",
+            "lastAccessed": "2026-10-02T04:50:31.320Z"
+          },
+          {
+            "key": "wcs_bt",
+            "value": "s_2df09aba46f5e:1790916631",
+            "expires": "2027-11-06T04:50:31.158Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-10-02T04:50:31.320Z",
+            "lastAccessed": "2026-10-02T04:50:31.320Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-10-02T05:40:29.284Z",
+      "createdAt": "2026-10-02T04:50:29.284Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_OeOi37Pd6e",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-10-02T05:40:32.822Z",
+      "createdAt": "2026-10-02T04:50:32.822Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_ah9sKXEEdQ",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "smartstore-STORE_LAST_VISITED_DATETIME",
+            "value": "1790866800000",
+            "expires": "2026-10-02T05:40:35.016Z",
+            "domain": "brand.naver.com",
+            "path": "/bandai",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:50:35.016Z",
+            "lastAccessed": "2026-10-02T04:50:35.016Z"
+          },
+          {
+            "key": "_fwb",
+            "value": "1838K6sJ9RmoGGOE2qAUKGY.1790916634543",
+            "expires": "2027-11-06T04:50:34.543Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:50:35.017Z",
+            "lastAccessed": "2026-10-02T04:50:35.017Z"
+          },
+          {
+            "key": "wcs_bt",
+            "value": "s_2df09aba46f5e:1790916634",
+            "expires": "2027-11-06T04:50:34.769Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-10-02T04:50:35.017Z",
+            "lastAccessed": "2026-10-02T04:50:35.017Z"
+          },
+          {
+            "key": "NAC",
+            "value": "DoBcBQBOhWja",
+            "expires": "2027-11-06T04:50:35.008Z",
+            "domain": "naver.com",
+            "path": "/",
+            "secure": true,
+            "hostOnly": false,
+            "creation": "2026-10-02T04:50:35.017Z",
+            "lastAccessed": "2026-10-02T04:50:35.017Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-10-02T05:40:32.823Z",
+      "createdAt": "2026-10-02T04:50:32.823Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_mDz62DX2fG",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-10-02T05:40:53.464Z",
+      "createdAt": "2026-10-02T04:50:53.464Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_bjiFcgvrxC",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "isMobile",
+            "value": "Mozilla%2F5.0+%28Linux%3B+Android+13%3B+SM-G991B%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F124.0+Mobile+Safari%2F537.36",
+            "expires": "2026-10-02T05:40:55.896Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-10-02T04:50:55.896Z",
+            "lastAccessed": "2026-10-02T04:50:55.896Z"
+          },
+          {
+            "key": "setcook",
+            "value": "9979beac2f3a84384bd9b90cda7ba13e",
+            "expires": "2026-10-02T05:40:55.896Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-10-02T04:50:55.896Z",
+            "lastAccessed": "2026-10-02T04:50:55.896Z"
+          },
+          {
+            "key": "_gcl_au",
+            "value": "1.1.1051771754.1790916655",
+            "expires": "2026-12-31T04:50:54.000Z",
+            "domain": "gundamboom.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:50:55.896Z",
+            "lastAccessed": "2026-10-02T04:50:55.896Z"
+          },
+          {
+            "key": "_fwb",
+            "value": "224X0UcIC61qN57KpHRs58g.1790916655614",
+            "expires": "2027-11-06T04:50:55.614Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:50:55.897Z",
+            "lastAccessed": "2026-10-02T04:50:55.897Z"
+          },
+          {
+            "key": "wcs_bt",
+            "value": "s_50284fe1e516:1790916655",
+            "expires": "2027-11-06T04:50:55.694Z",
+            "domain": "m.gundamboom.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-10-02T04:50:55.897Z",
+            "lastAccessed": "2026-10-02T04:50:55.897Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-10-02T05:40:53.465Z",
+      "createdAt": "2026-10-02T04:50:53.465Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_lTOA0taECq",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-10-02T05:42:55.678Z",
+      "createdAt": "2026-10-02T04:52:55.678Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_zRRHGXa4fk",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.2",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "NACT",
+            "value": "1",
+            "expires": "2026-10-03T04:52:57.286Z",
+            "domain": "naver.com",
+            "path": "/bandai",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:52:57.365Z",
+            "lastAccessed": "2026-10-02T04:52:57.365Z"
+          },
+          {
+            "key": "smartstore-STORE_LAST_VISITED_DATETIME",
+            "value": "1790866800000",
+            "expires": "2026-10-02T05:42:57.365Z",
+            "domain": "brand.naver.com",
+            "path": "/bandai",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:52:57.366Z",
+            "lastAccessed": "2026-10-02T04:52:57.366Z"
+          },
+          {
+            "key": "_fwb",
+            "value": "213RjceMYgLXSTIRw4IyHty.1790916777065",
+            "expires": "2027-11-06T04:52:57.066Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-10-02T04:52:57.366Z",
+            "lastAccessed": "2026-10-02T04:52:57.366Z"
+          },
+          {
+            "key": "wcs_bt",
+            "value": "s_2df09aba46f5e:1790916777",
+            "expires": "2027-11-06T04:52:57.219Z",
+            "domain": "m.brand.naver.com",
+            "path": "/",
+            "hostOnly": true,
+            "creation": "2026-10-02T04:52:57.366Z",
+            "lastAccessed": "2026-10-02T04:52:57.366Z"
+          },
+          {
+            "key": "NAC",
+            "value": "kwonBQBOjGWI",
+            "expires": "2027-11-06T04:52:57.274Z",
+            "domain": "naver.com",
+            "path": "/",
+            "secure": true,
+            "hostOnly": false,
+            "creation": "2026-10-02T04:52:57.366Z",
+            "lastAccessed": "2026-10-02T04:52:57.366Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-10-02T05:42:55.678Z",
+      "createdAt": "2026-10-02T04:52:55.678Z",
       "usageCount": 1,
       "maxUsageCount": 50,
       "errorScore": 0

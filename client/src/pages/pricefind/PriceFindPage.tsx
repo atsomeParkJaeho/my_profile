@@ -154,7 +154,7 @@ export default function PriceFindPage() {
         {!loading && items.length > 0 && (
           <div className="row g-3">
             {items.map((item, idx) => (
-              <div key={idx} className="col-md-6 col-lg-4">
+              <div key={idx} className="col-md-6 col-lg-4 col-6">
                 <div
                   className="card h-100 shadow-sm"
                   style={{ transition: 'box-shadow 0.2s', cursor: 'pointer' }}

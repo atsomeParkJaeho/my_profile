@@ -14,7 +14,7 @@ export class AuthService {
 
   async signup(dto: SignupDto) {
     const existing = await this.usersService.findByEmail(dto.email);
-    if (existing) throw new ConflictException('?��? ?�록???�메?�입?�다.');
+    if (existing) throw new ConflictException('이미 등록된 이메일입니다.');
 
     const hashed = await bcrypt.hash(dto.password, 10);
     const user = await this.usersService.create({
@@ -28,12 +28,12 @@ export class AuthService {
 
   async login(dto: LoginDto, session: any) {
     const user = await this.usersService.findByEmail(dto.email);
-    if (!user || !user.password) throw new UnauthorizedException('?�메???�는 비�?번호가 ?�바르�? ?�습?�다.');
+    if (!user || !user.password) throw new UnauthorizedException('이메일 또는 비밀번호가 올바르지 않습니다.');
 
     const isMatch = await bcrypt.compare(dto.password, user.password);
-    if (!isMatch) throw new UnauthorizedException('?�메???�는 비�?번호가 ?�바르�? ?�습?�다.');
+    if (!isMatch) throw new UnauthorizedException('이메일 또는 비밀번호가 올바르지 않습니다.');
 
-    // ?�션???��? ?�보 ?�??(?�버 메모리에 보�?, 브라?��???session ID 쿠키�??�달)
+    // 세션에 사용자 정보 저장 (서버 메모리에 보관, 브라우저에는 session ID 쿠키만 전달)
     session.userId = user.id;
     session.name   = user.name;
     session.email  = user.email;
