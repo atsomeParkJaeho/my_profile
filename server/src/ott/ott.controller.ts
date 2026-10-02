@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
+import { Body, Controller, Delete, ForbiddenException, Get, HttpCode, Param, Post, Put, Query, Req } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody, ApiCookieAuth } from '@nestjs/swagger';
 import { OttService } from './ott.service';
 
 /* swagger에 노출 되는 소스 */
@@ -52,5 +52,20 @@ export class OttController {
   @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.ottService.remove(Number(id));
+  }
+
+  /* swagger에 노출 되는 소스 */
+  @ApiOperation({ summary: '크롤링 시드 데이터로 전체 재적재 (관리자 전용, 기존 데이터 전부 삭제 후 재삽입)' })
+  @ApiCookieAuth()
+  @ApiResponse({ status: 200, description: '{ count: number }' })
+  @ApiResponse({ status: 403, description: '관리자 권한 필요' })
+  @Post('reseed')
+  @HttpCode(200)
+  reseed(@Req() req: any) {
+    const adminEmail = process.env.ADMIN_EMAIL;
+    if (!adminEmail || req.session?.email !== adminEmail) {
+      throw new ForbiddenException('관리자만 재적재할 수 있습니다.');
+    }
+    return this.ottService.reseed();
   }
 }

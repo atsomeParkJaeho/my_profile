@@ -133,21 +133,33 @@ export class OttService implements OnApplicationBootstrap {
     // 최초 1회 나무위키 크롤링 시드 데이터 적재 (이미 데이터가 있으면 건너뜀)
     const [{ count }] = await this.dataSource.query('SELECT COUNT(*) as count FROM ott_anime');
     if (Number(count) === 0 && OTT_SEED_DATA.length > 0) {
-      for (const item of OTT_SEED_DATA) {
-        await this.query(
-          `INSERT INTO ott_anime
-            (title, sub_title, year, quarter, image, netflix_link, laftel_link, wavve_link, watcha_link, tving_link, disneyplus_link, coupangplay_link,
-             created_at, updated_at, created_by, updated_by)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          [
-            item.title, (item as any).subTitle ?? '', item.year, item.quarter, item.image,
-            item.netflixLink, item.laftelLink, item.wavveLink,
-            item.watchaLink, item.tvingLink, item.disneyplusLink ?? '', item.coupangplayLink,
-            item.createdAt, item.updatedAt, item.createdBy ?? '크롤러', item.updatedBy ?? '크롤러',
-          ],
-        );
-      }
+      await this.seedAll();
     }
+  }
+
+  private async seedAll() {
+    for (const item of OTT_SEED_DATA) {
+      await this.query(
+        `INSERT INTO ott_anime
+          (title, sub_title, year, quarter, image, netflix_link, laftel_link, wavve_link, watcha_link, tving_link, disneyplus_link, coupangplay_link,
+           created_at, updated_at, created_by, updated_by)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          item.title, (item as any).subTitle ?? '', item.year, item.quarter, item.image,
+          item.netflixLink, item.laftelLink, item.wavveLink,
+          item.watchaLink, item.tvingLink, item.disneyplusLink ?? '', item.coupangplayLink,
+          item.createdAt, item.updatedAt, item.createdBy ?? '크롤러', item.updatedBy ?? '크롤러',
+        ],
+      );
+    }
+  }
+
+  // 관리자 전용: 크롤링 시드 데이터로 전체 재적재 (기존 데이터 삭제 후 재삽입)
+  async reseed(): Promise<{ count: number }> {
+    await this.dataSource.query('DELETE FROM ott_anime');
+    await this.seedAll();
+    const [{ count }] = await this.dataSource.query('SELECT COUNT(*) as count FROM ott_anime');
+    return { count: Number(count) };
   }
 
   private mapRow(row: any): any {
