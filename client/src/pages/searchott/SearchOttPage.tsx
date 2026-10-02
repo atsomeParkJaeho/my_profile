@@ -40,6 +40,16 @@ const PLATFORM_LINKS = [
   { key: 'coupangplayLink',  label: '쿠팡플레이' },
 ];
 
+const OTT_BADGES = [
+  { key: 'netflixLink',     text: 'NETFLIX',     color: '#e50914' },
+  { key: 'laftelLink',      text: 'LAFTEL',       color: '#816bff' },
+  { key: 'tvingLink',       text: 'TVING',        color: '#e5252a' },
+  { key: 'wavveLink',       text: 'Wavve',        color: '#2a6ff0' },
+  { key: 'watchaLink',      text: 'WATCHA',       color: '#ff0558' },
+  { key: 'disneyplusLink',  text: 'Disney+',      color: '#113ccf' },
+  { key: 'coupangplayLink', text: 'COUPANG PLAY', color: '#2874f0' },
+];
+
 export default function SearchOttPage() {
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
@@ -163,8 +173,21 @@ export default function SearchOttPage() {
           <p className="text-muted small mt-1 mb-0">
             {item.year} {item.quarter}
           </p>
-          <div className='ott_link_group'>
-            <p className="text-muted small mt-1 mb-0">asdf</p>
+          <div className='ott_link_group mt-2 d-flex flex-column gap-1'>
+            {OTT_BADGES.filter((b) => item?.[b.key]).map((b) => (
+              <a
+                key={b.key}
+                href={item[b.key]}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="d-flex align-items-center gap-1 text-decoration-none"
+                style={{ fontSize: '0.8rem' }}
+              >
+                <span style={{ color: b.color, fontWeight: 700 }}>{b.text}</span>
+                <i className="bi bi-play-circle-fill text-success" style={{ fontSize: '0.8rem' }}></i>
+              </a>
+            ))}
           </div>
         </div>
       </div>

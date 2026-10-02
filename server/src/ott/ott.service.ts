@@ -50,7 +50,7 @@ export class OttService implements OnApplicationBootstrap {
   // 컬럼 순서: id, title, year, quarter, image, netflix_link, laftel_link, wavve_link,
   // watcha_link, tving_link, disneyplus_link, coupangplay_link, created_at, updated_at, created_by, updated_by
   private readonly COLUMN_ORDER = [
-    'title', 'sub_title', 'year', 'quarter', 'image',
+    'title', 'sub_title', 'year', 'quarter', 'weekday', 'genre', 'image',
     'netflix_link', 'laftel_link', 'wavve_link', 'watcha_link', 'tving_link',
     'disneyplus_link', 'coupangplay_link',
     'created_at', 'updated_at', 'created_by', 'updated_by',
@@ -62,6 +62,8 @@ export class OttService implements OnApplicationBootstrap {
       ['sub_title', 'VARCHAR(500)'],
       ['year', 'VARCHAR(10)'],
       ['quarter', 'VARCHAR(10)'],
+      ['weekday', 'VARCHAR(10)'],
+      ['genre', 'VARCHAR(300)'],
       ['image', 'TEXT'],
       ['netflix_link', 'TEXT'],
       ['laftel_link', 'TEXT'],
@@ -141,11 +143,12 @@ export class OttService implements OnApplicationBootstrap {
     for (const item of OTT_SEED_DATA) {
       await this.query(
         `INSERT INTO ott_anime
-          (title, sub_title, year, quarter, image, netflix_link, laftel_link, wavve_link, watcha_link, tving_link, disneyplus_link, coupangplay_link,
+          (title, sub_title, year, quarter, weekday, genre, image, netflix_link, laftel_link, wavve_link, watcha_link, tving_link, disneyplus_link, coupangplay_link,
            created_at, updated_at, created_by, updated_by)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
-          item.title, (item as any).subTitle ?? '', item.year, item.quarter, item.image,
+          item.title, (item as any).subTitle ?? '', item.year, item.quarter,
+          (item as any).weekday ?? '', (item as any).genre ?? '', item.image,
           item.netflixLink, item.laftelLink, item.wavveLink,
           item.watchaLink, item.tvingLink, item.disneyplusLink ?? '', item.coupangplayLink,
           item.createdAt, item.updatedAt, item.createdBy ?? '크롤러', item.updatedBy ?? '크롤러',
@@ -170,6 +173,8 @@ export class OttService implements OnApplicationBootstrap {
       subTitle: row.sub_title,
       year: row.year,
       quarter: row.quarter,
+      weekday: row.weekday,
+      genre: row.genre,
       image: row.image,
       netflixLink: row.netflix_link,
       laftelLink: row.laftel_link,
@@ -212,11 +217,11 @@ export class OttService implements OnApplicationBootstrap {
     const now = this.getNow();
     return this.query(
       `INSERT INTO ott_anime
-        (title, sub_title, year, quarter, image, netflix_link, laftel_link, wavve_link, watcha_link, tving_link, disneyplus_link, coupangplay_link,
+        (title, sub_title, year, quarter, weekday, genre, image, netflix_link, laftel_link, wavve_link, watcha_link, tving_link, disneyplus_link, coupangplay_link,
          created_at, updated_at, created_by, updated_by)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        dto.title, dto.subTitle ?? '', dto.year ?? '', dto.quarter ?? '', dto.image ?? '',
+        dto.title, dto.subTitle ?? '', dto.year ?? '', dto.quarter ?? '', dto.weekday ?? '', dto.genre ?? '', dto.image ?? '',
         dto.netflixLink ?? '', dto.laftelLink ?? '', dto.wavveLink ?? '',
         dto.watchaLink ?? '', dto.tvingLink ?? '', dto.disneyplusLink ?? '', dto.coupangplayLink ?? '',
         now, now, dto.userId ?? '', dto.userId ?? '',
@@ -228,13 +233,13 @@ export class OttService implements OnApplicationBootstrap {
     const now = this.getNow();
     return this.query(
       `UPDATE ott_anime
-       SET title = ?, sub_title = ?, year = ?, quarter = ?, image = ?,
+       SET title = ?, sub_title = ?, year = ?, quarter = ?, weekday = ?, genre = ?, image = ?,
            netflix_link = ?, laftel_link = ?, wavve_link = ?,
            watcha_link = ?, tving_link = ?, disneyplus_link = ?, coupangplay_link = ?,
            updated_at = ?, updated_by = ?
        WHERE id = ?`,
       [
-        dto.title, dto.subTitle ?? '', dto.year ?? '', dto.quarter ?? '', dto.image ?? '',
+        dto.title, dto.subTitle ?? '', dto.year ?? '', dto.quarter ?? '', dto.weekday ?? '', dto.genre ?? '', dto.image ?? '',
         dto.netflixLink ?? '', dto.laftelLink ?? '', dto.wavveLink ?? '',
         dto.watchaLink ?? '', dto.tvingLink ?? '', dto.disneyplusLink ?? '', dto.coupangplayLink ?? '',
         now, dto.userId ?? '',

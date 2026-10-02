@@ -16,7 +16,7 @@ export default function LoginPage() {
     dispatch(clearError());
     const result = await dispatch(login({ email, password: pass }));
     if (login.fulfilled.match(result)) {
-      navigate('/home', { replace: true });
+      navigate('/searchott', { replace: true });
     }
   };
 

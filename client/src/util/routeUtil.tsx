@@ -17,13 +17,13 @@ const PrivateRoute = ({ element }: { element: JSX.Element }) => {
 // ── 비인증 전용 라우트 ─────────────────────────────────────────────────────
 const PublicRoute = ({ element }: { element: JSX.Element }) => {
   const { user } = useAppSelector((state) => state.auth);
-  return user ? <Navigate to="/pricefind" replace /> : element;
+  return user ? <Navigate to="/searchott" replace /> : element;
 };
 
 // ── 라우트 목록 ────────────────────────────────────────────────────────────
 export const RouteList: { path: string; element: JSX.Element }[] = [
-  { path: '/',        element: <Navigate to="/pricefind" replace /> },
-  { path: '*',        element: <Navigate to="/pricefind" replace /> },
+  { path: '/',        element: <Navigate to="/searchott" replace /> },
+  { path: '*',        element: <Navigate to="/searchott" replace /> },
   { path: '/login',   element: <PublicRoute element={<LoginPage />} /> },
   { path: '/home',    element: <HomePage /> },
   { path: '/contact',    element: <ContactPage /> },

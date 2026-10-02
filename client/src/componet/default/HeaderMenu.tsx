@@ -43,7 +43,7 @@ export const HeaderMenu = () => {
 		>
 			{/* ── 로고 ── */}
 			<Link
-				to="/pricefind"
+				to="/searchott"
 				style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', flexShrink: 0 }}
 			>
 				<div style={{
