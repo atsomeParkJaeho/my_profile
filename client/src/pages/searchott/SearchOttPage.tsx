@@ -141,7 +141,7 @@ export default function SearchOttPage() {
               className="card-img-top"
               src={item.image}
               alt={item.title}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', left: 0, top: 0 }}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition:'bottom', position: 'absolute', left: 0, top: 0 }}
               onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
             />
           ) : null}
@@ -273,8 +273,8 @@ export default function SearchOttPage() {
               const quarterLabel = season.label.replace(/^\d{4}년\s*/, ''); // "2026년 4분기" → "4분기"
               const seasonItems = allItems.filter((item) => item.quarter === quarterLabel);
               return (
-                <div key={season.id} className='season_tab border-bottom mb-5' id={season.id}>
-                  <h3>{season.label}</h3>
+                <div key={season.id} className='season_tab' id={season.id}>
+                  <h3 className='border-bottom pb-3 mb-3'>{season.label}</h3>
                   {seasonItems.length > 0 ? (
                     <div className="row g-3 mb-4">
                       {seasonItems.map((item) => renderCard(item))}

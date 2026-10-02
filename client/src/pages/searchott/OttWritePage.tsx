@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Layout from '@/componet/default/Layout';
 import { getOttDetail, createOtt, updateOtt, deleteOtt } from '@api/ott';
+import { useAppSelector } from '@store/hooks';
 
 const QUARTER_OPTIONS = ['1분기', '2분기', '3분기', '4분기'];
 
@@ -12,11 +13,13 @@ const PLATFORM_FIELDS = [
   { key: 'watchaLink',      label: '왓챠 링크' },
   { key: 'tvingLink',       label: '티빙 링크' },
   { key: 'coupangplayLink', label: '쿠팡플레이 링크' },
+  { key: 'disneyplusLink',  label: '디즈니플러스 링크' },
 ];
 
 export default function OttWritePage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user }  = useAppSelector((state) => state.auth);
   const actType  = location.state?.actType ?? 'create';
   const itemId   = location.state?.id;
   const isEdit   = actType === 'edit' && !!itemId;
@@ -26,8 +29,9 @@ export default function OttWritePage() {
   const [quarter, setQuarter] = useState('4분기');
   const [image,   setImage]   = useState('');
   const [links,   setLinks]   = useState<Record<string, string>>({
-    netflixLink: '', laftelLink: '', wavveLink: '', watchaLink: '', tvingLink: '', coupangplayLink: '',
+    netflixLink: '', laftelLink: '', wavveLink: '', watchaLink: '', tvingLink: '', coupangplayLink: '', disneyplusLink: '',
   });
+  const [meta,    setMeta]    = useState<{ createdAt?: string; updatedAt?: string; createdBy?: string; updatedBy?: string }>({});
   const [loading, setLoading] = useState(isEdit);
   const [saving,  setSaving]  = useState(false);
 
@@ -46,6 +50,11 @@ export default function OttWritePage() {
           watchaLink: data.watchaLink ?? '',
           tvingLink: data.tvingLink ?? '',
           coupangplayLink: data.coupangplayLink ?? '',
+          disneyplusLink: data.disneyplusLink ?? '',
+        });
+        setMeta({
+          createdAt: data.createdAt, updatedAt: data.updatedAt,
+          createdBy: data.createdBy, updatedBy: data.updatedBy,
         });
       }
     }).finally(() => setLoading(false));
@@ -56,7 +65,7 @@ export default function OttWritePage() {
     if (!title.trim()) return;
     setSaving(true);
     try {
-      const dto = { title: title.trim(), year, quarter, image, ...links };
+      const dto = { title: title.trim(), year, quarter, image, ...links, userName: user?.name ?? '' };
       if (isEdit) {
         await updateOtt(itemId, dto);
       } else {
@@ -98,6 +107,15 @@ export default function OttWritePage() {
           <div className="border-bottom mb-4 pb-4">
             <h5 className="mb-1">{isEdit ? 'OTT 정보 수정' : 'OTT 정보 작성'}</h5>
             <p className="text-muted mb-0">내용을 입력하고 저장 버튼을 눌러주세요.</p>
+            {isEdit && (meta.createdAt || meta.updatedAt) && (
+              <p className="text-muted small mt-2 mb-0">
+                {meta.createdBy && <>작성자: {meta.createdBy} · </>}
+                작성일: {meta.createdAt || '-'}
+                {' · '}
+                {meta.updatedBy && <>수정자: {meta.updatedBy} · </>}
+                수정일: {meta.updatedAt || '-'}
+              </p>
+            )}
           </div>
 
           <form onSubmit={handleSubmit}>
