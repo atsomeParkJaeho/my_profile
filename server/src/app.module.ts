@@ -9,6 +9,7 @@ import { ProfileModule } from './profile/profile.module';
 import { CommentModule } from './comment/comment.module';
 import { ContactModule } from './contact/contact.module';
 import { PricefindModule } from './pricefind/pricefind.module';
+import { SearchottModule } from './searchott/searchott.module';
 
 // DB_HOST 환경변수 유무로 PostgreSQL / SQLite 자동 선택
 const dbConfig = process.env.DB_HOST
@@ -49,6 +50,7 @@ const dbConfig = process.env.DB_HOST
     CommentModule,
     ContactModule,
     PricefindModule,
+    SearchottModule,
   ],
 })
 export class AppModule {}
