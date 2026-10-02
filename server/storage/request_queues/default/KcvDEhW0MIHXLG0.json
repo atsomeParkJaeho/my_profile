@@ -1,9 +1,0 @@
-{
-	"id": "KcvDEhW0MIHXLG0",
-	"json": "{\"id\":\"KcvDEhW0MIHXLG0\",\"url\":\"https://m.gundamboom.com/product/list.php?mode=view\",\"loadedUrl\":\"https://m.gundamboom.com/product/list.php?mode=view\",\"uniqueKey\":\"https://m.gundamboom.com/product/list.php?mode=view#스트라이크#1790663532605\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2026-09-29T06:32:18.122Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://m.gundamboom.com/product/list.php?mode=view#스트라이크#1790663532605",
-	"url": "https://m.gundamboom.com/product/list.php?mode=view"
-}

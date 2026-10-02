@@ -8,6 +8,13 @@ const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL;
 const LAYOUT = 'gallery';
 const TYPE   = 'ott_list';
 
+const CATEGORIES = [
+  { label: '전체' },
+  { label: '영화' },
+  { label: '드라마' },
+  { label: '예능' },
+];
+
 // HTML 태그 제거 후 지정 길이만큼 잘라 반환
 const stripHtml = (html: string, max = 80) => {
   const text = html?.replace(/<[^>]*>/g, '') ?? '';
@@ -26,6 +33,9 @@ export default function SearchOttPage() {
   const [items,     setItems]     = useState<any[]>([]);
   const [loading,   setLoading]   = useState(true);
   const [searched,  setSearched]  = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<typeof CATEGORIES[number] | null>(
+    CATEGORIES.find((cat) => cat.label === '전체') ?? null
+  );
 
   useEffect(() => {
     getCommunity(LAYOUT, TYPE).then((res) => {
@@ -43,12 +53,23 @@ export default function SearchOttPage() {
     });
   }, []);
 
+  const applyFilter = (list: any[], q: string, category: typeof CATEGORIES[number] | null) => {
+    let result = q ? list.filter((item) => item.title?.includes(q)) : list;
+    if (category && category.label !== '전체') {
+      result = result.filter((item) => item.extra2 === category.label);
+    }
+    return result;
+  };
+
   const handleSearch = (e?: React.FormEvent) => {
     e?.preventDefault();
     const q = inputVal.trim();
     setKeyword(q);
-    setSearchParams(q ? { q } : {});
-    setItems(q ? allItems.filter((item) => item.title?.includes(q)) : allItems);
+    const params: Record<string, string> = {};
+    if (q) params.q = q;
+    if (selectedCategory && selectedCategory.label !== '전체') params.category = selectedCategory.label;
+    setSearchParams(params);
+    setItems(applyFilter(allItems, q, selectedCategory));
     setSearched(true);
   };
 
@@ -57,6 +78,7 @@ export default function SearchOttPage() {
     setKeyword('');
     setItems(allItems);
     setSearched(true);
+    setSelectedCategory(CATEGORIES.find((cat) => cat.label === '전체') ?? null);
     setSearchParams({});
   };
 
@@ -65,7 +87,7 @@ export default function SearchOttPage() {
       <div className="my-4">
 
         {/* ── 검색 헤더 ── */}
-        <div className="mb-4">
+        <div className="card card-body mb-4">
           <div className="d-flex align-items-center justify-content-between mb-1">
             <h5 className="fw-bold mb-0">
               <i className="bi bi-tv me-2 text-primary"></i>OTT 정보
@@ -80,18 +102,43 @@ export default function SearchOttPage() {
             )}
           </div>
           <p className="text-muted small mb-3">보고 싶은 콘텐츠를 검색하고 OTT 정보를 확인하세요.</p>
-          <form className="d-flex flex-row mb-2 p-1 bg-white border rounded input-group" onSubmit={handleSearch}>
+          <form className="d-flex input-group" onSubmit={handleSearch}>
             <input
               type="text"
-              className="form-control rounded-0 border-0"
+              className="form-control"
               placeholder="콘텐츠명 검색..."
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
             />
-            <button className="btn btn-primary rounded-0 flex-shrink-0" type="submit" disabled={loading}>
-              <i className="bi bi-search me-1"></i>검색
+            <button className="btn btn-primary flex-shrink-0" type="submit" disabled={loading}>
+              {loading
+                ? <span className="spinner-border spinner-border-sm" />
+                : <><i className="bi bi-search me-1"></i>검색</>
+              }
             </button>
           </form>
+
+          {/* 카테고리 버튼 */}
+          <div className="mt-3">
+            <p className="text-muted small mb-2">카테고리 선택 후 검색버튼을 클릭하세요.</p>
+            <div className="d-flex flex-wrap gap-2">
+              {CATEGORIES.map((cat) => {
+                const isSelected = selectedCategory?.label === cat.label;
+                return (
+                  <button
+                    key={cat.label}
+                    type="button"
+                    className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-secondary'}`}
+                    disabled={loading}
+                    onClick={() => setSelectedCategory(isSelected ? null : cat)}
+                  >
+                    {isSelected && <i className="bi bi-check2 me-1"></i>}
+                    {cat.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
         {/* ── 결과 헤더 ── */}

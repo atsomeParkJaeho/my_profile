@@ -16,7 +16,7 @@ export const Layout = ({ children }: any) => {
         <div className="container py-4">
           <div className="row align-items-start">
             {/* 좌측 사이드바 */}
-            <div className={`col-lg-4 col-xl-3`} style={{marginTop: '-80px'}}>
+            <div className={`col-lg-4 col-xl-3`}>
               <LeftMenu />
             </div>
             {/* 우측 콘텐츠 */}
