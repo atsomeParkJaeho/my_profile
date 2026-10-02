@@ -129,7 +129,7 @@ export default function SearchOttPage() {
       <div
         className="card hover-scale overflow-hidden"
         style={{ cursor: 'pointer' }}
-        onClick={() => handleCardClick(item)}
+        // onClick={() => handleCardClick(item)}
       >
         {/* 콘텐츠 이미지 */}
         <div
@@ -163,6 +163,9 @@ export default function SearchOttPage() {
           <p className="text-muted small mt-1 mb-0">
             {item.year} {item.quarter}
           </p>
+          <div className='ott_link_group'>
+            <p className="text-muted small mt-1 mb-0">asdf</p>
+          </div>
         </div>
       </div>
     </div>

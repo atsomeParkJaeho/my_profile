@@ -207,7 +207,7 @@ export class OttService implements OnApplicationBootstrap {
         dto.title, dto.subTitle ?? '', dto.year ?? '', dto.quarter ?? '', dto.image ?? '',
         dto.netflixLink ?? '', dto.laftelLink ?? '', dto.wavveLink ?? '',
         dto.watchaLink ?? '', dto.tvingLink ?? '', dto.disneyplusLink ?? '', dto.coupangplayLink ?? '',
-        now, now, dto.userName ?? '', dto.userName ?? '',
+        now, now, dto.userId ?? '', dto.userId ?? '',
       ],
     );
   }
@@ -225,7 +225,7 @@ export class OttService implements OnApplicationBootstrap {
         dto.title, dto.subTitle ?? '', dto.year ?? '', dto.quarter ?? '', dto.image ?? '',
         dto.netflixLink ?? '', dto.laftelLink ?? '', dto.wavveLink ?? '',
         dto.watchaLink ?? '', dto.tvingLink ?? '', dto.disneyplusLink ?? '', dto.coupangplayLink ?? '',
-        now, dto.userName ?? '',
+        now, dto.userId ?? '',
         id,
       ],
     );

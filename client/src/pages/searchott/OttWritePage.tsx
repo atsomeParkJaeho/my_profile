@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Layout from '@/componet/default/Layout';
 import { getOttDetail, createOtt, updateOtt, deleteOtt } from '@api/ott';
-import { useAppSelector } from '@store/hooks';
 
 const QUARTER_OPTIONS = ['1분기', '2분기', '3분기', '4분기'];
 
@@ -19,7 +18,6 @@ const PLATFORM_FIELDS = [
 export default function OttWritePage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user }  = useAppSelector((state) => state.auth);
   const actType  = location.state?.actType ?? 'create';
   const itemId   = location.state?.id;
   const isEdit   = actType === 'edit' && !!itemId;
@@ -65,7 +63,7 @@ export default function OttWritePage() {
     if (!title.trim()) return;
     setSaving(true);
     try {
-      const dto = { title: title.trim(), year, quarter, image, ...links, userName: user?.name ?? '' };
+      const dto = { title: title.trim(), year, quarter, image, ...links };
       if (isEdit) {
         await updateOtt(itemId, dto);
       } else {
@@ -109,10 +107,10 @@ export default function OttWritePage() {
             <p className="text-muted mb-0">내용을 입력하고 저장 버튼을 눌러주세요.</p>
             {isEdit && (meta.createdAt || meta.updatedAt) && (
               <p className="text-muted small mt-2 mb-0">
-                {meta.createdBy && <>작성자: {meta.createdBy} · </>}
+                {meta.createdBy && <>작성자 ID: {meta.createdBy} · </>}
                 작성일: {meta.createdAt || '-'}
                 {' · '}
-                {meta.updatedBy && <>수정자: {meta.updatedBy} · </>}
+                {meta.updatedBy && <>수정자 ID: {meta.updatedBy} · </>}
                 수정일: {meta.updatedAt || '-'}
               </p>
             )}

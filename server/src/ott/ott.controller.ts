@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
 import { OttService } from './ott.service';
 
@@ -32,8 +32,8 @@ export class OttController {
   @ApiBody({ schema: { example: { title: '제목', year: '2026', quarter: '4분기', image: '', netflixLink: '', laftelLink: '', wavveLink: '', watchaLink: '', tvingLink: '', coupangplayLink: '' } } })
   @ApiResponse({ status: 201, description: '생성된 항목' })
   @Post('create')
-  create(@Body() dto: any) {
-    return this.ottService.create(dto);
+  create(@Body() dto: any, @Req() req: any) {
+    return this.ottService.create({ ...dto, userId: req.session?.userId != null ? String(req.session.userId) : '' });
   }
 
   /* swagger에 노출 되는 소스 */
@@ -41,8 +41,8 @@ export class OttController {
   @ApiParam({ name: 'id', description: 'ID' })
   @ApiResponse({ status: 200, description: '수정된 항목' })
   @Put('update/:id')
-  update(@Param('id') id: string, @Body() dto: any) {
-    return this.ottService.update(Number(id), dto);
+  update(@Param('id') id: string, @Body() dto: any, @Req() req: any) {
+    return this.ottService.update(Number(id), { ...dto, userId: req.session?.userId != null ? String(req.session.userId) : '' });
   }
 
   /* swagger에 노출 되는 소스 */
