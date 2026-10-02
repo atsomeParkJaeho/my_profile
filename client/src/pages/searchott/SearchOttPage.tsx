@@ -1,13 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import Layout from '@/componet/default/Layout';
+import { getCommunity } from '@api/community';
 import { useAppSelector } from '@store/hooks';
-import axios from 'axios';
-
-interface SearchItem {
-  title: string;
-  link: string;
-}
 
 const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL;
 const LAYOUT = 'gallery';
@@ -37,6 +32,12 @@ const getOrderedSeasons = () => {
   return current ? [current, ...rest] : rest;
 };
 
+// HTML 태그 제거 후 지정 길이만큼 잘라 반환
+const stripHtml = (html: string, max = 80) => {
+  const text = html?.replace(/<[^>]*>/g, '') ?? '';
+  return text.length > max ? text.slice(0, max) + '…' : text;
+};
+
 export default function SearchOttPage() {
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
@@ -45,52 +46,55 @@ export default function SearchOttPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [inputVal,  setInputVal]  = useState(searchParams.get('q') ?? '');
   const [keyword,   setKeyword]   = useState('');
-  const [items,     setItems]     = useState<SearchItem[]>([]);
-  const [loading,   setLoading]   = useState(false);
+  const [allItems,  setAllItems]  = useState<any[]>([]);
+  const [items,     setItems]     = useState<any[]>([]);
+  const [loading,   setLoading]   = useState(true);
   const [searched,  setSearched]  = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<typeof CATEGORIES[number] | null>(
     CATEGORIES.find((cat) => cat.label === '전체') ?? null
   );
 
-  const fetchSearch = async (q: string) => {
-    setKeyword(q);
-    setLoading(true);
-    setSearched(false);
-    try {
-      const { data } = await axios.get<{ items: SearchItem[]; total: number }>(
-        '/api/searchott/search', { params: { q } }
-      );
-      setItems(data.items ?? []);
-    } catch (err) {
-      console.error(err);
-      setItems([]);
-    } finally {
+  useEffect(() => {
+    getCommunity(LAYOUT, TYPE).then((res) => {
+      const list = res ?? [];
+      setAllItems(list);
+      const q = searchParams.get('q');
+      if (q) {
+        setKeyword(q);
+        setItems(list.filter((item: any) => item.title?.includes(q)));
+      } else {
+        setItems(list);
+      }
       setLoading(false);
       setSearched(true);
-    }
-  };
-
-  // 새로고침 시 URL의 q 파라미터로 자동 검색
-  useEffect(() => {
-    const q = searchParams.get('q');
-    if (q) fetchSearch(q);
+    });
   }, []);
 
-  const handleSearch = async (e?: React.FormEvent) => {
+  const applyFilter = (list: any[], q: string, category: typeof CATEGORIES[number] | null) => {
+    let result = q ? list.filter((item) => item.title?.includes(q)) : list;
+    if (category && category.label !== '전체') {
+      result = result.filter((item) => item.extra2 === category.label);
+    }
+    return result;
+  };
+
+  const handleSearch = (e?: React.FormEvent) => {
     e?.preventDefault();
     const q = inputVal.trim();
-    if (!q) return;
-    const params: Record<string, string> = { q };
+    setKeyword(q);
+    const params: Record<string, string> = {};
+    if (q) params.q = q;
     if (selectedCategory && selectedCategory.label !== '전체') params.category = selectedCategory.label;
     setSearchParams(params);
-    await fetchSearch(q);
+    setItems(applyFilter(allItems, q, selectedCategory));
+    setSearched(true);
   };
 
   const handleReset = () => {
     setInputVal('');
     setKeyword('');
-    setItems([]);
-    setSearched(false);
+    setItems(allItems);
+    setSearched(true);
     setSelectedCategory(CATEGORIES.find((cat) => cat.label === '전체') ?? null);
     setSearchParams({});
   };
@@ -173,7 +177,7 @@ export default function SearchOttPage() {
         {loading && (
           <div className="card card-body text-center py-5 text-muted">
             <div className="spinner-border text-primary mx-auto mb-3" style={{ width: 40, height: 40 }} />
-            <p className="mb-0">나무위키에서 검색 중...</p>
+            <p className="mb-0">OTT 정보를 불러오는 중...</p>
           </div>
         )}
         
@@ -181,7 +185,7 @@ export default function SearchOttPage() {
         {!loading && searched && keyword && items.length === 0 && (
           <div className="card card-body text-center py-5 text-muted">
             <i className="bi bi-inbox fs-1 mb-2"></i>
-            <p className="mb-0">검색 결과가 없습니다.</p>
+            <p className="mb-0">등록된 게시글이 없습니다.</p>
           </div>
         )}
 
@@ -190,22 +194,34 @@ export default function SearchOttPage() {
         {!loading && keyword && items.length > 0 && (
           <div className="row g-3">
 
-            {items.map((item, idx) => (
-              <div key={idx} className="col-sm-6 col-lg-4 col-xl-3 col-6">
+            {items.map((item) => (
+              <div key={item.id} className="col-sm-6 col-lg-4 col-xl-3 col-6">
                 <div
                   className="card hover-scale overflow-hidden"
                   style={{ cursor: 'pointer' }}
-                  onClick={() => window.open(item.link, '_blank', 'noopener,noreferrer')}
+                  onClick={() => navigate(`/${LAYOUT}/${TYPE}/detail`, { state: { id: item.id } })}
                 >
                   {/* 콘텐츠 이미지 */}
                   <div
                     className="d-flex align-items-center justify-content-center bg-light"
                     style={{ position: 'relative', paddingTop: '100%' }}
                   >
+                    {item.extra1 ? (
+                      <img
+                        className="card-img-top"
+                        src={item.extra1}
+                        alt={item.title}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', left: 0, top: 0 }}
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                      />
+                    ) : null}
                   </div>
 
                   <div className="card-body p-3">
                     <h5 className="mt-1 mb-0 text-reset" style={{ fontSize: '1rem' }}>{item.title}</h5>
+                    <p className="text-muted small mt-1 mb-0" style={{ lineHeight: 1.5 }}>
+                      {stripHtml(item.content)}
+                    </p>
                   </div>
                 </div>
               </div>
