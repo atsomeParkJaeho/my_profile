@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import Layout from '@/componet/default/Layout';
-import { getCommunity } from '@api/community';
+import { getOttList } from '@api/ott';
 import { useAppSelector } from '@store/hooks';
 
 const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL;
-const LAYOUT = 'gallery';
-const TYPE   = 'ott_list';
 
-const CATEGORIES = [
+const QUARTERS = [
   { label: '전체' },
-  { label: '영화' },
-  { label: '드라마' },
-  { label: '예능' },
+  { label: '1분기' },
+  { label: '2분기' },
+  { label: '3분기' },
+  { label: '4분기' },
 ];
 
 const SEASONS = [
@@ -32,11 +31,14 @@ const getOrderedSeasons = () => {
   return current ? [current, ...rest] : rest;
 };
 
-// HTML 태그 제거 후 지정 길이만큼 잘라 반환
-const stripHtml = (html: string, max = 80) => {
-  const text = html?.replace(/<[^>]*>/g, '') ?? '';
-  return text.length > max ? text.slice(0, max) + '…' : text;
-};
+const PLATFORM_LINKS = [
+  { key: 'netflixLink',      label: '넷플릭스' },
+  { key: 'laftelLink',       label: '라프텔' },
+  { key: 'wavveLink',        label: '웨이브' },
+  { key: 'watchaLink',       label: '왓챠' },
+  { key: 'tvingLink',        label: '티빙' },
+  { key: 'coupangplayLink',  label: '쿠팡플레이' },
+];
 
 export default function SearchOttPage() {
   const navigate = useNavigate();
@@ -46,58 +48,125 @@ export default function SearchOttPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [inputVal,  setInputVal]  = useState(searchParams.get('q') ?? '');
   const [keyword,   setKeyword]   = useState('');
-  const [allItems,  setAllItems]  = useState<any[]>([]);
   const [items,     setItems]     = useState<any[]>([]);
-  const [loading,   setLoading]   = useState(true);
+  const [allItems,  setAllItems]  = useState<any[]>([]);
+  const [loading,   setLoading]   = useState(false);
   const [searched,  setSearched]  = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<typeof CATEGORIES[number] | null>(
-    CATEGORIES.find((cat) => cat.label === '전체') ?? null
+  const [selectedQuarter, setSelectedQuarter] = useState<typeof QUARTERS[number] | null>(
+    QUARTERS.find((q) => q.label === '전체') ?? null
   );
 
-  useEffect(() => {
-    getCommunity(LAYOUT, TYPE).then((res) => {
-      const list = res ?? [];
-      setAllItems(list);
-      const q = searchParams.get('q');
-      if (q) {
-        setKeyword(q);
-        setItems(list.filter((item: any) => item.title?.includes(q)));
-      } else {
-        setItems(list);
-      }
+  const fetchSearch = async (q: string, quarter?: string) => {
+    setKeyword(q);
+    setLoading(true);
+    setSearched(false);
+    try {
+      const data = await getOttList(q, quarter && quarter !== '전체' ? quarter : undefined);
+      setItems(data ?? []);
+    } catch (err) {
+      console.error(err);
+      setItems([]);
+    } finally {
       setLoading(false);
       setSearched(true);
-    });
-  }, []);
-
-  const applyFilter = (list: any[], q: string, category: typeof CATEGORIES[number] | null) => {
-    let result = q ? list.filter((item) => item.title?.includes(q)) : list;
-    if (category && category.label !== '전체') {
-      result = result.filter((item) => item.extra2 === category.label);
     }
-    return result;
   };
 
-  const handleSearch = (e?: React.FormEvent) => {
+  const fetchAll = async () => {
+    setLoading(true);
+    try {
+      const data = await getOttList();
+      setAllItems(data ?? []);
+    } catch (err) {
+      console.error(err);
+      setAllItems([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 새로고침 시 URL의 q 파라미터로 자동 검색, 없으면 전체 목록 로드
+  useEffect(() => {
+    const q = searchParams.get('q');
+    if (q) {
+      fetchSearch(q, searchParams.get('quarter') ?? undefined);
+    } else {
+      fetchAll();
+    }
+  }, []);
+
+  const handleSearch = async (e?: React.FormEvent) => {
     e?.preventDefault();
     const q = inputVal.trim();
-    setKeyword(q);
-    const params: Record<string, string> = {};
-    if (q) params.q = q;
-    if (selectedCategory && selectedCategory.label !== '전체') params.category = selectedCategory.label;
+    if (!q) return;
+    const params: Record<string, string> = { q };
+    if (selectedQuarter && selectedQuarter.label !== '전체') params.quarter = selectedQuarter.label;
     setSearchParams(params);
-    setItems(applyFilter(allItems, q, selectedCategory));
-    setSearched(true);
+    await fetchSearch(q, selectedQuarter?.label);
   };
 
   const handleReset = () => {
     setInputVal('');
     setKeyword('');
-    setItems(allItems);
-    setSearched(true);
-    setSelectedCategory(CATEGORIES.find((cat) => cat.label === '전체') ?? null);
+    setItems([]);
+    setSearched(false);
+    setSelectedQuarter(QUARTERS.find((q) => q.label === '전체') ?? null);
     setSearchParams({});
+    fetchAll();
   };
+
+  const handleCardClick = (item: any) => {
+    if (isAdmin) {
+      navigate('/searchott/write', { state: { actType: 'edit', id: item.id } });
+      return;
+    }
+    const firstLink = PLATFORM_LINKS.map((p) => item[p.key]).find((link) => !!link);
+    if (firstLink) window.open(firstLink, '_blank', 'noopener,noreferrer');
+  };
+
+  const renderCard = (item: any) => (
+    <div key={item.id} className="col-sm-6 col-lg-4 col-xl-3 col-6">
+      <div
+        className="card hover-scale overflow-hidden"
+        style={{ cursor: 'pointer' }}
+        onClick={() => handleCardClick(item)}
+      >
+        {/* 콘텐츠 이미지 */}
+        <div
+          className="d-flex align-items-center justify-content-center bg-light"
+          style={{ position: 'relative', paddingTop: '100%' }}
+        >
+          {item.image ? (
+            <img
+              className="card-img-top"
+              src={item.image}
+              alt={item.title}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', left: 0, top: 0 }}
+              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+            />
+          ) : null}
+        </div>
+
+        <div className="card-body p-3">
+          <h5
+            className="mt-1 mb-0 text-reset"
+            style={{
+              fontSize: '1rem',
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}
+          >
+            {item.title}
+          </h5>
+          <p className="text-muted small mt-1 mb-0">
+            {item.year} {item.quarter}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <Layout>
@@ -112,7 +181,7 @@ export default function SearchOttPage() {
             {isAdmin && (
               <button
                 className="btn btn-primary btn-sm"
-                onClick={() => navigate(`/${LAYOUT}/${TYPE}/write`, { state: { actType: 'create' } })}
+                onClick={() => navigate('/searchott/write', { state: { actType: 'create' } })}
               >
                 <i className="bi bi-pencil-square me-1"></i>글쓰기
               </button>
@@ -135,22 +204,22 @@ export default function SearchOttPage() {
             </button>
           </form>
 
-          {/* 카테고리 버튼 */}
+          {/* 방영분기 카테고리 버튼 */}
           <div className="mt-3">
-            <p className="text-muted small mb-2">카테고리 선택 후 검색버튼을 클릭하세요.</p>
+            <p className="text-muted small mb-2">방영분기 선택 후 검색버튼을 클릭하세요.</p>
             <div className="d-flex flex-wrap gap-2">
-              {CATEGORIES.map((cat) => {
-                const isSelected = selectedCategory?.label === cat.label;
+              {QUARTERS.map((q) => {
+                const isSelected = selectedQuarter?.label === q.label;
                 return (
                   <button
-                    key={cat.label}
+                    key={q.label}
                     type="button"
                     className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-secondary'}`}
                     disabled={loading}
-                    onClick={() => setSelectedCategory(isSelected ? null : cat)}
+                    onClick={() => setSelectedQuarter(q)}
                   >
                     {isSelected && <i className="bi bi-check2 me-1"></i>}
-                    {cat.label}
+                    {q.label}
                   </button>
                 );
               })}
@@ -180,12 +249,12 @@ export default function SearchOttPage() {
             <p className="mb-0">OTT 정보를 불러오는 중...</p>
           </div>
         )}
-        
+
         {/* ── 결과 없음 ── */}
         {!loading && searched && keyword && items.length === 0 && (
           <div className="card card-body text-center py-5 text-muted">
             <i className="bi bi-inbox fs-1 mb-2"></i>
-            <p className="mb-0">등록된 게시글이 없습니다.</p>
+            <p className="mb-0">검색 결과가 없습니다.</p>
           </div>
         )}
 
@@ -193,50 +262,29 @@ export default function SearchOttPage() {
         {/* ── 갤러리 결과 (검색어가 있을 때) ── */}
         {!loading && keyword && items.length > 0 && (
           <div className="row g-3">
-
-            {items.map((item) => (
-              <div key={item.id} className="col-sm-6 col-lg-4 col-xl-3 col-6">
-                <div
-                  className="card hover-scale overflow-hidden"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => navigate(`/${LAYOUT}/${TYPE}/detail`, { state: { id: item.id } })}
-                >
-                  {/* 콘텐츠 이미지 */}
-                  <div
-                    className="d-flex align-items-center justify-content-center bg-light"
-                    style={{ position: 'relative', paddingTop: '100%' }}
-                  >
-                    {item.extra1 ? (
-                      <img
-                        className="card-img-top"
-                        src={item.extra1}
-                        alt={item.title}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', left: 0, top: 0 }}
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                      />
-                    ) : null}
-                  </div>
-
-                  <div className="card-body p-3">
-                    <h5 className="mt-1 mb-0 text-reset" style={{ fontSize: '1rem' }}>{item.title}</h5>
-                    <p className="text-muted small mt-1 mb-0" style={{ lineHeight: 1.5 }}>
-                      {stripHtml(item.content)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
+            {items.map((item) => renderCard(item))}
           </div>
         )}
 
-        {/* ── 검색어가 없을 때: 분기별 탭 ── */}
+        {/* ── 검색어가 없을 때: 분기별로 전체 목록 ── */}
         {!loading && !keyword && (
           <>
-            {getOrderedSeasons().map((season) => (
-              <div key={season.id} className='season_tab border-bottom mb-5' id={season.id}>
-                <h3>{season.label}</h3>
-              </div>
-            ))}
+            {getOrderedSeasons().map((season) => {
+              const quarterLabel = season.label.replace(/^\d{4}년\s*/, ''); // "2026년 4분기" → "4분기"
+              const seasonItems = allItems.filter((item) => item.quarter === quarterLabel);
+              return (
+                <div key={season.id} className='season_tab border-bottom mb-5' id={season.id}>
+                  <h3>{season.label}</h3>
+                  {seasonItems.length > 0 ? (
+                    <div className="row g-3 mb-4">
+                      {seasonItems.map((item) => renderCard(item))}
+                    </div>
+                  ) : (
+                    <p className="text-muted small mb-4">등록된 작품이 없습니다.</p>
+                  )}
+                </div>
+              );
+            })}
           </>
         )}
 

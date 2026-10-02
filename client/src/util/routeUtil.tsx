@@ -6,6 +6,7 @@ import BoardPage      from '@pages/community/Page';
 import ContactPage    from '@pages/contact/ContactPage';
 import PriceFindPage  from '@pages/pricefind/PriceFindPage';
 import SearchOttPage  from '@pages/searchott/SearchOttPage';
+import OttWritePage   from '@pages/searchott/OttWritePage';
 
 // ── 인증 필요 라우트 ───────────────────────────────────────────────────────
 const PrivateRoute = ({ element }: { element: JSX.Element }) => {
@@ -28,6 +29,7 @@ export const RouteList: { path: string; element: JSX.Element }[] = [
   { path: '/contact',    element: <ContactPage /> },
   { path: '/pricefind', element: <PriceFindPage /> },
   { path: '/searchott', element: <SearchOttPage /> },
+  { path: '/searchott/write', element: <PrivateRoute element={<OttWritePage />} /> },
 
   // 1차 카테고리 / 2차 카테고리 / 액션
   { path: '/community/:type/list',   element: <BoardPage /> },
