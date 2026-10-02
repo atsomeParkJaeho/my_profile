@@ -205,7 +205,7 @@ export default function SearchOttPage() {
           </form>
 
           {/* 방영분기 카테고리 버튼 */}
-          <div className="mt-3">
+          {/* <div className="mt-3">
             <p className="text-muted small mb-2">방영분기 선택 후 검색버튼을 클릭하세요.</p>
             <div className="d-flex flex-wrap gap-2">
               {QUARTERS.map((q) => {
@@ -224,7 +224,7 @@ export default function SearchOttPage() {
                 );
               })}
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* ── 결과 헤더 ── */}
