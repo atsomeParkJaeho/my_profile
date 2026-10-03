@@ -5,6 +5,13 @@
   background-color: #0f1623;
 }
 
+/* 모바일 하단 고정 메뉴(nav)에 본문이 가리지 않도록 높이 + 10px만큼 여백 확보 */
+@media (max-width: 991.98px) {
+  .pb-mobile-nav {
+    padding-bottom: calc(var(--mobile-nav-h, 0px) + 10px) !important;
+  }
+}
+
 .container_box  {
     /*display: flex;*/
     /*width: 100vw;*/

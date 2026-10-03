@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import Layout from '@/componet/default/Layout';
 import { getOttList } from '@api/ott';
@@ -57,30 +57,13 @@ export default function SearchOttPage() {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [inputVal,  setInputVal]  = useState(searchParams.get('q') ?? '');
-  const [keyword,   setKeyword]   = useState('');
-  const [items,     setItems]     = useState<any[]>([]);
   const [allItems,  setAllItems]  = useState<any[]>([]);
   const [loading,   setLoading]   = useState(false);
-  const [searched,  setSearched]  = useState(false);
   const [selectedQuarter, setSelectedQuarter] = useState<typeof QUARTERS[number] | null>(
     QUARTERS.find((q) => q.label === '전체') ?? null
   );
 
-  const fetchSearch = async (q: string, quarter?: string) => {
-    setKeyword(q);
-    setLoading(true);
-    setSearched(false);
-    try {
-      const data = await getOttList(q, quarter && quarter !== '전체' ? quarter : undefined);
-      setItems(data ?? []);
-    } catch (err) {
-      console.error(err);
-      setItems([]);
-    } finally {
-      setLoading(false);
-      setSearched(true);
-    }
-  };
+  const keyword = inputVal.trim();
 
   const fetchAll = async () => {
     setLoading(true);
@@ -95,34 +78,36 @@ export default function SearchOttPage() {
     }
   };
 
-  // 새로고침 시 URL의 q 파라미터로 자동 검색, 없으면 전체 목록 로드
+  // 전체 목록을 한 번만 불러온 뒤, 검색/분기 필터는 allItems에서 실시간으로 계산
   useEffect(() => {
-    const q = searchParams.get('q');
-    if (q) {
-      fetchSearch(q, searchParams.get('quarter') ?? undefined);
-    } else {
-      fetchAll();
-    }
+    fetchAll();
   }, []);
 
-  const handleSearch = async (e?: React.FormEvent) => {
+  const items = useMemo(() => {
+    if (!keyword) return [];
+    return allItems.filter((item) => {
+      const matchesKeyword =
+        item.title?.includes(keyword) || item.subTitle?.includes(keyword);
+      const matchesQuarter =
+        !selectedQuarter || selectedQuarter.label === '전체' || item.quarter === selectedQuarter.label;
+      return matchesKeyword && matchesQuarter;
+    });
+  }, [allItems, keyword, selectedQuarter]);
+
+  const searched = !!keyword;
+
+  const handleSearch = (e?: React.FormEvent) => {
     e?.preventDefault();
-    const q = inputVal.trim();
-    if (!q) return;
-    const params: Record<string, string> = { q };
+    const params: Record<string, string> = {};
+    if (keyword) params.q = keyword;
     if (selectedQuarter && selectedQuarter.label !== '전체') params.quarter = selectedQuarter.label;
     setSearchParams(params);
-    await fetchSearch(q, selectedQuarter?.label);
   };
 
   const handleReset = () => {
     setInputVal('');
-    setKeyword('');
-    setItems([]);
-    setSearched(false);
     setSelectedQuarter(QUARTERS.find((q) => q.label === '전체') ?? null);
     setSearchParams({});
-    fetchAll();
   };
 
   const handleCardClick = (item: any) => {
@@ -231,7 +216,7 @@ export default function SearchOttPage() {
           </form>
 
           {/* 방영분기 카테고리 버튼 */}
-          {/* <div className="mt-3">
+          <div className="mt-3">
             <p className="text-muted small mb-2">방영분기 선택 후 검색버튼을 클릭하세요.</p>
             <div className="d-flex flex-wrap gap-2">
               {QUARTERS.map((q) => {
@@ -250,7 +235,7 @@ export default function SearchOttPage() {
                 );
               })}
             </div>
-          </div> */}
+          </div>
         </div>
 
         {/* ── 결과 헤더 ── */}

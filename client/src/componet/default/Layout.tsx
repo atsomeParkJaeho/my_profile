@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import HeaderMenu from './HeaderMenu';
 import LeftMenu from './LeftMenu';
@@ -7,6 +8,18 @@ import '@styles/componet/layout.css';
 export const Layout = ({ children }: any) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const mobileNavRef = useRef<HTMLElement>(null);
+  const [mobileNavHeight, setMobileNavHeight] = useState(0);
+
+  useEffect(() => {
+    const el = mobileNavRef.current;
+    if (!el) return;
+    const update = () => setMobileNavHeight(el.offsetHeight);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -18,7 +31,10 @@ export const Layout = ({ children }: any) => {
       {/* <div className="bg-primary" style={{height: 200}} /> */}
       {/* 본문 */}
       <section className="layout-section" style={{flex: 1}}>
-        <div className="container py-4">
+        <div
+          className="container py-4 pb-mobile-nav"
+          style={{ '--mobile-nav-h': `${mobileNavHeight}px` } as React.CSSProperties}
+        >
           <div className="row align-items-start">
             {/* 좌측 사이드바 */}
             <div className={`col-lg-4 col-xl-3 d-none d-lg-block`}>
@@ -33,7 +49,7 @@ export const Layout = ({ children }: any) => {
       </section>
 
       {/* 모바일 전용 하단 메뉴 */}
-      <nav className="d-lg-none fixed-bottom bg-white border-top d-flex">
+      <nav ref={mobileNavRef} className="d-lg-none fixed-bottom bg-white border-top d-flex">
         {MobileMenuList?.map((item, idx) => {
           const active = location.pathname.startsWith(item?.activePrefix ?? item?.to);
           return (
