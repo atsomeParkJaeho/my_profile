@@ -82,13 +82,13 @@ export default function SearchOttPage() {
   const [allItems,  setAllItems]  = useState<any[]>([]);
   const [loading,   setLoading]   = useState(false);
   const [selectedQuarter, setSelectedQuarter] = useState<typeof QUARTERS[number] | null>(
-    QUARTERS.find((q) => q.label === '전체') ?? null
+    QUARTERS.find((q) => q.label === searchParams.get('quarter')) ?? QUARTERS.find((q) => q.label === '전체') ?? null
   );
   const [selectedWeekday, setSelectedWeekday] = useState<typeof WEEKDAYS[number] | null>(
-    WEEKDAYS.find((w) => w.label === '전체') ?? null
+    WEEKDAYS.find((w) => w.label === searchParams.get('weekday')) ?? WEEKDAYS.find((w) => w.label === '전체') ?? null
   );
   const [selectedOtt, setSelectedOtt] = useState<typeof OTT_FILTERS[number] | null>(
-    OTT_FILTERS.find((o) => o.label === '전체') ?? null
+    OTT_FILTERS.find((o) => o.key === searchParams.get('ott')) ?? OTT_FILTERS.find((o) => o.label === '전체') ?? null
   );
 
   const keyword = inputVal.trim();
@@ -128,14 +128,42 @@ export default function SearchOttPage() {
     });
   }, [allItems, keyword, searched, isQuarterFiltered, isWeekdayFiltered, isOttFiltered, selectedQuarter, selectedWeekday, selectedOtt]);
 
-  const handleSearch = (e?: React.FormEvent) => {
-    e?.preventDefault();
+  // 현재 선택 상태(+ 변경분)를 URL 쿼리에 반영
+  const syncParams = (overrides: {
+    quarter?: typeof QUARTERS[number] | null;
+    weekday?: typeof WEEKDAYS[number] | null;
+    ott?: typeof OTT_FILTERS[number] | null;
+  } = {}) => {
+    const quarter = overrides.quarter !== undefined ? overrides.quarter : selectedQuarter;
+    const weekday = overrides.weekday !== undefined ? overrides.weekday : selectedWeekday;
+    const ott = overrides.ott !== undefined ? overrides.ott : selectedOtt;
+
     const params: Record<string, string> = {};
     if (keyword) params.q = keyword;
-    if (isQuarterFiltered) params.quarter = selectedQuarter!.label;
-    if (isWeekdayFiltered) params.weekday = selectedWeekday!.label;
-    if (isOttFiltered) params.ott = selectedOtt!.key;
+    if (quarter && quarter.label !== '전체') params.quarter = quarter.label;
+    if (weekday && weekday.label !== '전체') params.weekday = weekday.label;
+    if (ott && ott.key) params.ott = ott.key;
     setSearchParams(params);
+  };
+
+  const handleSearch = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    syncParams();
+  };
+
+  const handleQuarterClick = (q: typeof QUARTERS[number]) => {
+    setSelectedQuarter(q);
+    syncParams({ quarter: q });
+  };
+
+  const handleWeekdayClick = (w: typeof WEEKDAYS[number]) => {
+    setSelectedWeekday(w);
+    syncParams({ weekday: w });
+  };
+
+  const handleOttClick = (o: typeof OTT_FILTERS[number]) => {
+    setSelectedOtt(o);
+    syncParams({ ott: o });
   };
 
   const handleReset = () => {
@@ -263,7 +291,7 @@ export default function SearchOttPage() {
                     type="button"
                     className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-secondary'}`}
                     disabled={loading}
-                    onClick={() => setSelectedQuarter(q)}
+                    onClick={() => handleQuarterClick(q)}
                   >
                     {isSelected && <i className="bi bi-check2 me-1"></i>}
                     {q.label}
@@ -285,7 +313,7 @@ export default function SearchOttPage() {
                     type="button"
                     className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-secondary'}`}
                     disabled={loading}
-                    onClick={() => setSelectedWeekday(w)}
+                    onClick={() => handleWeekdayClick(w)}
                   >
                     {isSelected && <i className="bi bi-check2 me-1"></i>}
                     {w.label}
@@ -307,7 +335,7 @@ export default function SearchOttPage() {
                     type="button"
                     className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-secondary'}`}
                     disabled={loading}
-                    onClick={() => setSelectedOtt(o)}
+                    onClick={() => handleOttClick(o)}
                   >
                     {isSelected && <i className="bi bi-check2 me-1"></i>}
                     {o.label}
