@@ -14,6 +14,17 @@ const QUARTERS = [
   { label: '4분기' },
 ];
 
+const WEEKDAYS = [
+  { label: '전체' },
+  { label: '월요일' },
+  { label: '화요일' },
+  { label: '수요일' },
+  { label: '목요일' },
+  { label: '금요일' },
+  { label: '토요일' },
+  { label: '일요일' },
+];
+
 const SEASONS = [
   { id: 'season_1', label: '2026년 1분기' },
   { id: 'season_2', label: '2026년 2분기' },
@@ -40,6 +51,17 @@ const PLATFORM_LINKS = [
   { key: 'coupangplayLink',  label: '쿠팡플레이' },
 ];
 
+const OTT_FILTERS = [
+  { key: '', label: '전체' },
+  { key: 'netflixLink',      label: '넷플릭스' },
+  { key: 'laftelLink',       label: '라프텔' },
+  { key: 'tvingLink',        label: '티빙' },
+  { key: 'wavveLink',        label: '웨이브' },
+  { key: 'watchaLink',       label: '왓챠' },
+  { key: 'disneyplusLink',   label: '디즈니플러스' },
+  { key: 'coupangplayLink',  label: '쿠팡플레이' },
+];
+
 const OTT_BADGES = [
   { key: 'netflixLink',     text: 'NETFLIX',     color: '#e50914' },
   { key: 'laftelLink',      text: 'LAFTEL',       color: '#816bff' },
@@ -62,6 +84,12 @@ export default function SearchOttPage() {
   const [selectedQuarter, setSelectedQuarter] = useState<typeof QUARTERS[number] | null>(
     QUARTERS.find((q) => q.label === '전체') ?? null
   );
+  const [selectedWeekday, setSelectedWeekday] = useState<typeof WEEKDAYS[number] | null>(
+    WEEKDAYS.find((w) => w.label === '전체') ?? null
+  );
+  const [selectedOtt, setSelectedOtt] = useState<typeof OTT_FILTERS[number] | null>(
+    OTT_FILTERS.find((o) => o.label === '전체') ?? null
+  );
 
   const keyword = inputVal.trim();
 
@@ -83,30 +111,38 @@ export default function SearchOttPage() {
     fetchAll();
   }, []);
 
+  const isQuarterFiltered = !!selectedQuarter && selectedQuarter.label !== '전체';
+  const isWeekdayFiltered = !!selectedWeekday && selectedWeekday.label !== '전체';
+  const isOttFiltered = !!selectedOtt && !!selectedOtt.key;
+  const searched = !!keyword || isQuarterFiltered || isWeekdayFiltered || isOttFiltered;
+
   const items = useMemo(() => {
-    if (!keyword) return [];
+    if (!searched) return [];
     return allItems.filter((item) => {
       const matchesKeyword =
-        item.title?.includes(keyword) || item.subTitle?.includes(keyword);
-      const matchesQuarter =
-        !selectedQuarter || selectedQuarter.label === '전체' || item.quarter === selectedQuarter.label;
-      return matchesKeyword && matchesQuarter;
+        !keyword || item.title?.includes(keyword) || item.subTitle?.includes(keyword);
+      const matchesQuarter = !isQuarterFiltered || item.quarter === selectedQuarter?.label;
+      const matchesWeekday = !isWeekdayFiltered || item.weekday === selectedWeekday?.label;
+      const matchesOtt = !isOttFiltered || !!item[selectedOtt!.key];
+      return matchesKeyword && matchesQuarter && matchesWeekday && matchesOtt;
     });
-  }, [allItems, keyword, selectedQuarter]);
-
-  const searched = !!keyword;
+  }, [allItems, keyword, searched, isQuarterFiltered, isWeekdayFiltered, isOttFiltered, selectedQuarter, selectedWeekday, selectedOtt]);
 
   const handleSearch = (e?: React.FormEvent) => {
     e?.preventDefault();
     const params: Record<string, string> = {};
     if (keyword) params.q = keyword;
-    if (selectedQuarter && selectedQuarter.label !== '전체') params.quarter = selectedQuarter.label;
+    if (isQuarterFiltered) params.quarter = selectedQuarter!.label;
+    if (isWeekdayFiltered) params.weekday = selectedWeekday!.label;
+    if (isOttFiltered) params.ott = selectedOtt!.key;
     setSearchParams(params);
   };
 
   const handleReset = () => {
     setInputVal('');
     setSelectedQuarter(QUARTERS.find((q) => q.label === '전체') ?? null);
+    setSelectedWeekday(WEEKDAYS.find((w) => w.label === '전체') ?? null);
+    setSelectedOtt(OTT_FILTERS.find((o) => o.label === '전체') ?? null);
     setSearchParams({});
   };
 
@@ -215,9 +251,9 @@ export default function SearchOttPage() {
             </button>
           </form>
 
-          {/* 방영분기 카테고리 버튼 */}
+          {/* 분기별 검색 */}
           <div className="mt-3">
-            <p className="text-muted small mb-2">방영분기 선택 후 검색버튼을 클릭하세요.</p>
+            <p className="text-muted small mb-2">분기별 검색</p>
             <div className="d-flex flex-wrap gap-2">
               {QUARTERS.map((q) => {
                 const isSelected = selectedQuarter?.label === q.label;
@@ -231,6 +267,50 @@ export default function SearchOttPage() {
                   >
                     {isSelected && <i className="bi bi-check2 me-1"></i>}
                     {q.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 요일별 검색 */}
+          <div className="mt-3">
+            <p className="text-muted small mb-2">요일별 검색</p>
+            <div className="d-flex flex-wrap gap-2">
+              {WEEKDAYS.map((w) => {
+                const isSelected = selectedWeekday?.label === w.label;
+                return (
+                  <button
+                    key={w.label}
+                    type="button"
+                    className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-secondary'}`}
+                    disabled={loading}
+                    onClick={() => setSelectedWeekday(w)}
+                  >
+                    {isSelected && <i className="bi bi-check2 me-1"></i>}
+                    {w.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* OTT별 검색 */}
+          <div className="mt-3">
+            <p className="text-muted small mb-2">OTT별 검색</p>
+            <div className="d-flex flex-wrap gap-2">
+              {OTT_FILTERS.map((o) => {
+                const isSelected = selectedOtt?.key === o.key;
+                return (
+                  <button
+                    key={o.label}
+                    type="button"
+                    className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-secondary'}`}
+                    disabled={loading}
+                    onClick={() => setSelectedOtt(o)}
+                  >
+                    {isSelected && <i className="bi bi-check2 me-1"></i>}
+                    {o.label}
                   </button>
                 );
               })}
@@ -262,7 +342,7 @@ export default function SearchOttPage() {
         )}
 
         {/* ── 결과 없음 ── */}
-        {!loading && searched && keyword && items.length === 0 && (
+        {!loading && searched && items.length === 0 && (
           <div className="card card-body text-center py-5 text-muted">
             <i className="bi bi-inbox fs-1 mb-2"></i>
             <p className="mb-0">검색 결과가 없습니다.</p>
@@ -270,15 +350,15 @@ export default function SearchOttPage() {
         )}
 
 
-        {/* ── 갤러리 결과 (검색어가 있을 때) ── */}
-        {!loading && keyword && items.length > 0 && (
+        {/* ── 갤러리 결과 (검색/필터 조건이 있을 때) ── */}
+        {!loading && searched && items.length > 0 && (
           <div className="row g-3">
             {items.map((item) => renderCard(item))}
           </div>
         )}
 
-        {/* ── 검색어가 없을 때: 분기별로 전체 목록 ── */}
-        {!loading && !keyword && (
+        {/* ── 검색/필터 조건이 없을 때: 분기별로 전체 목록 ── */}
+        {!loading && !searched && (
           <>
             {getOrderedSeasons().map((season) => {
               const quarterLabel = season.label.replace(/^\d{4}년\s*/, ''); // "2026년 4분기" → "4분기"

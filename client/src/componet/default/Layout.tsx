@@ -10,6 +10,7 @@ export const Layout = ({ children }: any) => {
   const navigate = useNavigate();
   const mobileNavRef = useRef<HTMLElement>(null);
   const [mobileNavHeight, setMobileNavHeight] = useState(0);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
     const el = mobileNavRef.current;
@@ -20,6 +21,15 @@ export const Layout = ({ children }: any) => {
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const onScroll = () => setShowScrollTop(window.scrollY > 300);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -47,6 +57,27 @@ export const Layout = ({ children }: any) => {
           </div>
         </div>
       </section>
+
+      {/* 위로가기 버튼 */}
+      {showScrollTop && (
+        <button
+          type="button"
+          onClick={scrollToTop}
+          aria-label="위로가기"
+          className="btn btn-primary rounded-circle shadow d-flex align-items-center justify-content-center"
+          style={{
+            position: 'fixed',
+            right: 20,
+            bottom: mobileNavHeight ? mobileNavHeight + 20 : 20,
+            width: 48,
+            height: 48,
+            padding: 0,
+            zIndex: 1030,
+          }}
+        >
+          <i className="bi bi-arrow-up-circle-fill fs-5"></i>
+        </button>
+      )}
 
       {/* 모바일 전용 하단 메뉴 */}
       <nav ref={mobileNavRef} className="d-lg-none fixed-bottom bg-white border-top d-flex">

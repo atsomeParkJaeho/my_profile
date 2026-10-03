@@ -70,4 +70,4 @@ services:
 databases:
   - name: my-profile-db
     databaseName: appdb
-    plan: free
+    plan: starter
