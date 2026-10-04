@@ -2,7 +2,7 @@ services:
   - type: web
     name: my_profile
     runtime: node
-    plan: pro
+    plan: free
 
     buildCommand: |
       cd client && npm ci --include=dev && npm run build &&
