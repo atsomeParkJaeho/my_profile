@@ -86,7 +86,13 @@ export const Layout = ({ children }: any) => {
           return (
             <button
               key={idx}
-              onClick={() => navigate(item?.to)}
+              onClick={() => {
+                if (item?.to === '/pricefind') {
+                  alert('준비중입니다.');
+                  return;
+                }
+                navigate(item?.to);
+              }}
               className={`btn flex-fill d-flex flex-column align-items-center justify-content-center py-2 rounded-0 ${active ? 'text-primary' : 'text-secondary'}`}
             >
               <i className={`bi ${item?.icon} fs-5`}></i>

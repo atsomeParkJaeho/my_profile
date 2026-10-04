@@ -81,6 +81,7 @@ export default function SearchOttPage() {
   const [inputVal,  setInputVal]  = useState(searchParams.get('q') ?? '');
   const [allItems,  setAllItems]  = useState<any[]>([]);
   const [loading,   setLoading]   = useState(false);
+  const [genreOpen, setGenreOpen] = useState(false);
   const [selectedQuarter, setSelectedQuarter] = useState<typeof QUARTERS[number] | null>(
     QUARTERS.find((q) => q.label === searchParams.get('quarter')) ?? QUARTERS.find((q) => q.label === '전체') ?? null
   );
@@ -90,8 +91,22 @@ export default function SearchOttPage() {
   const [selectedOtt, setSelectedOtt] = useState<typeof OTT_FILTERS[number] | null>(
     OTT_FILTERS.find((o) => o.key === searchParams.get('ott')) ?? OTT_FILTERS.find((o) => o.label === '전체') ?? null
   );
+  const [selectedGenre, setSelectedGenre] = useState<string>(searchParams.get('genre') ?? '전체');
 
   const keyword = inputVal.trim();
+
+  // ott_anime 테이블의 genre 컬럼(콤마 구분 문자열)에서 중복 제거한 전체 장르 목록 추출
+  const GENRES = useMemo(() => {
+    const set = new Set<string>();
+    allItems.forEach((item) => {
+      (item.genre ?? '')
+        .split(',')
+        .map((g: string) => g.trim())
+        .filter(Boolean)
+        .forEach((g: string) => set.add(g));
+    });
+    return ['전체', ...Array.from(set).sort((a, b) => a.localeCompare(b, 'ko'))];
+  }, [allItems]);
 
   const fetchAll = async () => {
     setLoading(true);
@@ -114,7 +129,8 @@ export default function SearchOttPage() {
   const isQuarterFiltered = !!selectedQuarter && selectedQuarter.label !== '전체';
   const isWeekdayFiltered = !!selectedWeekday && selectedWeekday.label !== '전체';
   const isOttFiltered = !!selectedOtt && !!selectedOtt.key;
-  const searched = !!keyword || isQuarterFiltered || isWeekdayFiltered || isOttFiltered;
+  const isGenreFiltered = selectedGenre !== '전체';
+  const searched = !!keyword || isQuarterFiltered || isWeekdayFiltered || isOttFiltered || isGenreFiltered;
 
   const items = useMemo(() => {
     if (!searched) return [];
@@ -124,25 +140,29 @@ export default function SearchOttPage() {
       const matchesQuarter = !isQuarterFiltered || item.quarter === selectedQuarter?.label;
       const matchesWeekday = !isWeekdayFiltered || item.weekday === selectedWeekday?.label;
       const matchesOtt = !isOttFiltered || !!item[selectedOtt!.key];
-      return matchesKeyword && matchesQuarter && matchesWeekday && matchesOtt;
+      const matchesGenre = !isGenreFiltered || (item.genre ?? '').split(',').map((g: string) => g.trim()).includes(selectedGenre);
+      return matchesKeyword && matchesQuarter && matchesWeekday && matchesOtt && matchesGenre;
     });
-  }, [allItems, keyword, searched, isQuarterFiltered, isWeekdayFiltered, isOttFiltered, selectedQuarter, selectedWeekday, selectedOtt]);
+  }, [allItems, keyword, searched, isQuarterFiltered, isWeekdayFiltered, isOttFiltered, isGenreFiltered, selectedQuarter, selectedWeekday, selectedOtt, selectedGenre]);
 
   // 현재 선택 상태(+ 변경분)를 URL 쿼리에 반영
   const syncParams = (overrides: {
     quarter?: typeof QUARTERS[number] | null;
     weekday?: typeof WEEKDAYS[number] | null;
     ott?: typeof OTT_FILTERS[number] | null;
+    genre?: string;
   } = {}) => {
     const quarter = overrides.quarter !== undefined ? overrides.quarter : selectedQuarter;
     const weekday = overrides.weekday !== undefined ? overrides.weekday : selectedWeekday;
     const ott = overrides.ott !== undefined ? overrides.ott : selectedOtt;
+    const genre = overrides.genre !== undefined ? overrides.genre : selectedGenre;
 
     const params: Record<string, string> = {};
     if (keyword) params.q = keyword;
     if (quarter && quarter.label !== '전체') params.quarter = quarter.label;
     if (weekday && weekday.label !== '전체') params.weekday = weekday.label;
     if (ott && ott.key) params.ott = ott.key;
+    if (genre && genre !== '전체') params.genre = genre;
     setSearchParams(params);
   };
 
@@ -166,11 +186,17 @@ export default function SearchOttPage() {
     syncParams({ ott: o });
   };
 
+  const handleGenreClick = (g: string) => {
+    setSelectedGenre(g);
+    syncParams({ genre: g });
+  };
+
   const handleReset = () => {
     setInputVal('');
     setSelectedQuarter(QUARTERS.find((q) => q.label === '전체') ?? null);
     setSelectedWeekday(WEEKDAYS.find((w) => w.label === '전체') ?? null);
     setSelectedOtt(OTT_FILTERS.find((o) => o.label === '전체') ?? null);
+    setSelectedGenre('전체');
     setSearchParams({});
   };
 
@@ -343,6 +369,36 @@ export default function SearchOttPage() {
                 );
               })}
             </div>
+          </div>
+
+          {/* 장르별 검색 */}
+          <div className="mt-3">
+            <p className="text-muted small mb-2">장르별 검색</p>
+            <div className={`genre-filter-group d-flex flex-wrap gap-2 ${genreOpen ? 'genre-filter-group--open' : ''}`}>
+              {GENRES.map((g) => {
+                const isSelected = selectedGenre === g;
+                return (
+                  <button
+                    key={g}
+                    type="button"
+                    className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-secondary'}`}
+                    disabled={loading}
+                    onClick={() => handleGenreClick(g)}
+                  >
+                    {isSelected && <i className="bi bi-check2 me-1"></i>}
+                    {g}
+                  </button>
+                );
+              })}
+            </div>
+            <button
+              type="button"
+              className="btn btn-link btn-sm px-0 mt-1 text-decoration-none"
+              onClick={() => setGenreOpen((prev) => !prev)}
+            >
+              {genreOpen ? '접기' : '더보기'}
+              <i className={`bi ${genreOpen ? 'bi-chevron-up' : 'bi-chevron-down'} ms-1`}></i>
+            </button>
           </div>
         </div>
 

@@ -137,7 +137,13 @@ export const LeftMenu = () => {
             return (
               <button
                 key={idx}
-                onClick={() => navigate(item?.to)}
+                onClick={() => {
+                  if (item?.to === '/pricefind') {
+                    alert('준비중입니다.');
+                    return;
+                  }
+                  navigate(item?.to);
+                }}
                 className={`list-group-item list-group-item-action d-flex justify-content-between py-3 ${active}`}
               >
                 <div><i className={`bi ${item?.icon} me-2`}></i><span>{item?.name}</span></div>

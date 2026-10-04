@@ -12,6 +12,16 @@
   }
 }
 
+/* 장르별 검색: PC/모바일 모두 "더보기" 클릭 전까지 일부만 노출(collapse) */
+.genre-filter-group {
+  max-height: 76px;
+  overflow: hidden;
+}
+.genre-filter-group.genre-filter-group--open {
+  max-height: none;
+  overflow: visible;
+}
+
 .container_box  {
     /*display: flex;*/
     /*width: 100vw;*/
