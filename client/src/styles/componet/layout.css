@@ -12,6 +12,22 @@
   }
 }
 
+/* 분기별/요일별/OTT별 검색탭: 모바일에서는 줄바꿈 없이 한 줄 가로 스크롤 처리 */
+@media (max-width: 991.98px) {
+  .filter-scroll-x {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+  .filter-scroll-x::-webkit-scrollbar {
+    height: 4px;
+  }
+  .filter-scroll-x > * {
+    flex-shrink: 0;
+  }
+}
+
 /* 장르별 검색: PC/모바일 모두 "더보기" 클릭 전까지 일부만 노출(collapse) */
 .genre-filter-group {
   max-height: 76px;

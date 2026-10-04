@@ -77,23 +77,25 @@ export default function SearchOttPage() {
   const { user } = useAppSelector((state) => state.auth);
   const isAdmin  = user?.email === ADMIN_EMAIL;
 
+  const parseListParam = (name: string) =>
+    (searchParams.get(name) ?? '').split(',').map((s) => s.trim()).filter(Boolean);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [inputVal,  setInputVal]  = useState(searchParams.get('q') ?? '');
   const [allItems,  setAllItems]  = useState<any[]>([]);
   const [loading,   setLoading]   = useState(false);
   const [genreOpen, setGenreOpen] = useState(false);
-  const [selectedQuarter, setSelectedQuarter] = useState<typeof QUARTERS[number] | null>(
-    QUARTERS.find((q) => q.label === searchParams.get('quarter')) ?? QUARTERS.find((q) => q.label === '전체') ?? null
-  );
-  const [selectedWeekday, setSelectedWeekday] = useState<typeof WEEKDAYS[number] | null>(
-    WEEKDAYS.find((w) => w.label === searchParams.get('weekday')) ?? WEEKDAYS.find((w) => w.label === '전체') ?? null
-  );
-  const [selectedOtt, setSelectedOtt] = useState<typeof OTT_FILTERS[number] | null>(
-    OTT_FILTERS.find((o) => o.key === searchParams.get('ott')) ?? OTT_FILTERS.find((o) => o.label === '전체') ?? null
-  );
-  const [selectedGenre, setSelectedGenre] = useState<string>(searchParams.get('genre') ?? '전체');
+  // 다중 선택: 빈 배열 = "전체"
+  const [selectedQuarters, setSelectedQuarters] = useState<string[]>(parseListParam('quarter'));
+  const [selectedWeekdays, setSelectedWeekdays] = useState<string[]>(parseListParam('weekday'));
+  const [selectedOtts,     setSelectedOtts]     = useState<string[]>(parseListParam('ott'));
+  const [selectedGenres,   setSelectedGenres]   = useState<string[]>(parseListParam('genre'));
 
   const keyword = inputVal.trim();
+
+  // 배열에 값이 있으면 제거, 없으면 추가 (다중 선택 토글)
+  const toggleInArray = (arr: string[], value: string) =>
+    arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value];
 
   // ott_anime 테이블의 genre 컬럼(콤마 구분 문자열)에서 중복 제거한 전체 장르 목록 추출
   const GENRES = useMemo(() => {
@@ -126,10 +128,10 @@ export default function SearchOttPage() {
     fetchAll();
   }, []);
 
-  const isQuarterFiltered = !!selectedQuarter && selectedQuarter.label !== '전체';
-  const isWeekdayFiltered = !!selectedWeekday && selectedWeekday.label !== '전체';
-  const isOttFiltered = !!selectedOtt && !!selectedOtt.key;
-  const isGenreFiltered = selectedGenre !== '전체';
+  const isQuarterFiltered = selectedQuarters.length > 0;
+  const isWeekdayFiltered = selectedWeekdays.length > 0;
+  const isOttFiltered = selectedOtts.length > 0;
+  const isGenreFiltered = selectedGenres.length > 0;
   const searched = !!keyword || isQuarterFiltered || isWeekdayFiltered || isOttFiltered || isGenreFiltered;
 
   const items = useMemo(() => {
@@ -137,32 +139,33 @@ export default function SearchOttPage() {
     return allItems.filter((item) => {
       const matchesKeyword =
         !keyword || item.title?.includes(keyword) || item.subTitle?.includes(keyword);
-      const matchesQuarter = !isQuarterFiltered || item.quarter === selectedQuarter?.label;
-      const matchesWeekday = !isWeekdayFiltered || item.weekday === selectedWeekday?.label;
-      const matchesOtt = !isOttFiltered || !!item[selectedOtt!.key];
-      const matchesGenre = !isGenreFiltered || (item.genre ?? '').split(',').map((g: string) => g.trim()).includes(selectedGenre);
+      const matchesQuarter = !isQuarterFiltered || selectedQuarters.includes(item.quarter);
+      const matchesWeekday = !isWeekdayFiltered || selectedWeekdays.includes(item.weekday);
+      const matchesOtt = !isOttFiltered || selectedOtts.some((key) => !!item[key]);
+      const itemGenres = (item.genre ?? '').split(',').map((g: string) => g.trim());
+      const matchesGenre = !isGenreFiltered || selectedGenres.some((g) => itemGenres.includes(g));
       return matchesKeyword && matchesQuarter && matchesWeekday && matchesOtt && matchesGenre;
     });
-  }, [allItems, keyword, searched, isQuarterFiltered, isWeekdayFiltered, isOttFiltered, isGenreFiltered, selectedQuarter, selectedWeekday, selectedOtt, selectedGenre]);
+  }, [allItems, keyword, searched, isQuarterFiltered, isWeekdayFiltered, isOttFiltered, isGenreFiltered, selectedQuarters, selectedWeekdays, selectedOtts, selectedGenres]);
 
-  // 현재 선택 상태(+ 변경분)를 URL 쿼리에 반영
+  // 현재 선택 상태(+ 변경분)를 URL 쿼리에 반영 (다중 선택은 콤마로 구분)
   const syncParams = (overrides: {
-    quarter?: typeof QUARTERS[number] | null;
-    weekday?: typeof WEEKDAYS[number] | null;
-    ott?: typeof OTT_FILTERS[number] | null;
-    genre?: string;
+    quarter?: string[];
+    weekday?: string[];
+    ott?: string[];
+    genre?: string[];
   } = {}) => {
-    const quarter = overrides.quarter !== undefined ? overrides.quarter : selectedQuarter;
-    const weekday = overrides.weekday !== undefined ? overrides.weekday : selectedWeekday;
-    const ott = overrides.ott !== undefined ? overrides.ott : selectedOtt;
-    const genre = overrides.genre !== undefined ? overrides.genre : selectedGenre;
+    const quarter = overrides.quarter ?? selectedQuarters;
+    const weekday = overrides.weekday ?? selectedWeekdays;
+    const ott = overrides.ott ?? selectedOtts;
+    const genre = overrides.genre ?? selectedGenres;
 
     const params: Record<string, string> = {};
     if (keyword) params.q = keyword;
-    if (quarter && quarter.label !== '전체') params.quarter = quarter.label;
-    if (weekday && weekday.label !== '전체') params.weekday = weekday.label;
-    if (ott && ott.key) params.ott = ott.key;
-    if (genre && genre !== '전체') params.genre = genre;
+    if (quarter.length) params.quarter = quarter.join(',');
+    if (weekday.length) params.weekday = weekday.join(',');
+    if (ott.length) params.ott = ott.join(',');
+    if (genre.length) params.genre = genre.join(',');
     setSearchParams(params);
   };
 
@@ -171,32 +174,56 @@ export default function SearchOttPage() {
     syncParams();
   };
 
-  const handleQuarterClick = (q: typeof QUARTERS[number]) => {
-    setSelectedQuarter(q);
-    syncParams({ quarter: q });
+  const handleQuarterClick = (label: string) => {
+    if (label === '전체') {
+      setSelectedQuarters([]);
+      syncParams({ quarter: [] });
+      return;
+    }
+    const next = toggleInArray(selectedQuarters, label);
+    setSelectedQuarters(next);
+    syncParams({ quarter: next });
   };
 
-  const handleWeekdayClick = (w: typeof WEEKDAYS[number]) => {
-    setSelectedWeekday(w);
-    syncParams({ weekday: w });
+  const handleWeekdayClick = (label: string) => {
+    if (label === '전체') {
+      setSelectedWeekdays([]);
+      syncParams({ weekday: [] });
+      return;
+    }
+    const next = toggleInArray(selectedWeekdays, label);
+    setSelectedWeekdays(next);
+    syncParams({ weekday: next });
   };
 
-  const handleOttClick = (o: typeof OTT_FILTERS[number]) => {
-    setSelectedOtt(o);
-    syncParams({ ott: o });
+  const handleOttClick = (key: string) => {
+    if (!key) {
+      setSelectedOtts([]);
+      syncParams({ ott: [] });
+      return;
+    }
+    const next = toggleInArray(selectedOtts, key);
+    setSelectedOtts(next);
+    syncParams({ ott: next });
   };
 
   const handleGenreClick = (g: string) => {
-    setSelectedGenre(g);
-    syncParams({ genre: g });
+    if (g === '전체') {
+      setSelectedGenres([]);
+      syncParams({ genre: [] });
+      return;
+    }
+    const next = toggleInArray(selectedGenres, g);
+    setSelectedGenres(next);
+    syncParams({ genre: next });
   };
 
   const handleReset = () => {
     setInputVal('');
-    setSelectedQuarter(QUARTERS.find((q) => q.label === '전체') ?? null);
-    setSelectedWeekday(WEEKDAYS.find((w) => w.label === '전체') ?? null);
-    setSelectedOtt(OTT_FILTERS.find((o) => o.label === '전체') ?? null);
-    setSelectedGenre('전체');
+    setSelectedQuarters([]);
+    setSelectedWeekdays([]);
+    setSelectedOtts([]);
+    setSelectedGenres([]);
     setSearchParams({});
   };
 
@@ -214,12 +241,16 @@ export default function SearchOttPage() {
       <div
         className="card hover-scale overflow-hidden"
         style={{ cursor: 'pointer' }}
-        // onClick={() => handleCardClick(item)}
+        onClick={() => handleCardClick(item)}
       >
-        {/* 콘텐츠 이미지 */}
+        {/* 콘텐츠 이미지 (클릭 시 상세보기로 이동, 회원/비회원 공통) */}
         <div
           className="d-flex align-items-center justify-content-center bg-light"
           style={{ position: 'relative', paddingTop: '100%' }}
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate('/searchott/detail', { state: { id: item.id } });
+          }}
         >
           {item.image ? (
             <img
@@ -308,16 +339,16 @@ export default function SearchOttPage() {
           {/* 분기별 검색 */}
           <div className="mt-3">
             <p className="text-muted small mb-2">분기별 검색</p>
-            <div className="d-flex flex-wrap gap-2">
+            <div className="d-flex flex-wrap gap-2 filter-scroll-x">
               {QUARTERS.map((q) => {
-                const isSelected = selectedQuarter?.label === q.label;
+                const isSelected = q.label === '전체' ? selectedQuarters.length === 0 : selectedQuarters.includes(q.label);
                 return (
                   <button
                     key={q.label}
                     type="button"
                     className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-secondary'}`}
                     disabled={loading}
-                    onClick={() => handleQuarterClick(q)}
+                    onClick={() => handleQuarterClick(q.label)}
                   >
                     {isSelected && <i className="bi bi-check2 me-1"></i>}
                     {q.label}
@@ -330,16 +361,16 @@ export default function SearchOttPage() {
           {/* 요일별 검색 */}
           <div className="mt-3">
             <p className="text-muted small mb-2">요일별 검색</p>
-            <div className="d-flex flex-wrap gap-2">
+            <div className="d-flex flex-wrap gap-2 filter-scroll-x">
               {WEEKDAYS.map((w) => {
-                const isSelected = selectedWeekday?.label === w.label;
+                const isSelected = w.label === '전체' ? selectedWeekdays.length === 0 : selectedWeekdays.includes(w.label);
                 return (
                   <button
                     key={w.label}
                     type="button"
                     className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-secondary'}`}
                     disabled={loading}
-                    onClick={() => handleWeekdayClick(w)}
+                    onClick={() => handleWeekdayClick(w.label)}
                   >
                     {isSelected && <i className="bi bi-check2 me-1"></i>}
                     {w.label}
@@ -352,16 +383,16 @@ export default function SearchOttPage() {
           {/* OTT별 검색 */}
           <div className="mt-3">
             <p className="text-muted small mb-2">OTT별 검색</p>
-            <div className="d-flex flex-wrap gap-2">
+            <div className="d-flex flex-wrap gap-2 filter-scroll-x">
               {OTT_FILTERS.map((o) => {
-                const isSelected = selectedOtt?.key === o.key;
+                const isSelected = !o.key ? selectedOtts.length === 0 : selectedOtts.includes(o.key);
                 return (
                   <button
                     key={o.label}
                     type="button"
                     className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-secondary'}`}
                     disabled={loading}
-                    onClick={() => handleOttClick(o)}
+                    onClick={() => handleOttClick(o.key)}
                   >
                     {isSelected && <i className="bi bi-check2 me-1"></i>}
                     {o.label}
@@ -376,7 +407,7 @@ export default function SearchOttPage() {
             <p className="text-muted small mb-2">장르별 검색</p>
             <div className={`genre-filter-group d-flex flex-wrap gap-2 ${genreOpen ? 'genre-filter-group--open' : ''}`}>
               {GENRES.map((g) => {
-                const isSelected = selectedGenre === g;
+                const isSelected = g === '전체' ? selectedGenres.length === 0 : selectedGenres.includes(g);
                 return (
                   <button
                     key={g}
