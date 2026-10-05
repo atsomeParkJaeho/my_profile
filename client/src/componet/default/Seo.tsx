@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 const SITE_NAME = 'jutoku';
 const SITE_URL  = 'https://my-profile-zc6t.onrender.com';
-const DEFAULT_DESCRIPTION = '국내외 상품 최저가 비교와 분기별 애니메이션 OTT 스트리밍 정보를 한 곳에서 확인하세요.';
+const DEFAULT_DESCRIPTION = '분기별 일본 애니메이션 OTT 스트리밍 정보를 한 곳에서 확인하세요.';
 const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`;
 
 interface SeoProps {

@@ -80,6 +80,7 @@ export default function PriceFindPage() {
         title="가격 비교"
         description="네이버 브랜드스토어 기준 반다이, 굿스마일 등 피규어/굿즈 최저가를 비교하세요."
         path="/pricefind"
+        noindex
       />
       <div className="my-4">
 
