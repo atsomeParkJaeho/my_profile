@@ -88,7 +88,7 @@ export default function OttDetailPage() {
               <div className="mb-3">
                 <span className="text-muted small me-2">장르</span>
                 {item.genre.split(',').map((g: string) => g.trim()).filter(Boolean).map((g: string) => (
-                  <span key={g} className="badge bg-light text-dark border me-1 mb-1">{g}</span>
+                  <span key={g} className="badge genre-badge border me-1 mb-1">{g}</span>
                 ))}
               </div>
             )}

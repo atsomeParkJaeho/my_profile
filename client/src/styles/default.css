@@ -152,6 +152,19 @@ input::placeholder {
   color: #ffffff;
 }
 
+/* ── 장르 뱃지 (라이트/다크 공통) ──────────────────── */
+.genre-badge {
+  background-color: #f1f3f5;
+  color: #212529;
+  border-color: #dee2e6 !important;
+  font-weight: 500;
+}
+.dark .genre-badge {
+  background-color: #1e2a3f;
+  color: #e2e8f0;
+  border-color: #3d4a5c !important;
+}
+
 /* ── 다크모드 텍스트 유틸 ──────────────────────────── */
 .dark .text-muted {
   color: #94a3b8 !important;
