@@ -198,6 +198,12 @@ input::placeholder {
 .dark .community-table-row {
   border-bottom-color: #2d3a4f;
 }
+@media (max-width: 767.98px) {
+  .community-table th,
+  .community-table td {
+    font-size: 13px;
+  }
+}
 
 /* ── 다크모드 table ────────────────────────────────── */
 .dark .table {

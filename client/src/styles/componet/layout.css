@@ -20,8 +20,31 @@
     -webkit-overflow-scrolling: touch;
     padding-bottom: 4px;
   }
+  .filter-scroll-x {
+    scrollbar-width: thin;
+    scrollbar-color: #ced4da transparent;
+  }
   .filter-scroll-x::-webkit-scrollbar {
-    height: 4px;
+    height: 5px;
+  }
+  .filter-scroll-x::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .filter-scroll-x::-webkit-scrollbar-thumb {
+    background-color: #ced4da;
+    border-radius: 999px;
+  }
+  .filter-scroll-x::-webkit-scrollbar-thumb:hover {
+    background-color: #adb5bd;
+  }
+  .dark .filter-scroll-x {
+    scrollbar-color: #3d4a5c transparent;
+  }
+  .dark .filter-scroll-x::-webkit-scrollbar-thumb {
+    background-color: #3d4a5c;
+  }
+  .dark .filter-scroll-x::-webkit-scrollbar-thumb:hover {
+    background-color: #4d5c73;
   }
   .filter-scroll-x > * {
     flex-shrink: 0;

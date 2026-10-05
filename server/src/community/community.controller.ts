@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, ForbiddenException, Get, Param, Post, Put, Req } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 import { CommunityService } from './community.service';
 
@@ -42,7 +42,8 @@ export class CommunityController {
   @ApiBody({ schema: { example: { title: '제목', content: '내용', type: 'notice', board_layout: 'blog', c_user_name: '관리자' } } })
   @ApiResponse({ status: 201, description: '생성된 게시물' })
   @Post('create')
-  create(@Body() dto: any) {
+  create(@Body() dto: any, @Req() req: any) {
+    this.assertNoticeAdmin(dto, req);
     return this.communityService.create(dto);
   }
 
@@ -51,8 +52,18 @@ export class CommunityController {
   @ApiParam({ name: 'id', description: '게시물 ID' })
   @ApiResponse({ status: 200, description: '수정된 게시물' })
   @Put('update/:id')
-  update(@Param('id') id: string, @Body() dto: any) {
+  update(@Param('id') id: string, @Body() dto: any, @Req() req: any) {
+    this.assertNoticeAdmin(dto, req);
     return this.communityService.update(Number(id), dto);
+  }
+
+  // 공지사항(type: notice)은 관리자만 작성/수정 가능
+  private assertNoticeAdmin(dto: any, req: any) {
+    if (dto?.type !== 'notice') return;
+    const adminEmail = process.env.ADMIN_EMAIL;
+    if (!adminEmail || req.session?.email !== adminEmail) {
+      throw new ForbiddenException('공지사항은 관리자만 작성할 수 있습니다.');
+    }
   }
 
   /* swagger에 노출 되는 소스 */

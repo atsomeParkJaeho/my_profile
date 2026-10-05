@@ -88,6 +88,13 @@ export const LeftMenuList = [
     activePrefix: '/searchott',
     renderType: 'gallery',
   },
+  {
+    name: '공지사항',
+    to: '/community/notice/list',
+    icon: 'bi-megaphone',
+    activePrefix: '/community/notice',
+    renderType: 'community',
+  },
   // {
   //   name: '문의하기',
   //   to: '/contact',
@@ -111,5 +118,12 @@ export const MobileMenuList = [
     icon: 'bi-tv',
     activePrefix: '/searchott',
     renderType: 'gallery',
+  },
+  {
+    name: '공지사항',
+    to: '/community/notice/list',
+    icon: 'bi-megaphone',
+    activePrefix: '/community/notice',
+    renderType: 'community',
   },
 ];

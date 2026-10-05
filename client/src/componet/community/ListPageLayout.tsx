@@ -10,8 +10,9 @@ const ListPageLayout = ({ id, layout = 'community', type = 'default' }) => {
 	const { user } = useAppSelector((state) => state.auth);
 	const isAdmin  = user?.email === ADMIN_EMAIL;
 
-	const [list,    setList]    = useState<any[]>([]);
-	const [loading, setLoading] = useState(true);
+	const [list,     setList]     = useState<any[]>([]);
+	const [loading,  setLoading]  = useState(true);
+	const [isMobile, setIsMobile] = useState(false);
 
 	useEffect(() => {
 		getCommunity(layout, type).then((res) => {
@@ -19,6 +20,15 @@ const ListPageLayout = ({ id, layout = 'community', type = 'default' }) => {
 			setLoading(false);
 		});
 	}, [layout, type]);
+
+	// 수정일시/수정자 컬럼은 모바일(<768px)에서 DOM에서 아예 제거(표시만 숨기면 <col>이 깨짐)
+	useEffect(() => {
+		const mql = window.matchMedia('(max-width: 767.98px)');
+		const update = () => setIsMobile(mql.matches);
+		update();
+		mql.addEventListener('change', update);
+		return () => mql.removeEventListener('change', update);
+	}, []);
 
 	const onHandleClick = () => {
 		navigate(`/${layout}/${type}/write`, { state: { actType: 'create' } });
@@ -50,9 +60,9 @@ const ListPageLayout = ({ id, layout = 'community', type = 'default' }) => {
 							<col style={{ width: '5%' }} />
 							<col style={{ width: isAdmin ? '25%' : '30%' }} />
 							<col style={{ width: '15%' }} />
+							{!isMobile && <col style={{ width: '15%' }} />}
 							<col style={{ width: '15%' }} />
-							<col style={{ width: '15%' }} />
-							<col style={{ width: '15%' }} />
+							{!isMobile && <col style={{ width: '15%' }} />}
 							{isAdmin && <col style={{ width: '10%' }} />}
 						</colgroup>
 						<thead>
@@ -60,16 +70,16 @@ const ListPageLayout = ({ id, layout = 'community', type = 'default' }) => {
 								<th className="fw-bold py-3 text-center">#</th>
 								<th className="fw-bold py-3 text-center">제목</th>
 								<th className="fw-bold py-3 text-center">작성일시</th>
-								<th className="fw-bold py-3 text-center">수정일시</th>
+								{!isMobile && <th className="fw-bold py-3 text-center">수정일시</th>}
 								<th className="fw-bold py-3 text-center">작성자</th>
-								<th className="fw-bold py-3 text-center">수정자</th>
+								{!isMobile && <th className="fw-bold py-3 text-center">수정자</th>}
 								{isAdmin && <th className="fw-bold py-3 text-center">관리</th>}
 							</tr>
 						</thead>
 						<tbody>
 							{list.length === 0 ? (
 								<tr className="community-table-row">
-									<td colSpan={isAdmin ? 7 : 6} className="text-center py-4 text-muted">
+									<td colSpan={(isMobile ? 4 : 6) + (isAdmin ? 1 : 0)} className="text-center py-4 text-muted">
 										등록된 게시글이 없습니다.
 									</td>
 								</tr>
@@ -87,9 +97,9 @@ const ListPageLayout = ({ id, layout = 'community', type = 'default' }) => {
 											</span>
 										</td>
 										<td className="py-3 text-center">{item.c_date} {item.c_time}</td>
-										<td className="py-3 text-center">{item.e_date} {item.e_time}</td>
+										{!isMobile && <td className="py-3 text-center">{item.e_date} {item.e_time}</td>}
 										<td className="py-3 text-center">{item.c_user_name}</td>
-										<td className="py-3 text-center">{item.e_user_name}</td>
+										{!isMobile && <td className="py-3 text-center">{item.e_user_name}</td>}
 										{isAdmin && (
 											<td className="py-3 text-center">
 												<button
