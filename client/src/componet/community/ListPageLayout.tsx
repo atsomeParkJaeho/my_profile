@@ -4,6 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "@store/hooks";
 
 const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL;
+const NEW_BADGE_DAYS = 3;
+
+// 작성일(c_date/c_time)로부터 N일 이내면 true
+const isNewPost = (item: any) => {
+	if (!item?.c_date) return false;
+	const created = new Date(`${item.c_date}T${item.c_time ?? '00:00:00'}`);
+	if (Number.isNaN(created.getTime())) return false;
+	const diffMs = Date.now() - created.getTime();
+	return diffMs >= 0 && diffMs <= NEW_BADGE_DAYS * 24 * 60 * 60 * 1000;
+};
 
 const ListPageLayout = ({ id, layout = 'community', type = 'default' }) => {
 	const navigate = useNavigate();
@@ -86,8 +96,11 @@ const ListPageLayout = ({ id, layout = 'community', type = 'default' }) => {
 							) : (
 								list.map((item, index) => (
 									<tr key={item.id} className="align-middle community-table-row">
-										<td className="py-3 fw-bold text-center">{index + 1}</td>
-										<td className="py-3 text-center">
+										<td className="py-3 fw-bold text-center text-truncate">{index + 1}</td>
+										<td className="py-3 text-center text-truncate">
+											{type === 'notice' && isNewPost(item) && (
+												<span className="badge bg-danger me-1">new</span>
+											)}
 											<span
 												className="text-primary"
 												style={{ cursor: 'pointer' }}
@@ -96,10 +109,10 @@ const ListPageLayout = ({ id, layout = 'community', type = 'default' }) => {
 												{item.title}
 											</span>
 										</td>
-										<td className="py-3 text-center">{item.c_date} {item.c_time}</td>
-										{!isMobile && <td className="py-3 text-center">{item.e_date} {item.e_time}</td>}
-										<td className="py-3 text-center">{item.c_user_name}</td>
-										{!isMobile && <td className="py-3 text-center">{item.e_user_name}</td>}
+										<td className="py-3 text-center text-truncate">{item.c_date} {item.c_time}</td>
+										{!isMobile && <td className="py-3 text-center text-truncate">{item.e_date} {item.e_time}</td>}
+										<td className="py-3 text-center text-truncate">{item.c_user_name}</td>
+										{!isMobile && <td className="py-3 text-center text-truncate">{item.e_user_name}</td>}
 										{isAdmin && (
 											<td className="py-3 text-center">
 												<button
