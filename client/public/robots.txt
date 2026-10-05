@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /searchott/write
+Disallow: /community/*/write
+Disallow: /banner/*/write
+Disallow: /gallery/*/write
+Disallow: /login
+
+Sitemap: https://my-profile-zc6t.onrender.com/sitemap.xml

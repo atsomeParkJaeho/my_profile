@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import Layout from '@/componet/default/Layout';
+import Seo from '@/componet/default/Seo';
 import { getOttList } from '@api/ott';
 import { useAppSelector } from '@store/hooks';
 
@@ -302,6 +303,11 @@ export default function SearchOttPage() {
 
   return (
     <Layout>
+      <Seo
+        title="OTT 정보"
+        description="2026년 분기별 일본 애니메이션의 넷플릭스, 티빙, 웨이브, 왓챠, 라프텔, 쿠팡플레이, 디즈니플러스 스트리밍 정보를 검색하세요."
+        path="/searchott"
+      />
       <div className="my-4">
 
         {/* ── 검색 헤더 ── */}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Layout from '@/componet/default/Layout';
+import Seo from '@/componet/default/Seo';
 import axios from 'axios';
 
 interface SearchItem {
@@ -75,6 +76,11 @@ export default function PriceFindPage() {
 
   return (
     <Layout>
+      <Seo
+        title="가격 비교"
+        description="네이버 브랜드스토어 기준 반다이, 굿스마일 등 피규어/굿즈 최저가를 비교하세요."
+        path="/pricefind"
+      />
       <div className="my-4">
 
         {/* ── 검색 헤더 ── */}

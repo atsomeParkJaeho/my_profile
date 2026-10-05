@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Layout from '@/componet/default/Layout';
+import Seo from '@/componet/default/Seo';
 import { getOttDetail } from '@api/ott';
 import { useAppSelector } from '@store/hooks';
 
@@ -52,6 +53,13 @@ export default function OttDetailPage() {
 
   return (
     <Layout>
+      {/* 상세 페이지는 id가 URL이 아닌 router state로만 전달되어 직접 링크로 색인될 수 없어 noindex 처리 */}
+      <Seo
+        title={item.title}
+        description={`${item.title} - ${item.year ?? ''} ${item.quarter ?? ''} ${item.genre ?? ''}`.trim()}
+        image={item.image || undefined}
+        noindex
+      />
       <article className="card card-body mt-4">
         <div className="row g-4">
           {/* 이미지 */}
