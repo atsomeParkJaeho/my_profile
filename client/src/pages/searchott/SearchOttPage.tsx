@@ -247,7 +247,7 @@ export default function SearchOttPage() {
         {/* 콘텐츠 이미지 (클릭 시 상세보기로 이동, 회원/비회원 공통) */}
         <div
           className="d-flex align-items-center justify-content-center bg-light"
-          style={{ position: 'relative', paddingTop: '100%' }}
+          style={{ position: 'relative', paddingTop: '130%' }}
           onClick={(e) => {
             e.stopPropagation();
             navigate('/searchott/detail', { state: { id: item.id } });
@@ -258,7 +258,7 @@ export default function SearchOttPage() {
               className="card-img-top"
               src={item.image}
               alt={item.title}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition:'bottom', position: 'absolute', left: 0, top: 0 }}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition:'center', position: 'absolute', left: 0, top: 0 }}
               onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
             />
           ) : null}
