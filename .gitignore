@@ -19,8 +19,10 @@ server/storage/
 docfile
 
 # 로컬 전용 크롤링 도구 (운영 배포 제외)
-# ott.module.ts는 로컬에서 ott-crawl 등록을 추가해 수정하므로 함께 무시 처리
-# (커밋되는 "클린" 버전은 ott-crawl을 등록하지 않은 상태)
 server/src/ott/ott-crawl.service.ts
 server/src/ott/ott-crawl.controller.ts
-server/src/ott/ott.module.ts
+# ott.module.ts는 git에는 ott-crawl 미등록 상태로 유지하고,
+# 로컬에서만 크롤링 모듈을 등록해 쓸 수 있도록 제외 처리했습니다.
+# (`git update-index --skip-worktree server/src/ott/ott.module.ts` 적용됨 —
+#  이미 추적 중인 파일이라 .gitignore만으로는 변경사항이 무시되지 않습니다.
+#  필요 시 해제: `git update-index --no-skip-worktree server/src/ott/ott.module.ts`)
