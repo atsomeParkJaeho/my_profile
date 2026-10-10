@@ -3,7 +3,19 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import HeaderMenu from './HeaderMenu';
 import LeftMenu from './LeftMenu';
 import { MobileMenuList } from '@/util/routeUtil';
+import { getCommunity } from '@api/community';
 import '@styles/componet/layout.css';
+
+const NEW_BADGE_DAYS = 3;
+
+// 작성일(c_date/c_time)로부터 N일 이내면 true
+const isNewPost = (item: any) => {
+  if (!item?.c_date) return false;
+  const created = new Date(`${item.c_date}T${item.c_time ?? '00:00:00'}`);
+  if (Number.isNaN(created.getTime())) return false;
+  const diffMs = Date.now() - created.getTime();
+  return diffMs >= 0 && diffMs <= NEW_BADGE_DAYS * 24 * 60 * 60 * 1000;
+};
 
 export const Layout = ({ children }: any) => {
   const location = useLocation();
@@ -11,6 +23,7 @@ export const Layout = ({ children }: any) => {
   const mobileNavRef = useRef<HTMLElement>(null);
   const [mobileNavHeight, setMobileNavHeight] = useState(0);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [hasNewNotice, setHasNewNotice] = useState(false);
 
   useEffect(() => {
     const el = mobileNavRef.current;
@@ -20,6 +33,13 @@ export const Layout = ({ children }: any) => {
     const observer = new ResizeObserver(update);
     observer.observe(el);
     return () => observer.disconnect();
+  }, []);
+
+  // 공지사항 최신글(3일 이내) 유무 확인 → 모바일 하단 메뉴에 "N" 배지 표시
+  useEffect(() => {
+    getCommunity('community', 'notice').then((res) => {
+      setHasNewNotice(Array.isArray(res) && res.some(isNewPost));
+    });
   }, []);
 
   useEffect(() => {
@@ -98,7 +118,21 @@ export const Layout = ({ children }: any) => {
               }}
               className={`btn flex-fill d-flex flex-column align-items-center justify-content-center py-2 rounded-0 ${active ? 'text-primary' : 'text-secondary'}`}
             >
-              <i className={`bi ${item?.icon} fs-5`}></i>
+              <span style={{ position: 'relative' }}>
+                <i className={`bi ${item?.icon} fs-5`}></i>
+                {item?.to === '/community/notice/list' && hasNewNotice && (
+                  <span
+                    className="badge bg-danger rounded-circle"
+                    style={{
+                      position: 'absolute', top: -4, right: -8,
+                      fontSize: '0.55rem', padding: '2px 4px',
+                      lineHeight: 1,
+                    }}
+                  >
+                    N
+                  </span>
+                )}
+              </span>
               <span className="small mt-1">{item?.name}</span>
             </button>
           );
