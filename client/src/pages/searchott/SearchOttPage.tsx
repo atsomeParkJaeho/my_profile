@@ -33,14 +33,11 @@ const SEASONS = [
   { id: 'season_4', label: '2026년 4분기' },
 ];
 
-// 현재 월 기준 분기를 맨 위로, 나머지는 숫자 내림차순 정렬
+// 현재 서버 시간 기준 분기 하나만 노출 (예: 10월이면 4분기만)
 const getOrderedSeasons = () => {
   const currentQuarter = Math.floor(new Date().getMonth() / 3) + 1;
-  const rest = SEASONS
-    .filter((s) => s.id !== `season_${currentQuarter}`)
-    .sort((a, b) => Number(b.id.split('_')[1]) - Number(a.id.split('_')[1]));
   const current = SEASONS.find((s) => s.id === `season_${currentQuarter}`);
-  return current ? [current, ...rest] : rest;
+  return current ? [current] : [];
 };
 
 const PLATFORM_LINKS = [

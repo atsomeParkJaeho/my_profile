@@ -7,23 +7,6 @@ import { useAppSelector } from '@store/hooks';
 
 const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL;
 
-const SEASONS = [
-  { id: 'season_1', label: '2026년 1분기' },
-  { id: 'season_2', label: '2026년 2분기' },
-  { id: 'season_3', label: '2026년 3분기' },
-  { id: 'season_4', label: '2026년 4분기' },
-];
-
-// 현재 월 기준 분기를 맨 위로, 나머지는 숫자 내림차순 정렬
-const getOrderedSeasons = () => {
-  const currentQuarter = Math.floor(new Date().getMonth() / 3) + 1;
-  const rest = SEASONS
-    .filter((s) => s.id !== `season_${currentQuarter}`)
-    .sort((a, b) => Number(b.id.split('_')[1]) - Number(a.id.split('_')[1]));
-  const current = SEASONS.find((s) => s.id === `season_${currentQuarter}`);
-  return current ? [current, ...rest] : rest;
-};
-
 const PLATFORM_LINKS = [
   { key: 'netflixLink',      label: '넷플릭스' },
   { key: 'laftelLink',       label: '라프텔' },
@@ -328,26 +311,15 @@ export default function OttGenreSearchPage() {
           </div>
         )}
 
-        {/* ── 검색/필터 조건이 없을 때: 분기별로 전체 목록 ── */}
+        {/* ── 검색/필터 조건이 없을 때: 전체 애니메이션 목록 ── */}
         {!loading && !searched && (
-          <>
-            {getOrderedSeasons().map((season) => {
-              const quarterLabel = season.label.replace(/^\d{4}년\s*/, ''); // "2026년 4분기" → "4분기"
-              const seasonItems = allItems.filter((item) => item.quarter === quarterLabel);
-              return (
-                <div key={season.id} className='season_tab' id={season.id}>
-                  <h3 className='border-bottom pb-3 mb-3'>{season.label}</h3>
-                  {seasonItems.length > 0 ? (
-                    <div className="row g-3 mb-4">
-                      {seasonItems.map((item) => renderCard(item))}
-                    </div>
-                  ) : (
-                    <p className="text-muted small mb-4">등록된 작품이 없습니다.</p>
-                  )}
-                </div>
-              );
-            })}
-          </>
+          allItems.length > 0 ? (
+            <div className="row g-3">
+              {allItems.map((item) => renderCard(item))}
+            </div>
+          ) : (
+            <p className="text-muted small mb-4">등록된 작품이 없습니다.</p>
+          )
         )}
 
       </div>

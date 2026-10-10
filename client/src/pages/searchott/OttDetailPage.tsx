@@ -7,14 +7,22 @@ import { useAppSelector } from '@store/hooks';
 
 const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL;
 
+// 상세 페이지는 자막/더빙 링크를 모두 노출
 const OTT_BADGES = [
-  { key: 'netflixLink',     text: 'NETFLIX',     color: '#e50914' },
-  { key: 'laftelLink',      text: 'LAFTEL',       color: '#816bff' },
-  { key: 'tvingLink',       text: 'TVING',        color: '#e5252a' },
-  { key: 'wavveLink',       text: 'Wavve',        color: '#2a6ff0' },
-  { key: 'watchaLink',      text: 'WATCHA',       color: '#ff0558' },
-  { key: 'disneyplusLink',  text: 'Disney+',      color: '#113ccf' },
-  { key: 'coupangplayLink', text: 'COUPANG PLAY', color: '#2874f0' },
+  { key: 'netflixLink',        text: 'NETFLIX',     color: '#e50914', dub: false },
+  { key: 'netflixLinkDub',     text: 'NETFLIX',     color: '#e50914', dub: true },
+  { key: 'laftelLink',         text: 'LAFTEL',       color: '#816bff', dub: false },
+  { key: 'laftelLinkDub',      text: 'LAFTEL',       color: '#816bff', dub: true },
+  { key: 'tvingLink',          text: 'TVING',        color: '#e5252a', dub: false },
+  { key: 'tvingLinkDub',       text: 'TVING',        color: '#e5252a', dub: true },
+  { key: 'wavveLink',          text: 'Wavve',        color: '#2a6ff0', dub: false },
+  { key: 'wavveLinkDub',       text: 'Wavve',        color: '#2a6ff0', dub: true },
+  { key: 'watchaLink',         text: 'WATCHA',       color: '#ff0558', dub: false },
+  { key: 'watchaLinkDub',      text: 'WATCHA',       color: '#ff0558', dub: true },
+  { key: 'disneyplusLink',     text: 'Disney+',      color: '#113ccf', dub: false },
+  { key: 'disneyplusLinkDub',  text: 'Disney+',      color: '#113ccf', dub: true },
+  { key: 'coupangplayLink',    text: 'COUPANG PLAY', color: '#2874f0', dub: false },
+  { key: 'coupangplayLinkDub', text: 'COUPANG PLAY', color: '#2874f0', dub: true },
 ];
 
 export default function OttDetailPage() {
@@ -115,6 +123,9 @@ export default function OttDetailPage() {
                   style={{ fontSize: '0.9rem' }}
                 >
                   <span style={{ color: b.color, fontWeight: 700 }}>{b.text}</span>
+                  <span className="badge bg-secondary-subtle text-secondary-emphasis" style={{ fontSize: '0.7rem' }}>
+                    {b.dub ? '더빙' : '자막'}
+                  </span>
                   <i className="bi bi-play-circle-fill text-success"></i>
                 </a>
               ))}
