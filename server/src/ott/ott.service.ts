@@ -47,12 +47,23 @@ export class OttService implements OnApplicationBootstrap {
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
   }
 
-  // 컬럼 순서: id, title, year, quarter, image, netflix_link, laftel_link, wavve_link,
-  // watcha_link, tving_link, disneyplus_link, coupangplay_link, created_at, updated_at, created_by, updated_by
+  // OTT 플랫폼별 컬럼: 기존 _link 컬럼은 "자막"판으로 취급, _link_dub는 "더빙"판
+  private readonly OTT_COLUMNS = [
+    'netflix_link', 'netflix_link_dub',
+    'laftel_link', 'laftel_link_dub',
+    'wavve_link', 'wavve_link_dub',
+    'watcha_link', 'watcha_link_dub',
+    'tving_link', 'tving_link_dub',
+    'disneyplus_link', 'disneyplus_link_dub',
+    'coupangplay_link', 'coupangplay_link_dub',
+  ];
+
+  // 컬럼 순서: id, title, sub_title, year, quarter, weekday, genre, image,
+  // (플랫폼별 자막/더빙 링크 쌍), created_at, updated_at, created_by, updated_by
   private readonly COLUMN_ORDER = [
     'title', 'sub_title', 'year', 'quarter', 'weekday', 'genre', 'image',
-    'netflix_link', 'laftel_link', 'wavve_link', 'watcha_link', 'tving_link',
-    'disneyplus_link', 'coupangplay_link',
+    ...this.OTT_COLUMNS,
+    'view_count',
     'created_at', 'updated_at', 'created_by', 'updated_by',
   ];
 
@@ -65,13 +76,8 @@ export class OttService implements OnApplicationBootstrap {
       ['weekday', 'VARCHAR(10)'],
       ['genre', 'VARCHAR(300)'],
       ['image', 'TEXT'],
-      ['netflix_link', 'TEXT'],
-      ['laftel_link', 'TEXT'],
-      ['wavve_link', 'TEXT'],
-      ['watcha_link', 'TEXT'],
-      ['tving_link', 'TEXT'],
-      ['disneyplus_link', 'TEXT'],
-      ['coupangplay_link', 'TEXT'],
+      ...this.OTT_COLUMNS.map((col): [string, string] => [col, 'TEXT']),
+      ['view_count', 'INTEGER DEFAULT 0'],
       ['created_at', 'VARCHAR(20)'],
       ['updated_at', 'VARCHAR(20)'],
       ['created_by', 'VARCHAR(100)'],
@@ -90,7 +96,7 @@ export class OttService implements OnApplicationBootstrap {
     return rows.map((r: any) => r.name);
   }
 
-  // disneyplus_link를 tving_link 다음으로 옮기는 등, 컬럼 물리적 순서가 기대와 다르면 테이블을 재생성해 맞춘다
+  // 컬럼 물리적 순서가 기대와 다르면(신규 컬럼 추가 등) 테이블을 재생성해 맞춘다
   private async reorderColumnsIfNeeded() {
     const existing = await this.getColumnNames();
     const existingDataCols = existing.filter((c) => c !== 'id');
@@ -141,16 +147,26 @@ export class OttService implements OnApplicationBootstrap {
 
   private async seedAll() {
     for (const item of OTT_SEED_DATA) {
+      const i = item as any;
       await this.query(
         `INSERT INTO ott_anime
-          (title, sub_title, year, quarter, weekday, genre, image, netflix_link, laftel_link, wavve_link, watcha_link, tving_link, disneyplus_link, coupangplay_link,
+          (title, sub_title, year, quarter, weekday, genre, image,
+           netflix_link, netflix_link_dub, laftel_link, laftel_link_dub,
+           wavve_link, wavve_link_dub, watcha_link, watcha_link_dub,
+           tving_link, tving_link_dub, disneyplus_link, disneyplus_link_dub,
+           coupangplay_link, coupangplay_link_dub,
            created_at, updated_at, created_by, updated_by)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
-          item.title, (item as any).subTitle ?? '', item.year, item.quarter,
-          (item as any).weekday ?? '', (item as any).genre ?? '', item.image,
-          item.netflixLink, item.laftelLink, item.wavveLink,
-          item.watchaLink, item.tvingLink, item.disneyplusLink ?? '', item.coupangplayLink,
+          item.title, i.subTitle ?? '', item.year, item.quarter,
+          i.weekday ?? '', i.genre ?? '', item.image,
+          item.netflixLink ?? '', i.netflixLinkDub ?? '',
+          item.laftelLink ?? '', i.laftelLinkDub ?? '',
+          item.wavveLink ?? '', i.wavveLinkDub ?? '',
+          item.watchaLink ?? '', i.watchaLinkDub ?? '',
+          item.tvingLink ?? '', i.tvingLinkDub ?? '',
+          i.disneyplusLink ?? '', i.disneyplusLinkDub ?? '',
+          item.coupangplayLink ?? '', i.coupangplayLinkDub ?? '',
           item.createdAt, item.updatedAt, item.createdBy ?? '크롤러', item.updatedBy ?? '크롤러',
         ],
       );
@@ -177,12 +193,20 @@ export class OttService implements OnApplicationBootstrap {
       genre: row.genre,
       image: row.image,
       netflixLink: row.netflix_link,
+      netflixLinkDub: row.netflix_link_dub,
       laftelLink: row.laftel_link,
+      laftelLinkDub: row.laftel_link_dub,
       wavveLink: row.wavve_link,
+      wavveLinkDub: row.wavve_link_dub,
       watchaLink: row.watcha_link,
+      watchaLinkDub: row.watcha_link_dub,
       tvingLink: row.tving_link,
+      tvingLinkDub: row.tving_link_dub,
       disneyplusLink: row.disneyplus_link,
+      disneyplusLinkDub: row.disneyplus_link_dub,
       coupangplayLink: row.coupangplay_link,
+      coupangplayLinkDub: row.coupangplay_link_dub,
+      viewCount: row.view_count ?? 0,
       createdAt: row.created_at,
       updatedAt: row.updated_at,
       createdBy: row.created_by,
@@ -217,13 +241,22 @@ export class OttService implements OnApplicationBootstrap {
     const now = this.getNow();
     return this.query(
       `INSERT INTO ott_anime
-        (title, sub_title, year, quarter, weekday, genre, image, netflix_link, laftel_link, wavve_link, watcha_link, tving_link, disneyplus_link, coupangplay_link,
+        (title, sub_title, year, quarter, weekday, genre, image,
+         netflix_link, netflix_link_dub, laftel_link, laftel_link_dub,
+         wavve_link, wavve_link_dub, watcha_link, watcha_link_dub,
+         tving_link, tving_link_dub, disneyplus_link, disneyplus_link_dub,
+         coupangplay_link, coupangplay_link_dub,
          created_at, updated_at, created_by, updated_by)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         dto.title, dto.subTitle ?? '', dto.year ?? '', dto.quarter ?? '', dto.weekday ?? '', dto.genre ?? '', dto.image ?? '',
-        dto.netflixLink ?? '', dto.laftelLink ?? '', dto.wavveLink ?? '',
-        dto.watchaLink ?? '', dto.tvingLink ?? '', dto.disneyplusLink ?? '', dto.coupangplayLink ?? '',
+        dto.netflixLink ?? '', dto.netflixLinkDub ?? '',
+        dto.laftelLink ?? '', dto.laftelLinkDub ?? '',
+        dto.wavveLink ?? '', dto.wavveLinkDub ?? '',
+        dto.watchaLink ?? '', dto.watchaLinkDub ?? '',
+        dto.tvingLink ?? '', dto.tvingLinkDub ?? '',
+        dto.disneyplusLink ?? '', dto.disneyplusLinkDub ?? '',
+        dto.coupangplayLink ?? '', dto.coupangplayLinkDub ?? '',
         now, now, dto.userId ?? '', dto.userId ?? '',
       ],
     );
@@ -234,14 +267,24 @@ export class OttService implements OnApplicationBootstrap {
     return this.query(
       `UPDATE ott_anime
        SET title = ?, sub_title = ?, year = ?, quarter = ?, weekday = ?, genre = ?, image = ?,
-           netflix_link = ?, laftel_link = ?, wavve_link = ?,
-           watcha_link = ?, tving_link = ?, disneyplus_link = ?, coupangplay_link = ?,
+           netflix_link = ?, netflix_link_dub = ?,
+           laftel_link = ?, laftel_link_dub = ?,
+           wavve_link = ?, wavve_link_dub = ?,
+           watcha_link = ?, watcha_link_dub = ?,
+           tving_link = ?, tving_link_dub = ?,
+           disneyplus_link = ?, disneyplus_link_dub = ?,
+           coupangplay_link = ?, coupangplay_link_dub = ?,
            updated_at = ?, updated_by = ?
        WHERE id = ?`,
       [
         dto.title, dto.subTitle ?? '', dto.year ?? '', dto.quarter ?? '', dto.weekday ?? '', dto.genre ?? '', dto.image ?? '',
-        dto.netflixLink ?? '', dto.laftelLink ?? '', dto.wavveLink ?? '',
-        dto.watchaLink ?? '', dto.tvingLink ?? '', dto.disneyplusLink ?? '', dto.coupangplayLink ?? '',
+        dto.netflixLink ?? '', dto.netflixLinkDub ?? '',
+        dto.laftelLink ?? '', dto.laftelLinkDub ?? '',
+        dto.wavveLink ?? '', dto.wavveLinkDub ?? '',
+        dto.watchaLink ?? '', dto.watchaLinkDub ?? '',
+        dto.tvingLink ?? '', dto.tvingLinkDub ?? '',
+        dto.disneyplusLink ?? '', dto.disneyplusLinkDub ?? '',
+        dto.coupangplayLink ?? '', dto.coupangplayLinkDub ?? '',
         now, dto.userId ?? '',
         id,
       ],
@@ -250,5 +293,12 @@ export class OttService implements OnApplicationBootstrap {
 
   async remove(id: number): Promise<any> {
     return this.query('DELETE FROM ott_anime WHERE id = ?', [id]);
+  }
+
+  // OTT 링크 클릭 시 조회수 +1
+  async incrementView(id: number): Promise<{ viewCount: number }> {
+    await this.query('UPDATE ott_anime SET view_count = view_count + 1 WHERE id = ?', [id]);
+    const rows = await this.query('SELECT view_count FROM ott_anime WHERE id = ?', [id]);
+    return { viewCount: Number(rows[0]?.view_count ?? 0) };
   }
 }

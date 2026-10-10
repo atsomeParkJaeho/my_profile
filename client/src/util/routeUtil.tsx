@@ -6,6 +6,7 @@ import BoardPage      from '@pages/community/Page';
 import ContactPage    from '@pages/contact/ContactPage';
 import PriceFindPage  from '@pages/pricefind/PriceFindPage';
 import SearchOttPage  from '@pages/searchott/SearchOttPage';
+import OttGenreSearchPage from '@pages/searchott/OttGenreSearchPage';
 import OttWritePage   from '@pages/searchott/OttWritePage';
 import OttDetailPage  from '@pages/searchott/OttDetailPage';
 
@@ -30,6 +31,7 @@ export const RouteList: { path: string; element: JSX.Element }[] = [
   { path: '/contact',    element: <ContactPage /> },
   { path: '/pricefind', element: <PriceFindPage /> },
   { path: '/searchott', element: <SearchOttPage /> },
+  { path: '/searchott/genre', element: <OttGenreSearchPage /> },
   { path: '/searchott/write', element: <PrivateRoute element={<OttWritePage />} /> },
   { path: '/searchott/detail', element: <OttDetailPage /> },
 

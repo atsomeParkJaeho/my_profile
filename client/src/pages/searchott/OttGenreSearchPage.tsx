@@ -7,25 +7,6 @@ import { useAppSelector } from '@store/hooks';
 
 const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL;
 
-const QUARTERS = [
-  { label: '전체' },
-  { label: '1분기' },
-  { label: '2분기' },
-  { label: '3분기' },
-  { label: '4분기' },
-];
-
-const WEEKDAYS = [
-  { label: '전체' },
-  { label: '월요일' },
-  { label: '화요일' },
-  { label: '수요일' },
-  { label: '목요일' },
-  { label: '금요일' },
-  { label: '토요일' },
-  { label: '일요일' },
-];
-
 const SEASONS = [
   { id: 'season_1', label: '2026년 1분기' },
   { id: 'season_2', label: '2026년 2분기' },
@@ -52,17 +33,6 @@ const PLATFORM_LINKS = [
   { key: 'coupangplayLink',  label: '쿠팡플레이' },
 ];
 
-const OTT_FILTERS = [
-  { key: '', label: '전체' },
-  { key: 'netflixLink',      label: '넷플릭스' },
-  { key: 'laftelLink',       label: '라프텔' },
-  { key: 'tvingLink',        label: '티빙' },
-  { key: 'wavveLink',        label: '웨이브' },
-  { key: 'watchaLink',       label: '왓챠' },
-  { key: 'disneyplusLink',   label: '디즈니플러스' },
-  { key: 'coupangplayLink',  label: '쿠팡플레이' },
-];
-
 const OTT_BADGES = [
   { key: 'netflixLink',     text: 'NETFLIX',     color: '#e50914' },
   { key: 'laftelLink',      text: 'LAFTEL',       color: '#816bff' },
@@ -73,7 +43,7 @@ const OTT_BADGES = [
   { key: 'coupangplayLink', text: 'COUPANG PLAY', color: '#2874f0' },
 ];
 
-export default function SearchOttPage() {
+export default function OttGenreSearchPage() {
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
   const isAdmin  = user?.email === ADMIN_EMAIL;
@@ -85,12 +55,24 @@ export default function SearchOttPage() {
   const [inputVal,  setInputVal]  = useState(searchParams.get('q') ?? '');
   const [allItems,  setAllItems]  = useState<any[]>([]);
   const [loading,   setLoading]   = useState(false);
+  const [genreOpen, setGenreOpen] = useState(false);
   // 다중 선택: 빈 배열 = "전체"
-  const [selectedQuarters, setSelectedQuarters] = useState<string[]>(parseListParam('quarter'));
-  const [selectedWeekdays, setSelectedWeekdays] = useState<string[]>(parseListParam('weekday'));
-  const [selectedOtts,     setSelectedOtts]     = useState<string[]>(parseListParam('ott'));
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(parseListParam('genre'));
 
   const keyword = inputVal.trim();
+
+  // ott_anime 테이블의 genre 컬럼(콤마 구분 문자열)에서 중복 제거한 전체 장르 목록 추출
+  const GENRES = useMemo(() => {
+    const set = new Set<string>();
+    allItems.forEach((item) => {
+      (item.genre ?? '')
+        .split(',')
+        .map((g: string) => g.trim())
+        .filter(Boolean)
+        .forEach((g: string) => set.add(g));
+    });
+    return ['전체', ...Array.from(set).sort()];
+  }, [allItems]);
 
   // 배열에 값이 있으면 제거, 없으면 추가 (다중 선택 토글)
   const toggleInArray = (arr: string[], value: string) =>
@@ -109,43 +91,34 @@ export default function SearchOttPage() {
     }
   };
 
-  // 전체 목록을 한 번만 불러온 뒤, 검색/분기 필터는 allItems에서 실시간으로 계산
+  // 전체 목록을 한 번만 불러온 뒤, 검색/장르 필터는 allItems에서 실시간으로 계산
   useEffect(() => {
     fetchAll();
   }, []);
 
-  const isQuarterFiltered = selectedQuarters.length > 0;
-  const isWeekdayFiltered = selectedWeekdays.length > 0;
-  const isOttFiltered = selectedOtts.length > 0;
-  const searched = !!keyword || isQuarterFiltered || isWeekdayFiltered || isOttFiltered;
+  const isGenreFiltered = selectedGenres.length > 0;
+  const searched = !!keyword || isGenreFiltered;
 
   const items = useMemo(() => {
     if (!searched) return [];
     return allItems.filter((item) => {
       const matchesKeyword =
         !keyword || item.title?.includes(keyword) || item.subTitle?.includes(keyword);
-      const matchesQuarter = !isQuarterFiltered || selectedQuarters.includes(item.quarter);
-      const matchesWeekday = !isWeekdayFiltered || selectedWeekdays.includes(item.weekday);
-      const matchesOtt = !isOttFiltered || selectedOtts.some((key) => !!item[key]);
-      return matchesKeyword && matchesQuarter && matchesWeekday && matchesOtt;
+      const itemGenres = (item.genre ?? '').split(',').map((g: string) => g.trim());
+      const matchesGenre = !isGenreFiltered || selectedGenres.some((g) => itemGenres.includes(g));
+      return matchesKeyword && matchesGenre;
     });
-  }, [allItems, keyword, searched, isQuarterFiltered, isWeekdayFiltered, isOttFiltered, selectedQuarters, selectedWeekdays, selectedOtts]);
+  }, [allItems, keyword, searched, isGenreFiltered, selectedGenres]);
 
   // 현재 선택 상태(+ 변경분)를 URL 쿼리에 반영 (다중 선택은 콤마로 구분)
   const syncParams = (overrides: {
-    quarter?: string[];
-    weekday?: string[];
-    ott?: string[];
+    genre?: string[];
   } = {}) => {
-    const quarter = overrides.quarter ?? selectedQuarters;
-    const weekday = overrides.weekday ?? selectedWeekdays;
-    const ott = overrides.ott ?? selectedOtts;
+    const genre = overrides.genre ?? selectedGenres;
 
     const params: Record<string, string> = {};
     if (keyword) params.q = keyword;
-    if (quarter.length) params.quarter = quarter.join(',');
-    if (weekday.length) params.weekday = weekday.join(',');
-    if (ott.length) params.ott = ott.join(',');
+    if (genre.length) params.genre = genre.join(',');
     setSearchParams(params);
   };
 
@@ -154,44 +127,20 @@ export default function SearchOttPage() {
     syncParams();
   };
 
-  const handleQuarterClick = (label: string) => {
-    if (label === '전체') {
-      setSelectedQuarters([]);
-      syncParams({ quarter: [] });
+  const handleGenreClick = (g: string) => {
+    if (g === '전체') {
+      setSelectedGenres([]);
+      syncParams({ genre: [] });
       return;
     }
-    const next = toggleInArray(selectedQuarters, label);
-    setSelectedQuarters(next);
-    syncParams({ quarter: next });
-  };
-
-  const handleWeekdayClick = (label: string) => {
-    if (label === '전체') {
-      setSelectedWeekdays([]);
-      syncParams({ weekday: [] });
-      return;
-    }
-    const next = toggleInArray(selectedWeekdays, label);
-    setSelectedWeekdays(next);
-    syncParams({ weekday: next });
-  };
-
-  const handleOttClick = (key: string) => {
-    if (!key) {
-      setSelectedOtts([]);
-      syncParams({ ott: [] });
-      return;
-    }
-    const next = toggleInArray(selectedOtts, key);
-    setSelectedOtts(next);
-    syncParams({ ott: next });
+    const next = toggleInArray(selectedGenres, g);
+    setSelectedGenres(next);
+    syncParams({ genre: next });
   };
 
   const handleReset = () => {
     setInputVal('');
-    setSelectedQuarters([]);
-    setSelectedWeekdays([]);
-    setSelectedOtts([]);
+    setSelectedGenres([]);
     setSearchParams({});
   };
 
@@ -271,9 +220,9 @@ export default function SearchOttPage() {
   return (
     <Layout>
       <Seo
-        title="OTT 정보"
-        description="2026년 분기별 일본 애니메이션의 넷플릭스, 티빙, 웨이브, 왓챠, 라프텔, 쿠팡플레이, 디즈니플러스 스트리밍 정보를 검색하세요."
-        path="/searchott"
+        title="장르별 OTT 검색"
+        description="2026년 분기별 일본 애니메이션을 장르별로 검색하고 넷플릭스, 티빙, 웨이브, 왓챠, 라프텔, 쿠팡플레이, 디즈니플러스 스트리밍 정보를 확인하세요."
+        path="/searchott/genre"
       />
       <div className="my-4">
 
@@ -309,70 +258,34 @@ export default function SearchOttPage() {
             </button>
           </form>
 
-          {/* 분기별 검색 */}
+          {/* 장르별 검색 */}
           <div className="mt-3">
-            <p className="text-muted small mb-2">분기별 검색</p>
-            <div className="d-flex flex-wrap gap-2 filter-scroll-x">
-              {QUARTERS.map((q) => {
-                const isSelected = q.label === '전체' ? selectedQuarters.length === 0 : selectedQuarters.includes(q.label);
+            <p className="text-muted small mb-2">장르별 검색</p>
+            <div className={`genre-filter-group d-flex flex-wrap gap-2 ${genreOpen ? 'genre-filter-group--open' : ''}`}>
+              {GENRES.map((g) => {
+                const isSelected = g === '전체' ? selectedGenres.length === 0 : selectedGenres.includes(g);
                 return (
                   <button
-                    key={q.label}
+                    key={g}
                     type="button"
                     className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-secondary'}`}
                     disabled={loading}
-                    onClick={() => handleQuarterClick(q.label)}
+                    onClick={() => handleGenreClick(g)}
                   >
                     {isSelected && <i className="bi bi-check2 me-1"></i>}
-                    {q.label}
+                    {g}
                   </button>
                 );
               })}
             </div>
-          </div>
-
-          {/* 요일별 검색 */}
-          <div className="mt-3">
-            <p className="text-muted small mb-2">요일별 검색</p>
-            <div className="d-flex flex-wrap gap-2 filter-scroll-x">
-              {WEEKDAYS.map((w) => {
-                const isSelected = w.label === '전체' ? selectedWeekdays.length === 0 : selectedWeekdays.includes(w.label);
-                return (
-                  <button
-                    key={w.label}
-                    type="button"
-                    className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-secondary'}`}
-                    disabled={loading}
-                    onClick={() => handleWeekdayClick(w.label)}
-                  >
-                    {isSelected && <i className="bi bi-check2 me-1"></i>}
-                    {w.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* OTT별 검색 */}
-          <div className="mt-3">
-            <p className="text-muted small mb-2">OTT별 검색</p>
-            <div className="d-flex flex-wrap gap-2 filter-scroll-x">
-              {OTT_FILTERS.map((o) => {
-                const isSelected = !o.key ? selectedOtts.length === 0 : selectedOtts.includes(o.key);
-                return (
-                  <button
-                    key={o.label}
-                    type="button"
-                    className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-secondary'}`}
-                    disabled={loading}
-                    onClick={() => handleOttClick(o.key)}
-                  >
-                    {isSelected && <i className="bi bi-check2 me-1"></i>}
-                    {o.label}
-                  </button>
-                );
-              })}
-            </div>
+            <button
+              type="button"
+              className="btn btn-link btn-sm px-0 mt-1 text-decoration-none"
+              onClick={() => setGenreOpen((prev) => !prev)}
+            >
+              {genreOpen ? '접기' : '더보기'}
+              <i className={`bi ${genreOpen ? 'bi-chevron-up' : 'bi-chevron-down'} ms-1`}></i>
+            </button>
           </div>
         </div>
 

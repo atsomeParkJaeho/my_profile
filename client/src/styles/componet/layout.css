@@ -5,6 +5,13 @@
   background-color: #0f1623;
 }
 
+/* /searchott* 경로의 헤더+서브내비 spacer: PC 120px, 모바일에서는 96px로 축소 */
+@media (max-width: 991.98px) {
+  .layout-spacer-subnav {
+    height: 96px !important;
+  }
+}
+
 /* 모바일 하단 고정 메뉴(nav)에 본문이 가리지 않도록 높이 + 10px만큼 여백 확보 */
 @media (max-width: 991.98px) {
   .pb-mobile-nav {

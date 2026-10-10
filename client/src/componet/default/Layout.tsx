@@ -36,7 +36,10 @@ export const Layout = ({ children }: any) => {
       {/* 고정 헤더 */}
       <HeaderMenu />
       {/* navbar 높이 spacer */}
-      <div style={{ height: 56 }} />
+      <div
+        className={location.pathname.startsWith('/searchott') ? 'layout-spacer-subnav' : undefined}
+        style={{ height: location.pathname.startsWith('/searchott') ? 120 : 56 }}
+      />
       {/* 배너 */}
       {/* <div className="bg-primary" style={{height: 200}} /> */}
       {/* 본문 */}

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { logout } from '@store/authSlice';
 import { toggleTheme } from '@store/themeSlice';
@@ -10,6 +10,11 @@ const SunIcon = () => (
 	</svg>
 );
 
+const SUB_NAV_ITEMS = [
+	{ to: '/searchott', label: '분기별 검색' },
+	{ to: '/searchott/genre', label: '장르별 검색' },
+];
+
 const MoonIcon = () => (
 	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 		<path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278"/>
@@ -19,6 +24,8 @@ const MoonIcon = () => (
 export const HeaderMenu = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
+	const location = useLocation();
+	const showSubNav = location.pathname.startsWith('/searchott');
 	const { user } = useAppSelector((state) => state.auth);
 	const { mode } = useAppSelector((state) => state.theme);
 	const isAdmin = user?.email === import.meta.env.VITE_ADMIN_EMAIL;
@@ -29,6 +36,7 @@ export const HeaderMenu = () => {
 	};
 
 	return (
+		<>
 		<nav
 			className="header-nav"
 			style={{
@@ -109,6 +117,44 @@ export const HeaderMenu = () => {
 				)}
 			</div>
 		</nav>
+
+		{showSubNav && (
+		<nav
+			className="header-sub-nav"
+			style={{
+				position: 'fixed',
+				top: 56, left: 0, right: 0,
+				zIndex: 1029,
+				height: 44,
+				display: 'flex',
+				alignItems: 'center',
+				gap: 8,
+				padding: '30px 16px',
+				overflowX: 'auto',
+				whiteSpace: 'nowrap',
+			}}
+		>
+			{SUB_NAV_ITEMS.map((item) => (
+				<NavLink
+					key={item.to}
+					to={item.to}
+					end
+					className={({ isActive }) => `header-sub-nav-item${isActive ? ' header-sub-nav-item--active' : ''}`}
+					style={{
+						flexShrink: 0,
+						padding: '6px 14px',
+						borderRadius: 999,
+						fontSize: '0.85rem',
+						fontWeight: 600,
+						textDecoration: 'none',
+					}}
+				>
+					{item.label}
+				</NavLink>
+			))}
+		</nav>
+		)}
+		</>
 	);
 };
 

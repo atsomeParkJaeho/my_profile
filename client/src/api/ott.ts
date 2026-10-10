@@ -29,3 +29,13 @@ export const deleteOtt = async (id: number) => {
 	const { data } = await clientApi.delete(`/ott/delete/${id}`);
 	return data;
 };
+
+export const incrementOttView = async (id: number) => {
+	try {
+		const { data } = await clientApi.post(`/ott/view/${id}`);
+		return data;
+	} catch (err) {
+		console.error(err);
+		return null;
+	}
+};

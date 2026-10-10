@@ -40,3 +40,41 @@
 .dark .header-username {
   color: #94a3b8;
 }
+
+.header-sub-nav {
+  background-color: #ffffff;
+  border-bottom: 1px solid #dee2e6;
+  scrollbar-width: none;
+}
+.header-sub-nav::-webkit-scrollbar {
+  display: none;
+}
+.dark .header-sub-nav {
+  background-color: #1a2236;
+  border-bottom: 1px solid #2d3a4f;
+}
+
+.header-sub-nav-item {
+  color: #495057;
+  background-color: transparent;
+}
+.header-sub-nav-item:hover {
+  background-color: #f1f3f5;
+}
+.header-sub-nav-item--active {
+  background-color: #0d6efd;
+  color: #ffffff;
+}
+.header-sub-nav-item--active:hover {
+  background-color: #0d6efd;
+}
+.dark .header-sub-nav-item {
+  color: #cbd5e1;
+}
+.dark .header-sub-nav-item:hover {
+  background-color: #2d3a4f;
+}
+.dark .header-sub-nav-item--active {
+  background-color: #0d6efd;
+  color: #ffffff;
+}

@@ -55,6 +55,16 @@ export class OttController {
   }
 
   /* swagger에 노출 되는 소스 */
+  @ApiOperation({ summary: 'OTT 링크 클릭 시 조회수 +1' })
+  @ApiParam({ name: 'id', description: 'ID' })
+  @ApiResponse({ status: 200, description: '{ viewCount: number }' })
+  @Post('view/:id')
+  @HttpCode(200)
+  incrementView(@Param('id') id: string) {
+    return this.ottService.incrementView(Number(id));
+  }
+
+  /* swagger에 노출 되는 소스 */
   @ApiOperation({ summary: '크롤링 시드 데이터로 전체 재적재 (관리자 전용, 기존 데이터 전부 삭제 후 재삽입)' })
   @ApiCookieAuth()
   @ApiResponse({ status: 200, description: '{ count: number }' })
