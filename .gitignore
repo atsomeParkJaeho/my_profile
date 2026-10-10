@@ -17,3 +17,10 @@ installer/
 template/
 server/storage/
 docfile
+
+# 로컬 전용 크롤링 도구 (운영 배포 제외)
+# ott.module.ts는 로컬에서 ott-crawl 등록을 추가해 수정하므로 함께 무시 처리
+# (커밋되는 "클린" 버전은 ott-crawl을 등록하지 않은 상태)
+server/src/ott/ott-crawl.service.ts
+server/src/ott/ott-crawl.controller.ts
+server/src/ott/ott.module.ts
