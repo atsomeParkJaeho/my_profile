@@ -13,6 +13,7 @@ const SunIcon = () => (
 const SUB_NAV_ITEMS = [
 	{ to: '/searchott', label: '분기별 검색' },
 	{ to: '/searchott/genre', label: '장르별 검색' },
+	{ to: '/searchott/year', label: '년도별 검색' },
 ];
 
 const MoonIcon = () => (
@@ -125,12 +126,12 @@ export const HeaderMenu = () => {
 				position: 'fixed',
 				top: 56, left: 0, right: 0,
 				zIndex: 1029,
-				height: 44,
+				height: 54,
 				display: 'flex',
 				alignItems: 'center',
 				gap: 8,
-				padding: '30px 16px',
-				overflowX: 'auto',
+				padding: '0 16px',
+				overflow: 'hidden',
 				whiteSpace: 'nowrap',
 			}}
 		>

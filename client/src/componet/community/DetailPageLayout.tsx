@@ -76,7 +76,7 @@ const DetailPageLayout = ({ id, layout = 'community', type = 'default' }) => {
 						)}
 						<button
 							className="btn btn-outline-secondary btn-sm"
-							onClick={() => navigate(`/${layout}/${type}/list`)}
+							onClick={() => navigate(-1)}
 						>
 							<i className="bi bi-list-ul me-1"></i>목록
 						</button>

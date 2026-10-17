@@ -59,9 +59,11 @@ export class OttService implements OnApplicationBootstrap {
   ];
 
   // 컬럼 순서: id, title, sub_title, year, quarter, weekday, genre, image,
+  // anime_type(tva/극장판 애니메이션), air_date(방영일), release_date(개봉일), laftel_rating(라프텔 평점),
   // (플랫폼별 자막/더빙 링크 쌍), created_at, updated_at, created_by, updated_by
   private readonly COLUMN_ORDER = [
     'title', 'sub_title', 'year', 'quarter', 'weekday', 'genre', 'image',
+    'anime_type', 'air_date', 'release_date', 'laftel_rating',
     ...this.OTT_COLUMNS,
     'view_count',
     'created_at', 'updated_at', 'created_by', 'updated_by',
@@ -76,6 +78,12 @@ export class OttService implements OnApplicationBootstrap {
       ['weekday', 'VARCHAR(10)'],
       ['genre', 'VARCHAR(300)'],
       ['image', 'TEXT'],
+      // tva / 극장판 애니메이션 구분
+      ['anime_type', 'VARCHAR(20)'],
+      // tva일 경우 방영일, 극장판 애니메이션일 경우는 release_date(개봉일)에 기록
+      ['air_date', 'VARCHAR(20)'],
+      ['release_date', 'VARCHAR(20)'],
+      ['laftel_rating', 'VARCHAR(10)'],
       ...this.OTT_COLUMNS.map((col): [string, string] => [col, 'TEXT']),
       ['view_count', 'INTEGER DEFAULT 0'],
       ['created_at', 'VARCHAR(20)'],
@@ -151,15 +159,17 @@ export class OttService implements OnApplicationBootstrap {
       await this.query(
         `INSERT INTO ott_anime
           (title, sub_title, year, quarter, weekday, genre, image,
+           anime_type, air_date, release_date, laftel_rating,
            netflix_link, netflix_link_dub, laftel_link, laftel_link_dub,
            wavve_link, wavve_link_dub, watcha_link, watcha_link_dub,
            tving_link, tving_link_dub, disneyplus_link, disneyplus_link_dub,
            coupangplay_link, coupangplay_link_dub,
            created_at, updated_at, created_by, updated_by)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           item.title, i.subTitle ?? '', item.year, item.quarter,
           i.weekday ?? '', i.genre ?? '', item.image,
+          i.animeType ?? '', i.airDate ?? '', i.releaseDate ?? '', i.laftelRating ?? '',
           item.netflixLink ?? '', i.netflixLinkDub ?? '',
           item.laftelLink ?? '', i.laftelLinkDub ?? '',
           item.wavveLink ?? '', i.wavveLinkDub ?? '',
@@ -192,6 +202,10 @@ export class OttService implements OnApplicationBootstrap {
       weekday: row.weekday,
       genre: row.genre,
       image: row.image,
+      animeType: row.anime_type,
+      airDate: row.air_date,
+      releaseDate: row.release_date,
+      laftelRating: row.laftel_rating,
       netflixLink: row.netflix_link,
       netflixLinkDub: row.netflix_link_dub,
       laftelLink: row.laftel_link,
@@ -242,14 +256,16 @@ export class OttService implements OnApplicationBootstrap {
     return this.query(
       `INSERT INTO ott_anime
         (title, sub_title, year, quarter, weekday, genre, image,
+         anime_type, air_date, release_date, laftel_rating,
          netflix_link, netflix_link_dub, laftel_link, laftel_link_dub,
          wavve_link, wavve_link_dub, watcha_link, watcha_link_dub,
          tving_link, tving_link_dub, disneyplus_link, disneyplus_link_dub,
          coupangplay_link, coupangplay_link_dub,
          created_at, updated_at, created_by, updated_by)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         dto.title, dto.subTitle ?? '', dto.year ?? '', dto.quarter ?? '', dto.weekday ?? '', dto.genre ?? '', dto.image ?? '',
+        dto.animeType ?? '', dto.airDate ?? '', dto.releaseDate ?? '', dto.laftelRating ?? '',
         dto.netflixLink ?? '', dto.netflixLinkDub ?? '',
         dto.laftelLink ?? '', dto.laftelLinkDub ?? '',
         dto.wavveLink ?? '', dto.wavveLinkDub ?? '',
@@ -267,6 +283,7 @@ export class OttService implements OnApplicationBootstrap {
     return this.query(
       `UPDATE ott_anime
        SET title = ?, sub_title = ?, year = ?, quarter = ?, weekday = ?, genre = ?, image = ?,
+           anime_type = ?, air_date = ?, release_date = ?, laftel_rating = ?,
            netflix_link = ?, netflix_link_dub = ?,
            laftel_link = ?, laftel_link_dub = ?,
            wavve_link = ?, wavve_link_dub = ?,
@@ -278,6 +295,7 @@ export class OttService implements OnApplicationBootstrap {
        WHERE id = ?`,
       [
         dto.title, dto.subTitle ?? '', dto.year ?? '', dto.quarter ?? '', dto.weekday ?? '', dto.genre ?? '', dto.image ?? '',
+        dto.animeType ?? '', dto.airDate ?? '', dto.releaseDate ?? '', dto.laftelRating ?? '',
         dto.netflixLink ?? '', dto.netflixLinkDub ?? '',
         dto.laftelLink ?? '', dto.laftelLinkDub ?? '',
         dto.wavveLink ?? '', dto.wavveLinkDub ?? '',

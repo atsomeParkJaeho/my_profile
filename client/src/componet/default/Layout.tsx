@@ -58,7 +58,7 @@ export const Layout = ({ children }: any) => {
       {/* navbar 높이 spacer */}
       <div
         className={location.pathname.startsWith('/searchott') ? 'layout-spacer-subnav' : undefined}
-        style={{ height: location.pathname.startsWith('/searchott') ? 120 : 56 }}
+        style={{ height: location.pathname.startsWith('/searchott') ? 130 : 56 }}
       />
       {/* 배너 */}
       {/* <div className="bg-primary" style={{height: 200}} /> */}
