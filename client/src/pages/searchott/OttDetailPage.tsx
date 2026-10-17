@@ -23,6 +23,8 @@ const OTT_BADGES = [
   { key: 'disneyplusLinkDub',  text: 'Disney+',      color: '#113ccf', dub: true },
   { key: 'coupangplayLink',    text: 'COUPANG PLAY', color: '#2874f0', dub: false },
   { key: 'coupangplayLinkDub', text: 'COUPANG PLAY', color: '#2874f0', dub: true },
+  // 아마존프라임은 자막판만 존재(더빙 없음)
+  { key: 'amazonLink',         text: 'Prime Video',  color: '#0779fe', dub: false },
 ];
 
 export default function OttDetailPage() {

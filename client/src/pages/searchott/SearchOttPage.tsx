@@ -47,6 +47,7 @@ const PLATFORM_LINKS = [
   { key: 'watchaLink',       label: '왓챠' },
   { key: 'tvingLink',        label: '티빙' },
   { key: 'coupangplayLink',  label: '쿠팡플레이' },
+  { key: 'amazonLink',       label: '아마존프라임' },
 ];
 
 const OTT_FILTERS = [
@@ -58,6 +59,7 @@ const OTT_FILTERS = [
   { key: 'watchaLink',       label: '왓챠' },
   { key: 'disneyplusLink',   label: '디즈니플러스' },
   { key: 'coupangplayLink',  label: '쿠팡플레이' },
+  { key: 'amazonLink',       label: '아마존프라임' },
 ];
 
 const OTT_BADGES = [
@@ -68,6 +70,7 @@ const OTT_BADGES = [
   { key: 'watchaLink',      text: 'WATCHA',       color: '#ff0558' },
   { key: 'disneyplusLink',  text: 'Disney+',      color: '#113ccf' },
   { key: 'coupangplayLink', text: 'COUPANG PLAY', color: '#2874f0' },
+  { key: 'amazonLink',      text: 'Prime Video',  color: '#0779fe' },
 ];
 
 export default function SearchOttPage() {

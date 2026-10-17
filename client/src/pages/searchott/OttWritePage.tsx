@@ -18,6 +18,7 @@ const PLATFORM_FIELDS = [
   { key: 'tvingLink',       label: '티빙 링크' },
   { key: 'coupangplayLink', label: '쿠팡플레이 링크' },
   { key: 'disneyplusLink',  label: '디즈니플러스 링크' },
+  { key: 'amazonLink',      label: '아마존프라임 링크' },
 ];
 
 export default function OttWritePage() {
@@ -35,7 +36,7 @@ export default function OttWritePage() {
   const [airDate,     setAirDate]     = useState('');
   const [releaseDate, setReleaseDate] = useState('');
   const [links,   setLinks]   = useState<Record<string, string>>({
-    netflixLink: '', laftelLink: '', wavveLink: '', watchaLink: '', tvingLink: '', coupangplayLink: '', disneyplusLink: '',
+    netflixLink: '', laftelLink: '', wavveLink: '', watchaLink: '', tvingLink: '', coupangplayLink: '', disneyplusLink: '', amazonLink: '',
   });
   const [meta,    setMeta]    = useState<{ createdAt?: string; updatedAt?: string; createdBy?: string; updatedBy?: string }>({});
   const [loading, setLoading] = useState(isEdit);
@@ -60,6 +61,7 @@ export default function OttWritePage() {
           tvingLink: data.tvingLink ?? '',
           coupangplayLink: data.coupangplayLink ?? '',
           disneyplusLink: data.disneyplusLink ?? '',
+          amazonLink: data.amazonLink ?? '',
         });
         setMeta({
           createdAt: data.createdAt, updatedAt: data.updatedAt,

@@ -48,6 +48,7 @@ export class OttService implements OnApplicationBootstrap {
   }
 
   // OTT 플랫폼별 컬럼: 기존 _link 컬럼은 "자막"판으로 취급, _link_dub는 "더빙"판
+  // amazon_link는 아마존프라임(자막판만 존재)이라 더빙 컬럼 없음
   private readonly OTT_COLUMNS = [
     'netflix_link', 'netflix_link_dub',
     'laftel_link', 'laftel_link_dub',
@@ -56,6 +57,7 @@ export class OttService implements OnApplicationBootstrap {
     'tving_link', 'tving_link_dub',
     'disneyplus_link', 'disneyplus_link_dub',
     'coupangplay_link', 'coupangplay_link_dub',
+    'amazon_link',
   ];
 
   // 컬럼 순서: id, title, sub_title, year, quarter, weekday, genre, image,
@@ -163,9 +165,9 @@ export class OttService implements OnApplicationBootstrap {
            netflix_link, netflix_link_dub, laftel_link, laftel_link_dub,
            wavve_link, wavve_link_dub, watcha_link, watcha_link_dub,
            tving_link, tving_link_dub, disneyplus_link, disneyplus_link_dub,
-           coupangplay_link, coupangplay_link_dub,
+           coupangplay_link, coupangplay_link_dub, amazon_link,
            created_at, updated_at, created_by, updated_by)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           item.title, i.subTitle ?? '', item.year, item.quarter,
           i.weekday ?? '', i.genre ?? '', item.image,
@@ -177,6 +179,7 @@ export class OttService implements OnApplicationBootstrap {
           item.tvingLink ?? '', i.tvingLinkDub ?? '',
           i.disneyplusLink ?? '', i.disneyplusLinkDub ?? '',
           item.coupangplayLink ?? '', i.coupangplayLinkDub ?? '',
+          i.amazonLink ?? '',
           item.createdAt, item.updatedAt, item.createdBy ?? '크롤러', item.updatedBy ?? '크롤러',
         ],
       );
@@ -220,6 +223,7 @@ export class OttService implements OnApplicationBootstrap {
       disneyplusLinkDub: row.disneyplus_link_dub,
       coupangplayLink: row.coupangplay_link,
       coupangplayLinkDub: row.coupangplay_link_dub,
+      amazonLink: row.amazon_link,
       viewCount: row.view_count ?? 0,
       createdAt: row.created_at,
       updatedAt: row.updated_at,
@@ -260,9 +264,9 @@ export class OttService implements OnApplicationBootstrap {
          netflix_link, netflix_link_dub, laftel_link, laftel_link_dub,
          wavve_link, wavve_link_dub, watcha_link, watcha_link_dub,
          tving_link, tving_link_dub, disneyplus_link, disneyplus_link_dub,
-         coupangplay_link, coupangplay_link_dub,
+         coupangplay_link, coupangplay_link_dub, amazon_link,
          created_at, updated_at, created_by, updated_by)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         dto.title, dto.subTitle ?? '', dto.year ?? '', dto.quarter ?? '', dto.weekday ?? '', dto.genre ?? '', dto.image ?? '',
         dto.animeType ?? '', dto.airDate ?? '', dto.releaseDate ?? '', dto.laftelRating ?? '',
@@ -273,6 +277,7 @@ export class OttService implements OnApplicationBootstrap {
         dto.tvingLink ?? '', dto.tvingLinkDub ?? '',
         dto.disneyplusLink ?? '', dto.disneyplusLinkDub ?? '',
         dto.coupangplayLink ?? '', dto.coupangplayLinkDub ?? '',
+        dto.amazonLink ?? '',
         now, now, dto.userId ?? '', dto.userId ?? '',
       ],
     );
@@ -291,6 +296,7 @@ export class OttService implements OnApplicationBootstrap {
            tving_link = ?, tving_link_dub = ?,
            disneyplus_link = ?, disneyplus_link_dub = ?,
            coupangplay_link = ?, coupangplay_link_dub = ?,
+           amazon_link = ?,
            updated_at = ?, updated_by = ?
        WHERE id = ?`,
       [
@@ -303,6 +309,7 @@ export class OttService implements OnApplicationBootstrap {
         dto.tvingLink ?? '', dto.tvingLinkDub ?? '',
         dto.disneyplusLink ?? '', dto.disneyplusLinkDub ?? '',
         dto.coupangplayLink ?? '', dto.coupangplayLinkDub ?? '',
+        dto.amazonLink ?? '',
         now, dto.userId ?? '',
         id,
       ],
