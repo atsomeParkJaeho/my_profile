@@ -91,13 +91,28 @@ export default function OttDetailPage() {
 
           {/* 정보 */}
           <div className="col-md-8">
-            <h4 className="mb-1">{item.title}</h4>
+            <div className="d-flex align-items-center gap-2 mb-1">
+              <h4 className="mb-0">{item.title}</h4>
+              {item.animeType && (
+                <span
+                  className="badge"
+                  style={{
+                    backgroundColor: item.animeType === '극장판 애니메이션' ? '#dc3545' : '#0dcaf0',
+                    color: '#fff',
+                  }}
+                >
+                  {item.animeType === '극장판 애니메이션' ? '극장판' : 'TVA'}
+                </span>
+              )}
+            </div>
             {item.subTitle && <p className="text-muted mb-2">{item.subTitle}</p>}
 
             <div className="d-flex flex-wrap align-items-center gap-3 text-muted mb-3" style={{ fontSize: '0.85rem' }}>
               {item.year && <span><i className="bi bi-calendar3 me-1"></i>{item.year}</span>}
               {item.quarter && <span><i className="bi bi-collection me-1"></i>{item.quarter}</span>}
               {item.weekday && <span><i className="bi bi-clock me-1"></i>{item.weekday}</span>}
+              {item.airDate && <span><i className="bi bi-calendar-event me-1"></i>방영일 {item.airDate}</span>}
+              {item.releaseDate && <span><i className="bi bi-calendar-event me-1"></i>개봉일 {item.releaseDate}</span>}
             </div>
 
             {item.genre && (

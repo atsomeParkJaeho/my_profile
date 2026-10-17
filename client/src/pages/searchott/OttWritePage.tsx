@@ -4,6 +4,11 @@ import Layout from '@/componet/default/Layout';
 import { getOttDetail, createOtt, updateOtt, deleteOtt } from '@api/ott';
 
 const QUARTER_OPTIONS = ['1분기', '2분기', '3분기', '4분기'];
+const ANIME_TYPE_OPTIONS = [
+  { value: '', label: '미지정' },
+  { value: 'tva', label: 'TVA' },
+  { value: '극장판 애니메이션', label: '극장판 애니메이션' },
+];
 
 const PLATFORM_FIELDS = [
   { key: 'netflixLink',     label: '넷플릭스 링크' },
@@ -22,10 +27,13 @@ export default function OttWritePage() {
   const itemId   = location.state?.id;
   const isEdit   = actType === 'edit' && !!itemId;
 
-  const [title,   setTitle]   = useState('');
-  const [year,    setYear]    = useState('2026');
-  const [quarter, setQuarter] = useState('4분기');
-  const [image,   setImage]   = useState('');
+  const [title,       setTitle]       = useState('');
+  const [year,        setYear]        = useState('2026');
+  const [quarter,     setQuarter]     = useState('4분기');
+  const [image,       setImage]       = useState('');
+  const [animeType,   setAnimeType]   = useState('');
+  const [airDate,     setAirDate]     = useState('');
+  const [releaseDate, setReleaseDate] = useState('');
   const [links,   setLinks]   = useState<Record<string, string>>({
     netflixLink: '', laftelLink: '', wavveLink: '', watchaLink: '', tvingLink: '', coupangplayLink: '', disneyplusLink: '',
   });
@@ -41,6 +49,9 @@ export default function OttWritePage() {
         setYear(data.year ?? '');
         setQuarter(data.quarter ?? '4분기');
         setImage(data.image ?? '');
+        setAnimeType(data.animeType ?? '');
+        setAirDate(data.airDate ?? '');
+        setReleaseDate(data.releaseDate ?? '');
         setLinks({
           netflixLink: data.netflixLink ?? '',
           laftelLink: data.laftelLink ?? '',
@@ -63,7 +74,7 @@ export default function OttWritePage() {
     if (!title.trim()) return;
     setSaving(true);
     try {
-      const dto = { title: title.trim(), year, quarter, image, ...links };
+      const dto = { title: title.trim(), year, quarter, image, animeType, airDate, releaseDate, ...links };
       if (isEdit) {
         await updateOtt(itemId, dto);
       } else {
@@ -160,6 +171,50 @@ export default function OttWritePage() {
                       <option key={q} value={q}>{q}</option>
                     ))}
                   </select>
+                </div>
+              </div>
+
+              {/* 애니 구분 */}
+              <div className="col-md-4">
+                <div className="form-group mb-3">
+                  <label className="form-label">애니 구분</label>
+                  <select
+                    className="form-select"
+                    value={animeType}
+                    onChange={(e) => setAnimeType(e.target.value)}
+                  >
+                    {ANIME_TYPE_OPTIONS.map((o) => (
+                      <option key={o.value} value={o.value}>{o.label}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* 방영일 (TVA) */}
+              <div className="col-md-4">
+                <div className="form-group mb-3">
+                  <label className="form-label">방영일</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="예: 2026-01-07"
+                    value={airDate}
+                    onChange={(e) => setAirDate(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* 개봉일 (극장판) */}
+              <div className="col-md-4">
+                <div className="form-group mb-3">
+                  <label className="form-label">개봉일</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="예: 2026-02-27"
+                    value={releaseDate}
+                    onChange={(e) => setReleaseDate(e.target.value)}
+                  />
                 </div>
               </div>
 

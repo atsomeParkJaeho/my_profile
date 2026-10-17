@@ -9,9 +9,9 @@ const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL;
 
 const YEARS = [
   { label: '전체' },
-  { label: '2025' },
+  // { label: '2025' }, // 추후 추가예정
   { label: '2026' },
-  { label: '2027' },
+  // { label: '2027' }, // 추후 추가예정
 ];
 
 const PLATFORM_LINKS = [
@@ -153,11 +153,27 @@ export default function OttYearSearchPage() {
               onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
             />
           ) : null}
+          {/* 애니 구분(tva/극장판) 뱃지 */}
+          {item.animeType && (
+            <span
+              className="badge"
+              style={{
+                position: 'absolute', top: 6, left: 6,
+                backgroundColor: item.animeType === '극장판 애니메이션' ? '#dc3545' : '#0dcaf0',
+                color: '#fff', fontSize: '0.7rem',
+              }}
+            >
+              {item.animeType === '극장판 애니메이션' ? '극장판' : 'TVA'}
+            </span>
+          )}
         </div>
 
         <div className="card-body p-3">
+          <p className="text-muted small mb-1">
+            {item.year} {item.quarter}
+          </p>
           <h5
-            className="mt-1 mb-0 text-reset"
+            className="mt-1 mb-2 text-reset"
             style={{
               fontSize: '1rem',
               display: '-webkit-box',
@@ -168,9 +184,16 @@ export default function OttYearSearchPage() {
           >
             {item.title}
           </h5>
-          <p className="text-muted small mt-1 mb-0">
-            {item.year} {item.quarter}
-          </p>
+          {item.airDate && (
+            <p className="text-muted small mb-1">
+              {item.airDate} ~
+            </p>
+          )}
+          {item.releaseDate && (
+            <p className="text-muted small mb-1">
+              {item.releaseDate} ~
+            </p>
+          )}
           <div className='ott_link_group mt-2 d-flex flex-column gap-1'>
             {OTT_BADGES.filter((b) => item?.[b.key]).map((b) => (
               <a
