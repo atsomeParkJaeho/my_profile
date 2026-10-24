@@ -55,13 +55,12 @@ export const HeaderMenu = () => {
 				to="/searchott"
 				style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', flexShrink: 0 }}
 			>
-				<div style={{
-					width: 32, height: 32, borderRadius: 6,
-					backgroundColor: '#0d6efd', color: '#fff',
-					display: 'flex', alignItems: 'center', justifyContent: 'center',
-					fontWeight: 700, fontSize: '0.85rem',
-				}}>J</div>
-				<span className="header-logo-text">jutoku</span>
+				<img
+					src="/logo.png"
+					alt="쥬토코"
+					style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }}
+				/>
+				<span className="header-logo-text">쥬토코</span>
 			</Link>
 
 			{/* ── 우측 영역 ── */}

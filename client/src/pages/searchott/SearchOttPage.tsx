@@ -26,11 +26,14 @@ const WEEKDAYS = [
   { label: '일요일' },
 ];
 
+// 현재 년도 기준으로 해당 년도 애니메이션만 노출 (예: 올해가 2026년이면 2026년 작품만)
+const CURRENT_YEAR = String(new Date().getFullYear());
+
 const SEASONS = [
-  { id: 'season_1', label: '2026년 1분기' },
-  { id: 'season_2', label: '2026년 2분기' },
-  { id: 'season_3', label: '2026년 3분기' },
-  { id: 'season_4', label: '2026년 4분기' },
+  { id: 'season_1', label: `${CURRENT_YEAR}년 1분기` },
+  { id: 'season_2', label: `${CURRENT_YEAR}년 2분기` },
+  { id: 'season_3', label: `${CURRENT_YEAR}년 3분기` },
+  { id: 'season_4', label: `${CURRENT_YEAR}년 4분기` },
 ];
 
 // 현재 서버 시간 기준 분기 하나만 노출 (예: 10월이면 4분기만)
@@ -122,12 +125,13 @@ export default function SearchOttPage() {
   const items = useMemo(() => {
     if (!searched) return [];
     return allItems.filter((item) => {
+      const matchesYear = item.year === CURRENT_YEAR;
       const matchesKeyword =
         !keyword || item.title?.includes(keyword) || item.subTitle?.includes(keyword);
       const matchesQuarter = !isQuarterFiltered || selectedQuarters.includes(item.quarter);
       const matchesWeekday = !isWeekdayFiltered || selectedWeekdays.includes(item.weekday);
       const matchesOtt = !isOttFiltered || selectedOtts.some((key) => !!item[key]);
-      return matchesKeyword && matchesQuarter && matchesWeekday && matchesOtt;
+      return matchesYear && matchesKeyword && matchesQuarter && matchesWeekday && matchesOtt;
     });
   }, [allItems, keyword, searched, isQuarterFiltered, isWeekdayFiltered, isOttFiltered, selectedQuarters, selectedWeekdays, selectedOtts]);
 
@@ -443,7 +447,7 @@ export default function SearchOttPage() {
           <>
             {getOrderedSeasons().map((season) => {
               const quarterLabel = season.label.replace(/^\d{4}년\s*/, ''); // "2026년 4분기" → "4분기"
-              const seasonItems = allItems.filter((item) => item.quarter === quarterLabel);
+              const seasonItems = allItems.filter((item) => item.quarter === quarterLabel && item.year === CURRENT_YEAR);
               return (
                 <div key={season.id} className='season_tab' id={season.id}>
                   <h3 className='border-bottom pb-3 mb-3'>{season.label}</h3>

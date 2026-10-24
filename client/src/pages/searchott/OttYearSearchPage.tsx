@@ -11,7 +11,7 @@ const YEARS = [
   { label: '전체' },
   // { label: '2025' }, // 추후 추가예정
   { label: '2026' },
-  // { label: '2027' }, // 추후 추가예정
+  { label: '2027' },
 ];
 
 const PLATFORM_LINKS = [
